@@ -1,0 +1,22 @@
+% !TeX TXS-program:compile = txs:///knit2pdf
+\documentclass[12pt]{mwart}
+\usepackage[utf8]{inputenc}
+\usepackage[T1,plmath]{polski}
+\usepackage{lmodern}
+
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+
+\title{Sprawozdanie 1}
+\author{Aleksander Jakóbczyk i Kacper Pasterniak}
+\date{}
+
+\begin{document}
+	\maketitle 
+	Hello
+
+\end{document}
