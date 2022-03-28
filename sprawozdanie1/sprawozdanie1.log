@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.10.11)  28 MAR 2022 08:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.10.11)  28 MAR 2022 13:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -497,32 +497,189 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 70.
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 72.
- [1
+Package color Info: Redefining color shadecolor on input line 77.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 7
+8.
+
+(/usr/share/texmf/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2009/10/30 v1.6 Font defs for Latin Modern
+)
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 79.
+
+Overfull \hbox (207.86829pt too wide) in paragraph at lines 90--90
+[][]\T1/lmtt/m/n/10.95 Detergent.df[] []%>%[] []\T1/lmtt/b/n/10.95 filter[][]\T
+1/lmtt/m/n/10.95 (Water_softness[] []==[] []"Soft"[][])[] []%>%[] []\T1/lmtt/b/
+n/10.95 group_by[][]\T1/lmtt/m/n/10.95 (Temperature)[] []%>%[] []\T1/lmtt/b/n/1
+0.95 summarise[][]\T1/lmtt/m/n/10.95 ([][]n[] []=[] []\T1/lmtt/b/n/10.95 sum[][
+]\T1/lmtt/m/n/10.95 (Freq))[][] 
+ []
+
+
+Overfull \hbox (219.36575pt too wide) in paragraph at lines 100--100
+[][]\T1/lmtt/m/n/10.95 Detergent.df[] []%>%[] []\T1/lmtt/b/n/10.95 filter[][]\T
+1/lmtt/m/n/10.95 (Water_softness[] []==[] []"Medium"[][])[] []%>%[] []\T1/lmtt/
+b/n/10.95 group_by[][]\T1/lmtt/m/n/10.95 (Temperature)[] []%>%[] []\T1/lmtt/b/n
+/10.95 summarise[][]\T1/lmtt/m/n/10.95 ([][]n[] []=[] []\T1/lmtt/b/n/10.95 sum[
+][]\T1/lmtt/m/n/10.95 (Freq))[][] 
+ []
+
+
+Overfull \hbox (207.86829pt too wide) in paragraph at lines 110--110
+[][]\T1/lmtt/m/n/10.95 Detergent.df[] []%>%[] []\T1/lmtt/b/n/10.95 filter[][]\T
+1/lmtt/m/n/10.95 (Water_softness[] []==[] []"Hard"[][])[] []%>%[] []\T1/lmtt/b/
+n/10.95 group_by[][]\T1/lmtt/m/n/10.95 (Temperature)[] []%>%[] []\T1/lmtt/b/n/1
+0.95 summarise[][]\T1/lmtt/m/n/10.95 ([][]n[] []=[] []\T1/lmtt/b/n/10.95 sum[][
+]\T1/lmtt/m/n/10.95 (Freq))[][] 
+ []
+
+Package color Info: Redefining color shadecolor on input line 125.
+
+Overfull \hbox (2.81493pt too wide) in paragraph at lines 127--127
+[][]\T1/lmtt/m/it/10.95 # Detergent.df %>% group_by(Preference) %>% summarise(n
+ = sum(Freq))[][] 
+ []
+
+
+Overfull \hbox (202.11955pt too wide) in paragraph at lines 128--128
+[][]\T1/lmtt/m/n/10.95 Detergent.df[] []%>%[] []\T1/lmtt/b/n/10.95 filter[][]\T
+1/lmtt/m/n/10.95 (Water_softness[] []==[] []"Soft"[][])[] []%>%[] []\T1/lmtt/b/
+n/10.95 group_by[][]\T1/lmtt/m/n/10.95 (Preference)[] []%>%[] []\T1/lmtt/b/n/10
+.95 summarise[][]\T1/lmtt/m/n/10.95 ([][]n[] []=[] []\T1/lmtt/b/n/10.95 sum[][]
+\T1/lmtt/m/n/10.95 (Freq))[][] 
+ []
+
+
+Overfull \hbox (213.61702pt too wide) in paragraph at lines 138--138
+[][]\T1/lmtt/m/n/10.95 Detergent.df[] []%>%[] []\T1/lmtt/b/n/10.95 filter[][]\T
+1/lmtt/m/n/10.95 (Water_softness[] []==[] []"Medium"[][])[] []%>%[] []\T1/lmtt/
+b/n/10.95 group_by[][]\T1/lmtt/m/n/10.95 (Preference)[] []%>%[] []\T1/lmtt/b/n/
+10.95 summarise[][]\T1/lmtt/m/n/10.95 ([][]n[] []=[] []\T1/lmtt/b/n/10.95 sum[]
+[]\T1/lmtt/m/n/10.95 (Freq))[][] 
+ []
+
+
+Overfull \hbox (202.11955pt too wide) in paragraph at lines 148--148
+[][]\T1/lmtt/m/n/10.95 Detergent.df[] []%>%[] []\T1/lmtt/b/n/10.95 filter[][]\T
+1/lmtt/m/n/10.95 (Water_softness[] []==[] []"Hard"[][])[] []%>%[] []\T1/lmtt/b/
+n/10.95 group_by[][]\T1/lmtt/m/n/10.95 (Preference)[] []%>%[] []\T1/lmtt/b/n/10
+.95 summarise[][]\T1/lmtt/m/n/10.95 ([][]n[] []=[] []\T1/lmtt/b/n/10.95 sum[][]
+\T1/lmtt/m/n/10.95 (Freq))[][] 
+ []
+
+[1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 72.
+Package color Info: Redefining color shadecolor on input line 162.
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <12> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 164.
+
+Overfull \hbox (55.35013pt too wide) in paragraph at lines 164--164
+[][]\T1/lmtt/b/n/12 ftable[][]\T1/lmtt/m/n/12 (Detergent,[] []col.vars[] []=[] 
+[]"Temperature"[][],[] []row.vars[] []=[] []"Water_softness"[][])[][] 
+ []
+
+
+Overfull \hbox (32.3999pt too wide) in paragraph at lines 174--174
+[][]\T1/lmtt/b/n/12 structable[][]\T1/lmtt/m/n/12 (Temperature[] []~[] []Water_
+softness, Detergent)[] []%>%[] []\T1/lmtt/b/n/12 addmargins[][]\T1/lmtt/m/n/12 
+()[][] 
+ []
+
+Package color Info: Redefining color shadecolor on input line 189.
+<figure/r_fig_1-1.pdf, id=42, 505.89pt x 325.215pt>
+File: figure/r_fig_1-1.pdf Graphic file (type pdf)
+<use figure/r_fig_1-1.pdf>
+Package pdftex.def Info: figure/r_fig_1-1.pdf  used on input line 195.
+(pdftex.def)             Requested size: 390.0pt x 250.71902pt.
+[2]
+Package color Info: Redefining color shadecolor on input line 200.
+<figure/r_fig_2-1.pdf, id=49, 505.89pt x 325.215pt>
+File: figure/r_fig_2-1.pdf Graphic file (type pdf)
+<use figure/r_fig_2-1.pdf>
+Package pdftex.def Info: figure/r_fig_2-1.pdf  used on input line 206.
+(pdftex.def)             Requested size: 390.0pt x 250.71902pt.
+Package color Info: Redefining color shadecolor on input line 212.
+ [3pdfTeX warning (ext4): destination with the same identifier (name{figure.1})
+ has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.212 ....969, 0.969}\color{fgcolor}\begin{kframe}
+                                                  pdfTeX warning (ext4): destin
+ation with the same identifier (name{figure.2}) has been already used, duplicat
+e ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.212 ....969, 0.969}\color{fgcolor}\begin{kframe}
+                                                   <./figure/r_fig_1-1.pdf> <./
+figure/r_fig_2-1.pdf>]
+<figure/r_fig_3-1.pdf, id=67, 433.62pt x 216.81pt>
+File: figure/r_fig_3-1.pdf Graphic file (type pdf)
+<use figure/r_fig_3-1.pdf>
+Package pdftex.def Info: figure/r_fig_3-1.pdf  used on input line 218.
+(pdftex.def)             Requested size: 390.0pt x 195.00809pt.
+Package color Info: Redefining color shadecolor on input line 223.
+<figure/r_fig_4-1.pdf, id=68, 433.62pt x 216.81pt>
+File: figure/r_fig_4-1.pdf Graphic file (type pdf)
+<use figure/r_fig_4-1.pdf>
+Package pdftex.def Info: figure/r_fig_4-1.pdf  used on input line 229.
+(pdftex.def)             Requested size: 390.0pt x 195.00809pt.
+Package color Info: Redefining color shadecolor on input line 234.
+ [4pdfTeX warning (ext4): destination with the same identifier (name{figure.3})
+ has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.239 \end{kframe}
+                  \begin{figure}[H]pdfTeX warning (ext4): destination with the 
+same identifier (name{figure.4}) has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.239 \end{kframe}
+                  \begin{figure}[H] <./figure/r_fig_3-1.pdf> <./figure/r_fig_4-
+1.pdf>]
+<figure/r_fig_5-1.pdf, id=87, 433.62pt x 216.81pt>
+File: figure/r_fig_5-1.pdf Graphic file (type pdf)
+<use figure/r_fig_5-1.pdf>
+Package pdftex.def Info: figure/r_fig_5-1.pdf  used on input line 240.
+(pdftex.def)             Requested size: 390.0pt x 195.00809pt.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 244.
+ [5pdfTeX warning (ext4): destination with the same identifier (name{figure.5})
+ has been already used, duplicate ignored
+
+\AtBegShi@Output ...ipout \box \AtBeginShipoutBox 
+                                                  \fi \fi 
+l.244 \end{document}
+                     <./figure/r_fig_5-1.pdf>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 244.
  (./sprawozdanie1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 72.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 72.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 244.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 244.
 Package rerunfilecheck Info: File `sprawozdanie1.out' has not changed.
-(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 72.
+(rerunfilecheck)             Checksum: E0F6D0065273CBCB82FB27375D587DF2;388.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 244.
  ) 
 Here is how much of TeX's memory you used:
- 6998 strings out of 481239
- 103220 string characters out of 5920376
- 358146 words of memory out of 5000000
- 22101 multiletter control sequences out of 15000+600000
- 554517 words of font info for 46 fonts, out of 8000000 for 9000
+ 7129 strings out of 481239
+ 105341 string characters out of 5920376
+ 366828 words of memory out of 5000000
+ 22201 multiletter control sequences out of 15000+600000
+ 565095 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 34i,7n,32p,260b,311s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 34i,7n,32p,281b,383s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texmf/fonts/type1/
-public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr17.pfb>
-Output written on sprawozdanie1.pdf (1 page, 46659 bytes).
+public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr10.pfb></usr/sh
+are/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/
+lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmtk10.pfb></usr/share/tex
+mf/fonts/type1/public/lm/lmtt10.pfb></usr/share/texmf/fonts/type1/public/lm/lmt
+t12.pfb></usr/share/texmf/fonts/type1/public/lm/lmtti10.pfb>
+Output written on sprawozdanie1.pdf (5 pages, 220166 bytes).
 PDF statistics:
- 22 PDF objects out of 1000 (max. 8388607)
- 16 compressed objects within 1 object stream
- 2 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 133 PDF objects out of 1000 (max. 8388607)
+ 106 compressed objects within 2 object streams
+ 18 named destinations out of 1000 (max. 500000)
+ 82 words of extra memory for PDF output out of 10000 (max. 10000000)
 

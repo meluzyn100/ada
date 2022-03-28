@@ -17,6 +17,64 @@
 
 \begin{document}
 	\maketitle 
-	Hello
+	
+	<<warning=F, message=F,echo = F>>=
+  	library(binom)
+    require(ggplot2)
+    library(reshape2)
+    library(xtable)
+	
+	  library(vcdExtra)
+    library(tidyverse)
+  	# pdf.options(encoding = 'ISOLatin2') # znaki polskie w wykresach
+	@
+	
+	\section*{Lista 1}
+  \subsection*{Zad 1}
+  \subsubsection*{Detergent}
+<<size = "small">>=
+Detergent.df <- data.frame(Detergent)
+Detergent.df %>% group_by(Temperature) %>% summarise(n = sum(Freq))
+Detergent.df %>% filter(Water_softness == "Soft") %>% group_by(Temperature) %>% summarise(n = sum(Freq))
+Detergent.df %>% filter(Water_softness == "Medium") %>% group_by(Temperature) %>% summarise(n = sum(Freq))
+Detergent.df %>% filter(Water_softness == "Hard") %>% group_by(Temperature) %>% summarise(n = sum(Freq))
+@
 
+  \subsubsection*{Preference}
+
+  <<size = "small">>=
+  # Detergent.df %>% group_by(Preference) %>% summarise(n = sum(Freq))
+  Detergent.df %>% filter(Water_softness == "Soft") %>% group_by(Preference) %>% summarise(n = sum(Freq))
+  Detergent.df %>% filter(Water_softness == "Medium") %>% group_by(Preference) %>% summarise(n = sum(Freq))
+  Detergent.df %>% filter(Water_softness == "Hard") %>% group_by(Preference) %>% summarise(n = sum(Freq))
+  @
+
+  \subsection*{Zad 2}
+  <<>>=
+  ftable(Detergent, col.vars = "Temperature", row.vars = "Water_softness")
+  structable(Temperature ~ Water_softness, Detergent) %>% addmargins()
+  @
+
+  \subsection*{Zad 3}
+<<r fig_1, fig.width = 7, fig.height = 4.5, fig.cap ='\\label{fig:1}Wykresy słupkowy dla zmniennej Water Softness.' ,fig.pos = 'H'>>=
+A <- apply(Detergent, "Water_softness", sum)
+barplot(A)
+@
+<<r fig_2, fig.width = 7, fig.height = 4.5, fig.cap ='\\label{fig:2}Wykresy kołowy dla mniennej Water Softness.' ,fig.pos = 'H'>>=
+par(mar = c(2, 2, 2, 2))
+pie(A)
+@
+  \subsection*{Zad 4}
+<<r fig_3, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:3}Wykres mozajkowy dla Preference i Water softness' ,fig.pos = 'H'>>=
+par(mar = c(2, 2, 2, 2))
+mosaicplot(~Water_softness+Preference, data = Detergent)
+@
+<<r fig_4, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:4}Wykres mozajkowy dla Preference i M User.' ,fig.pos = 'H'>>=
+par(mar = c(2, 2, 2, 2))
+mosaicplot(~M_User+Preference, data = Detergent)
+@
+<<r fig_5, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:5}Wykres mozajkowy dla Preference i Temperature.' ,fig.pos = 'H'>>=
+par(mar = c(2, 2, 2, 2))
+mosaicplot(~Temperature+Preference, data = Detergent)
+@
 \end{document}
