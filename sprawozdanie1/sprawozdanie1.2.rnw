@@ -212,6 +212,169 @@ Widzimy zatem że symulowane wartości są bardzo bliskie wartości empirycznych
 W obu powyższych przypadkach nasze wyniki są bardzo bliskie co wskazuje na poprawność metody.
 
 \section*{Lista 3}
-
+W szymulacji wykorzystalismy przedziałów ufności Cloppera-Pearsona, Walda i Asymptotycznych.
+Symulacje przeporwadzimy na posdsawie ralizaji zmiennej loswej $X \sim \mathcal{B}(n, p)$.  
+<<eval = FALSE>>=
+symulation <-function(n = 10, dp= 0.2,MCs = 1000){
+  MCs <- MCs
+  n <- n
+  ps <- seq(0.01, 0.99, dp)
+  N <- length(ps)
   
+  data <- matrix(0,N,6)
+  
+  for (k in 1:N) {
+    p <- ps[k]
+    
+    wilson_ok <- 0
+    axact_ok  <- 0
+    asymp_ok  <- 0
+    
+    wilson_l <- rep(0,MCs)
+    axact_l  <- rep(0,MCs)
+    asymp_l  <- rep(0,MCs)
+    
+    for (i in 1:MCs){
+      x <- rbinom(1, n, p)
+      wilson <- binom.wilson(x, n)
+      exact  <- binom.exact(x, n)
+      asymp  <- binom.asymp(x, n)
+      
+      wilson_l[i] <- wilson$upper - wilson$lower
+      axact_l[i] <- exact$upper - exact$lower
+      asymp_l[i] <- asymp$upper - asymp$lower
+      
+      if (wilson["lower"]<p && p < wilson["upper"]) {
+        wilson_ok <- 1 + wilson_ok
+      }
+      if (exact["lower"]<p && p < exact["upper"]) {
+        axact_ok <- 1 + axact_ok
+      }
+      if (asymp["lower"]<p && p < asymp["upper"]) {
+        asymp_ok <- 1 + asymp_ok
+      }
+    }
+    
+    data[k,]<- c(  wilson_ok/MCs,
+              axact_ok/MCs,
+              asymp_ok/MCs,
+              
+              mean(wilson_l),
+              mean(axact_l) ,
+              mean(asymp_l) )
+  }
+  return(data)
+}
+@
+Odpolamy nasza szymulacje dla $n=10$ i z krokiem $dp = 0.01$ i zapiszmy wynik w pliku csv:
+<<eval = FALSE>>=
+data <- symulation(n = 10, dp = 0.01)
+write.csv(df_l, "data_n_10.csv")
+@
+
+Stwórzmy teraz ramki danych prawdopodobieństw pokrycia
+<<>>=
+data <- read.csv("data_n_10.csv")
+ps <- seq(0.01, 0.99, 0.01)
+df1 <- data.frame(wilsonp = data[,1], axact = data[,2],asymp = data[,3],p =ps)
+head(df1)
+@
+Stwórzmy teraz ramki danych średniej długości przedziałów
+<<>>=
+df2 <- data.frame(wilsonp = data[,4], axact = data[,5],asymp = data[,6], p =ps)
+head(df2)
+@
+Spozadzmy również wykresy
+<<fig_6, fig.width = 11, fig.height = 7, fig.cap ='\\label{fig:6}Wykres prawdopodobieństwa pokrycia dla poszczególnych metod i n równego 10.' ,fig.pos = 'H'>>=
+df_p <- melt(df1,id.vars="p")
+ggplot(df_p,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+@
+<<fig_7,  fig.width = 11, fig.height = 7, fig.cap ='\\label{fig:7}Wykres średniej długości przedziałów dla poszczególnych metod i n równego 10.' ,fig.pos = 'H'>>=
+df_l <- melt(df2,id.vars="p")
+ggplot(df_l,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+@
+Zobaczmy również jak wygladaja powyzsze wykresy ale dla tym razem dla n równego 100
+<<echo = FALSE>>=
+data <- read.csv("data_n_100.csv")
+ps <- seq(0.01, 0.99, 0.01)
+df1 <- data.frame(wilsonp = data[,1], axact = data[,2],asymp = data[,3],p =ps)
+df2 <- data.frame(wilsonp = data[,4], axact = data[,5],asymp = data[,6], p =ps)
+df_p2 <- melt(df1,id.vars="p")
+df_l2 <- melt(df2,id.vars="p")
+@
+<<fig_8, fig.width = 11, fig.height = 7, fig.cap ='\\label{fig:8}Wykres prawdopodobieństwa pokrycia dla poszczególnych metod i n równego 10.' ,fig.pos = 'H',echo = FALSE>>=
+ggplot(df_p2,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+@
+<<fig_9, fig.width = 11, fig.height = 7, fig.cap ='\\label{fig:9}Wykres średniej długości przedziałów dla poszczególnych metod i n równego 10.' ,fig.pos = 'H',echo = FALSE>>=
+ggplot(df_l2,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+@
+
+
+% ######################################## może do usuniecia
+<<fig.show="hold", out.width="50%", echo = FALSE, fig.cap ='\\label{fig:9}Wykresy prawdopodobieństwa pokrycia dla poszczególnych metod i n równego odpowiednio 10 i 100.',fig.pos = 'H'>>=
+ggplot(df_p,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+ggplot(df_p2,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+@
+<<fig.show="hold", out.width="50%", echo = FALSE, fig.cap ='\\label{fig:9}Wykresy średniej długości przedziałów dla poszczególnych metod i n równego 10 i 100.',fig.pos = 'H'>>=
+ggplot(df_l,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+ggplot(df_l2,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+@
+% #######################################
+
+\subsection*{Zad 2}
+\subsubsection*{a)}
+<<>>=
+conf <- binom.confint(50,200)
+ls <- conf$"upper"- conf$"lower"
+cbind(conf,ls)
+@
+Najlepszy
+<<>>=
+cbind(conf,ls)[ls == max(ls),]
+@
+
+
+\subsubsection*{b)}
+<<>>=
+conf <- binom.confint(0,200)
+ls <- conf$"upper"- conf$"lower"
+cbind(conf,ls)
+@
+Najlepszy
+<<>>=
+cbind(conf,ls)[ls == max(ls),]
+@
+
+
+\subsubsection*{c)}
+<<>>=
+conf <- binom.confint(44,200)
+ls <- conf$"upper"- conf$"lower"
+cbind(conf,ls)
+@
+Najlepszy
+<<>>=
+cbind(conf,ls)[ls == max(ls),]
+@
+
+
+\subsubsection*{d)}
+<<>>=
+conf <- binom.confint(22,200)
+ls <- conf$"upper"- conf$"lower"
+cbind(conf,ls)
+@
+Najlepszy
+<<>>=
+cbind(conf,ls)[ls == max(ls),]
+@
+
 \end{document}
