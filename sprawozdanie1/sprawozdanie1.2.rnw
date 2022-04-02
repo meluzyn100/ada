@@ -1,0 +1,217 @@
+% !TeX TXS-program:compile = txs:///knit2pdf
+\documentclass[12pt]{mwart}
+\usepackage[utf8]{inputenc}
+\usepackage[T1,plmath]{polski}
+\usepackage{lmodern}
+
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+
+\title{Sprawozdanie 1}
+\author{Aleksander Jakóbczyk i Kacper Pasterniak}
+\date{}
+
+\begin{document}
+	\maketitle 
+	
+	<<warning=F, message=F,echo = F>>=
+  	library(binom)
+    require(ggplot2)
+    library(reshape2)
+    library(xtable)
+	
+	  library(vcdExtra)
+    library(tidyverse)
+  	library(matrixStats)
+
+  	# pdf.options(encoding = 'ISOLatin2') # znaki polskie w wykresach
+	@
+	
+	\section*{Lista 1}
+  \subsection*{Zad 1}
+  \subsubsection*{Detergent}
+<<size = "small">>=
+Detergent.df <- data.frame(Detergent)
+Detergent.df %>% group_by(Temperature) %>% summarise(n = sum(Freq))
+Detergent.df %>% filter(Water_softness == "Soft") %>% group_by(Temperature) %>% summarise(n = sum(Freq))
+Detergent.df %>% filter(Water_softness == "Medium") %>% group_by(Temperature) %>% summarise(n = sum(Freq))
+Detergent.df %>% filter(Water_softness == "Hard") %>% group_by(Temperature) %>% summarise(n = sum(Freq))
+@
+
+  \subsubsection*{Preference}
+
+  <<size = "small">>=
+  # Detergent.df %>% group_by(Preference) %>% summarise(n = sum(Freq))
+  Detergent.df %>% filter(Water_softness == "Soft") %>% group_by(Preference) %>% summarise(n = sum(Freq))
+  Detergent.df %>% filter(Water_softness == "Medium") %>% group_by(Preference) %>% summarise(n = sum(Freq))
+  Detergent.df %>% filter(Water_softness == "Hard") %>% group_by(Preference) %>% summarise(n = sum(Freq))
+  @
+
+  \subsection*{Zad 2}
+  <<>>=
+  ftable(Detergent, col.vars = "Temperature", row.vars = "Water_softness")
+  structable(Temperature ~ Water_softness, Detergent) %>% addmargins()
+  @
+
+  \subsection*{Zad 3}
+<<fig_1, fig.width = 7, fig.height = 4.5, fig.cap ='\\label{fig:1}Wykresy słupkowy dla zmiennej Water Softness.' ,fig.pos = 'H'>>=
+A <- apply(Detergent, "Water_softness", sum)
+barplot(A)
+@
+<<fig_2, fig.width = 7, fig.height = 4.5, fig.cap ='\\label{fig:2}Wykresy kołowy dla zmiennej Water Softness.' ,fig.pos = 'H'>>=
+par(mar = c(2, 2, 2, 2))
+pie(A)
+@
+  \subsection*{Zad 4}
+<<fig_3, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:3}Wykres mozaikowy dla Preference i Water softness' ,fig.pos = 'H'>>=
+par(mar = c(2, 2, 2, 2))
+mosaicplot(~Water_softness+Preference, data = Detergent)
+@
+<<fig_4, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:4}Wykres mozaikowy dla Preference i M User.' ,fig.pos = 'H'>>=
+par(mar = c(2, 2, 2, 2))
+mosaicplot(~M_User+Preference, data = Detergent)
+@
+<<fig_5, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:5}Wykres mozaikowy dla Preference i Temperature.' ,fig.pos = 'H'>>=
+par(mar = c(2, 2, 2, 2))
+mosaicplot(~Temperature+Preference, data = Detergent)
+@
+
+\section*{Lista 2}
+\subsection*{Zad 1}
+\textbf{Losowanie ze zwracaniem:} 
+<<>>=
+ind <- sample(x=nrow(mtcars),size=nrow(mtcars)/10,replace=TRUE)
+@
+Wylosowane indeksy:
+<<>>=
+ind
+@
+Wylosowane elementy z bazy danych:
+<<>>=
+mtcars[ind,]
+@
+
+\newpage
+\textbf{Losowanie bez zwracania:} 
+<<>>=
+ind <- sample(x=nrow(mtcars),size=nrow(mtcars)/10,replace=FALSE)
+@
+Wylosowane indeksy:
+<<>>=
+ind
+@
+Wylosowane elementy z bazy danych:
+<<>>=
+mtcars[ind,]
+@
+
+
+\subsection*{Zad 2}
+  
+\textbf{Propozycja algorytmu:}
+  \begin{enumerate}
+    \item Generujemy wektor zer o rozmiarze n .
+    \item Dla każdego elementu tego wektora losujemy u z rozkładu jednostajnego ~U(0,1), jeśli u 	$\leq p$ to dodajemy 1 do tego elementu.
+    \item Krok 2 powtarzamy N razy.
+    \newline
+  \end{enumerate}
+
+
+\textbf{Algorytm opisany za pomocą funkcji w R:}
+<<>>=
+bin <- function(n,p,N){
+  X <- rep(0,N)
+  for (i in 1:N) {
+    r = sum(runif(n) < p)
+    X[i] = r
+  }
+  return(X)
+} 
+@
+gdzie: n - rozmiar próby, p - prawdopodobieństwo, N - ilość wywołań
+\newline
+
+\textbf{Przykładowe użycie:}
+<<>>=
+bin(10,0.4,5)
+@
+
+
+\textbf{Sprawdzenie poprawności:}\newline
+Dla zmiennej losowej $X \sim \mathcal{B}(n, p)$ wiemy, że:
+\begin{itemize}
+  \item[] $\mathbb{E}(X) = np$, 
+  \item[] $\text{Var}(X)= np(1-p)$,
+\end{itemize} 
+Sprawdźmy zatem działanie naszej funkcji dla $n = 1000$ i $p = 0.4$:
+<<cache = T>>=
+test <- bin(1000,0.4,10000)
+mean(test)
+var(test)
+@
+Wartości teoretyczne średniej i wariancji dla takich parametrów powinny wynosić kolejno 400 i 240. Nasze wyniki są bardzo bliskie co wskazuje na poprawność metody.
+
+\subsection*{Zad 3}
+Chcemy wygenerował generować zmienna losowa z rozkładu wielomianowego o parametrach $n$ i $p$, gdzie $p$ jest wektorem wag prawdopodobieństw o długości $k$ którego elementy sumują się do jedynki.\\
+
+
+\textbf{Propozycja algorytmu:}
+  \begin{enumerate}
+    \item Generujemy wektor zer o długości k.
+    \item Generuj wektor prób o długości n, przy czym w każdej próbie mamy do czynienia z wylosowaniem jednego z k zdarzeń o poszczególnym prawdopodobieństwem.
+    \item Sumuj ilość występowania każdego zdarzenia i zapisz je do wektora.
+    \item Krok 1 i 3 powtarzamy N razy.
+    \newline
+  \end{enumerate}
+  
+  
+\textbf{Algorytm opisany za pomocą funkcji w R:}
+<<>>=
+multinom.rv <-function(n, p, N){
+  k <- length(p)
+  X <- matrix(0, nrow = k, ncol = N)
+  for (j in 1:N) {
+    ind <- sample(1:k, n, replace = TRUE, prob = p)
+    for (i in 1:n) {
+      X[ind[i],j] = 1 + X[ind[i],j]
+    }
+  }
+  return(X)
+}
+@
+
+
+\textbf{Przykładowe użycie:}
+<<>>=
+multinom.rv(10,c(0.2,0.3,0.5),5)
+@
+
+
+\textbf{Sprawdzenie poprawności:}\newline
+Niech zmienne losowe $X_1,X_2, \dots,X_k $ oznaczają liczby zajść poszczególnych zdarzeń w
+n próbach, przy czym $X_1 + X_2 + \dots + X_k  = n$.
+Dla zmiennej losowej $X \sim \mathcal{W}(n,\{p_1, p_2, \dots,p_k \})$ wiemy, że:
+\begin{itemize}
+  \item[] $\mathbb{E}(X_i) = np_i$.
+  \item[] $\text{Var}(X_i)= np_i(1-p_i)$.
+\end{itemize} 
+Sprawdźmy zatem działanie naszej funkcji dla $n = 100$ i $p =\{ 0.2, 0.3, 0.5 \}$ :
+<<>>=
+test <- multinom.rv(100,c(0.2,0.3,0.5),10000)
+rowMeans(test)
+@
+Widzimy zatem że symulowane wartości są bardzo bliskie wartości empirycznych: $20,30,50$.
+<<>>=
+rowVars(test)
+@
+Widzimy zatem że symulowane wartości są bardzo bliskie wartości empirycznych: $16,21,25$.\\
+W obu powyższych przypadkach nasze wyniki są bardzo bliskie co wskazuje na poprawność metody.
+
+\section*{Lista 3}
+
+  
+\end{document}
