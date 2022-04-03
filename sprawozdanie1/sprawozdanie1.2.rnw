@@ -93,7 +93,9 @@ mosaicplot(~Temperature+Preference, data = Detergent)
 
 \section*{Lista 2}
 \subsection*{Zad 1}
-\textbf{Losowanie ze zwracaniem:} 
+Zapoznać się z funkcją \textit{sample} (w pakiecie \textit{stats}). Napisać fragment programu, którego celem jest wylosowanie próbki rozmiaru około 1/10 liczby przypadków danej
+bazy danych (pewnej hipotetycznej), ze zwracaniem oraz bez zwracania.
+\subsubsection*{Losowanie ze zwracaniem:} 
 <<>>=
 ind <- sample(x=nrow(mtcars),size=nrow(mtcars)/10,replace=TRUE)
 @
@@ -122,12 +124,13 @@ mtcars[ind,]
 
 
 \subsection*{Zad 2}
-  
-\textbf{Propozycja algorytmu:}
+Zaproponować algorytm generowania liczb z rozkładu dwumianowego i udowodnić,
+że jest poprawny. Napisać program do generowania tych liczb zgodnie z zaproponowanym algorytmem. (W pakiecie R dostępna jest funkcja rbinom.)
+\subsubsection*{Propozycja algorytmu:}
   \begin{enumerate}
-    \item Generujemy wektor zer o rozmiarze n .
-    \item Dla każdego elementu tego wektora losujemy u z rozkładu jednostajnego ~U(0,1), jeśli u 	$\leq p$ to dodajemy 1 do tego elementu.
-    \item Krok 2 powtarzamy N razy.
+    \item Generujemy wektor zer o rozmiarze $n$ .
+    \item Dla każdego elementu tego wektora losujemy $u$ z rozkładu jednostajnego ~U(0,1), jeśli  $u \leq p$ to dodajemy 1 do tego elementu.
+    \item Krok 2 powtarzamy $N$ razy.
     \newline
   \end{enumerate}
 
@@ -143,8 +146,8 @@ bin <- function(n,p,N){
   return(X)
 } 
 @
-gdzie: n - rozmiar próby, p - prawdopodobieństwo, N - ilość wywołań
-\newline
+gdzie: n - rozmiar próby, p - prawdopodobieństwo sukcesu, N - ilość wywołań
+\newpage
 
 \textbf{Przykładowe użycie:}
 <<>>=
@@ -158,19 +161,19 @@ Dla zmiennej losowej $X \sim \mathcal{B}(n, p)$ wiemy, że:
   \item[] $\mathbb{E}(X) = np$, 
   \item[] $\text{Var}(X)= np(1-p)$,
 \end{itemize} 
-Sprawdźmy zatem działanie naszej funkcji dla $n = 1000$ i $p = 0.4$:
+Sprawdźmy zatem działanie naszej funkcji dla $n = 100$ i $p = 0.4$:
 <<cache = T>>=
-test <- bin(1000,0.4,10000)
+test <- bin(100,0.4,10000)
 mean(test)
 var(test)
 @
-Wartości teoretyczne średniej i wariancji dla takich parametrów powinny wynosić kolejno 400 i 240. Nasze wyniki są bardzo bliskie co wskazuje na poprawność metody.
+Wartości teoretyczne średniej i wariancji dla takich parametrów powinny wynosić kolejno 40 i 24. Nasze wyniki są bardzo bliskie co wskazuje na poprawność metody.
 
 \subsection*{Zad 3}
-Chcemy wygenerował generować zmienna losowa z rozkładu wielomianowego o parametrach $n$ i $p$, gdzie $p$ jest wektorem wag prawdopodobieństw o długości $k$ którego elementy sumują się do jedynki.\\
+Zaproponować algorytm generowania wektora z rozkładu wielomianowego i udowodnić, że jest poprawny. Napisać program do generowania tych wektorów zgodnie z zaproponowanym algorytmem. (W pakiecie R dostępna jest funkcja \textit{rmultinom}.) \\
 
-
-\textbf{Propozycja algorytmu:}
+\textbf{Propozycja algorytmu:}\\
+Chcemy generować zmienna losowa z rozkładu wielomianowego o parametrach $n$ i $p$, gdzie $p$ jest wektorem wag prawdopodobieństw o długości $k$ którego elementy sumują się do jedynki.\\
   \begin{enumerate}
     \item Generujemy wektor zer o długości k.
     \item Generuj wektor prób o długości n, przy czym w każdej próbie mamy do czynienia z wylosowaniem jednego z k zdarzeń o poszczególnym prawdopodobieństwem.
@@ -179,7 +182,7 @@ Chcemy wygenerował generować zmienna losowa z rozkładu wielomianowego o param
     \newline
   \end{enumerate}
   
-  
+\newpage
 \textbf{Algorytm opisany za pomocą funkcji w R:}
 <<>>=
 multinom.rv <-function(n, p, N){
@@ -215,32 +218,30 @@ Sprawdźmy zatem działanie naszej funkcji dla $n = 100$ i $p =\{ 0.2, 0.3, 0.5 
 test <- multinom.rv(100,c(0.2,0.3,0.5),10000)
 rowMeans(test)
 @
-Widzimy zatem że symulowane wartości są bardzo bliskie wartości empirycznych: $20,30,50$.
+Widzimy zatem że symulowane wartości są bardzo bliskie wartości teoretycznych: $20,30,50$.
 <<>>=
 rowVars(test)
 @
-Widzimy zatem że symulowane wartości są bardzo bliskie wartości empirycznych: $16,21,25$.\\
+Widzimy zatem że symulowane wartości są bardzo bliskie wartości teoretycznych: $16,21,25$.\\
 W obu powyższych przypadkach nasze wyniki są bardzo bliskie co wskazuje na poprawność metody.
 
 \section*{Lista 3}
-W szymulacji wykorzystalismy przedziałów ufności Cloppera-Pearsona, Walda i Asymptotycznych.
+\subsection*{Zad 1}
+Przeprowadzić symulacje, których celem jest porównanie prawdopodobieństwa pokrycia i długości przedziałów ufności Cloppera-Pearsona, Walda i trzeciego dowolnego typu przedziału ufności zaimplementowanego w funkcji \textit{binom.confint} pakietu \textit{binom}. Uwzględnić poziom ufności 0.95, różne rozmiary próby i różne wartości prawdopodobieństwa $p$. Wyniki zamieścić w tabelach i na rysunkach. Sformułować wnioski, które umożliwią praktykowi wybór konkretnego przedziału ufności do wyznaczenia jego realizacji dla konkretnych danych.\\
+
+W szymulacji wykorzystalismy przedziałów ufności Cloppera-Pearsona, Walda i Asymptotyczne.
 Symulacje przeporwadzimy na posdsawie ralizaji zmiennej loswej $X \sim \mathcal{B}(n, p)$.  
 <<eval = FALSE>>=
-symulation <-function(n = 10, dp= 0.2,MCs = 1000){
-  MCs <- MCs
-  n <- n
+symulation <-function(n = 10, dp= 0.2, MCs = 1000){
   ps <- seq(0.01, 0.99, dp)
   N <- length(ps)
-  
   data <- matrix(0,N,6)
   
   for (k in 1:N) {
     p <- ps[k]
-    
     wilson_ok <- 0
     axact_ok  <- 0
     asymp_ok  <- 0
-    
     wilson_l <- rep(0,MCs)
     axact_l  <- rep(0,MCs)
     asymp_l  <- rep(0,MCs)
@@ -250,7 +251,6 @@ symulation <-function(n = 10, dp= 0.2,MCs = 1000){
       wilson <- binom.wilson(x, n)
       exact  <- binom.exact(x, n)
       asymp  <- binom.asymp(x, n)
-      
       wilson_l[i] <- wilson$upper - wilson$lower
       axact_l[i] <- exact$upper - exact$lower
       asymp_l[i] <- asymp$upper - asymp$lower
@@ -266,13 +266,8 @@ symulation <-function(n = 10, dp= 0.2,MCs = 1000){
       }
     }
     
-    data[k,]<- c(  wilson_ok/MCs,
-              axact_ok/MCs,
-              asymp_ok/MCs,
-              
-              mean(wilson_l),
-              mean(axact_l) ,
-              mean(asymp_l) )
+    data[k,]<- c( wilson_ok/MCs, axact_ok/MCs, asymp_ok/MCs,
+                  mean(wilson_l), mean(axact_l), mean(asymp_l))
   }
   return(data)
 }
@@ -287,26 +282,28 @@ Stwórzmy teraz ramki danych prawdopodobieństw pokrycia
 <<>>=
 data <- read.csv("data_n_10.csv")
 ps <- seq(0.01, 0.99, 0.01)
-df1 <- data.frame(wilsonp = data[,1], axact = data[,2],asymp = data[,3],p =ps)
+df1 <- data.frame(wilsonp = data[,1], axact = data[,2],
+                    asymp = data[,3], p = ps)
 head(df1)
 @
 Stwórzmy teraz ramki danych średniej długości przedziałów
 <<>>=
-df2 <- data.frame(wilsonp = data[,4], axact = data[,5],asymp = data[,6], p =ps)
+df2 <- data.frame(wilsonp = data[,4], axact = data[,5], 
+                    asymp = data[,6], p = ps)
 head(df2)
 @
 Spozadzmy również wykresy
-<<fig_6, fig.width = 11, fig.height = 7, fig.cap ='\\label{fig:6}Wykres prawdopodobieństwa pokrycia dla poszczególnych metod i n równego 10.' ,fig.pos = 'H'>>=
+<<fig_6, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:6}Wykres prawdopodobieństwa pokrycia dla poszczególnych metod i n równego 10.' ,fig.pos = 'H'>>=
 df_p <- melt(df1,id.vars="p")
 ggplot(df_p,aes(p, value,col=variable))+
   geom_point()+ geom_line()
 @
-<<fig_7,  fig.width = 11, fig.height = 7, fig.cap ='\\label{fig:7}Wykres średniej długości przedziałów dla poszczególnych metod i n równego 10.' ,fig.pos = 'H'>>=
+<<fig_7,  fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:7}Wykres średniej długości przedziałów dla poszczególnych metod i n równego 10.' ,fig.pos = 'H'>>=
 df_l <- melt(df2,id.vars="p")
 ggplot(df_l,aes(p, value,col=variable))+
   geom_point()+ geom_line()
 @
-Zobaczmy również jak wygladaja powyzsze wykresy ale dla tym razem dla n równego 100
+Zobaczmy również jak wygladaja powyzsze wykresy ale tym razem dla n równego 100
 <<echo = FALSE>>=
 data <- read.csv("data_n_100.csv")
 ps <- seq(0.01, 0.99, 0.01)
@@ -315,76 +312,81 @@ df2 <- data.frame(wilsonp = data[,4], axact = data[,5],asymp = data[,6], p =ps)
 df_p2 <- melt(df1,id.vars="p")
 df_l2 <- melt(df2,id.vars="p")
 @
-<<fig_8, fig.width = 11, fig.height = 7, fig.cap ='\\label{fig:8}Wykres prawdopodobieństwa pokrycia dla poszczególnych metod i n równego 10.' ,fig.pos = 'H',echo = FALSE>>=
+<<fig_8, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:8}Wykres prawdopodobieństwa pokrycia dla poszczególnych metod i n równego 100.' ,fig.pos = 'H', echo = FALSE>>=
 ggplot(df_p2,aes(p, value,col=variable))+
   geom_point()+ geom_line()
 @
-<<fig_9, fig.width = 11, fig.height = 7, fig.cap ='\\label{fig:9}Wykres średniej długości przedziałów dla poszczególnych metod i n równego 10.' ,fig.pos = 'H',echo = FALSE>>=
+<<fig_9, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:9}Wykres średniej długości przedziałów dla poszczególnych metod i n równego 100.' ,fig.pos = 'H', echo = FALSE>>=
 ggplot(df_l2,aes(p, value,col=variable))+
   geom_point()+ geom_line()
 @
-
+\newpage
+\subsection*{Porównanie Rysónk \ref{fig:6} z Rysónk \ref{fig:8} oraz Rysónek \ref{fig:7} z Rysónek \ref{fig:9}}
 
 % ######################################## może do usuniecia
-<<fig.show="hold", out.width="50%", echo = FALSE, fig.cap ='\\label{fig:9}Wykresy prawdopodobieństwa pokrycia dla poszczególnych metod i n równego odpowiednio 10 i 100.',fig.pos = 'H'>>=
+<<fig_10, fig.show="hold", out.width="50%", fig.cap ='\\label{fig:10}Wykresy prawdopodobieństwa pokrycia dla poszczególnych metod i n równego odpowiednio 10 i 100.',fig.pos = 'H',echo = FALSE>>=
 ggplot(df_p,aes(p, value,col=variable))+
   geom_point()+ geom_line()
 ggplot(df_p2,aes(p, value,col=variable))+
   geom_point()+ geom_line()
 @
-<<fig.show="hold", out.width="50%", echo = FALSE, fig.cap ='\\label{fig:9}Wykresy średniej długości przedziałów dla poszczególnych metod i n równego 10 i 100.',fig.pos = 'H'>>=
+<<fig_11, fig.show="hold", out.width="50%", fig.cap ='\\label{fig:11}Wykresy średniej długości przedziałów dla poszczególnych metod i n równego 10 i 100.',fig.pos = 'H',echo = FALSE>>=
 ggplot(df_l,aes(p, value,col=variable))+
   geom_point()+ geom_line()
 ggplot(df_l2,aes(p, value,col=variable))+
   geom_point()+ geom_line()
 @
 % #######################################
+Jak możemy zobaczyć z powyższych wykresów, przedziały Cloppera-Pearsona mają największe prawdopodobieństwo pokrycia oraz największą średnią długość dla każdego $p$, świadczy to, że metoda Cloppera-Pearsona będzie najlepszym wyborem spośród testowanych metod. 
 
+\newpage
 \subsection*{Zad 2}
+Załóżmy, że 200 losowo wybranych klientów (w różnym wieku) kilku (losowo wybranych) aptek zapytano, jaki lek przeciwbólowy zwykle stosują. Zebrane dane zawarte są w tablicy 1. Na podstawie tych danych, wyznaczyć realizacje przedziałów ufności, na poziomie ufności 0.95, dla:
 \subsubsection*{a)}
-<<>>=
+<<size = "small">>=
 conf <- binom.confint(50,200)
 ls <- conf$"upper"- conf$"lower"
 cbind(conf,ls)
 @
 Najlepszy
-<<>>=
+<<size = "small">>=
 cbind(conf,ls)[ls == max(ls),]
 @
 
-
+\newpage
 \subsubsection*{b)}
-<<>>=
+<<size = "small">>=
 conf <- binom.confint(0,200)
 ls <- conf$"upper"- conf$"lower"
 cbind(conf,ls)
 @
+
 Najlepszy
-<<>>=
+<<size = "small">>=
 cbind(conf,ls)[ls == max(ls),]
 @
 
 
 \subsubsection*{c)}
-<<>>=
+<<size = "small">>=
 conf <- binom.confint(44,200)
 ls <- conf$"upper"- conf$"lower"
 cbind(conf,ls)
 @
 Najlepszy
-<<>>=
+<<size = "small">>=
 cbind(conf,ls)[ls == max(ls),]
 @
 
 
 \subsubsection*{d)}
-<<>>=
+<<size = "small">>=
 conf <- binom.confint(22,200)
 ls <- conf$"upper"- conf$"lower"
 cbind(conf,ls)
 @
 Najlepszy
-<<>>=
+<<size = "small">>=
 cbind(conf,ls)[ls == max(ls),]
 @
 
