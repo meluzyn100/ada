@@ -16,54 +16,54 @@
 \date{}
 
 \begin{document}
-\maketitle
+	\maketitle 
+	
+	<<warning=F, message=F,echo = F>>=
+  	library(binom)
+    require(ggplot2)
+    library(reshape2)
+    library(xtable)
+	
+	  library(vcdExtra)
+    library(tidyverse)
+  	library(matrixStats)
 
-<<warning=F, message=F,echo = F>>=
-library(binom)
-require(ggplot2)
-library(reshape2)
-library(xtable)
-
-library(vcdExtra)
-library(tidyverse)
-library(matrixStats)
-
-# pdf.options(encoding = 'ISOLatin2') # znaki polskie w wykresach
-@
-
-\section*{Lista 1}
-\subsection*{Zad 1}
-Sporządzić tablice liczności dla zmiennych \textit{Temperature} oraz \textit{Preference} biorąc pod uwagę wszystkie dane, jak również w podgrupach ze względu na zmienną \textit{Water Softness}:
-\subsubsection*{Detergent}
+  	# pdf.options(encoding = 'ISOLatin2') # znaki polskie w wykresach
+	@
+	
+	\section*{Lista 1}
+  \subsection*{Zad 1}
+  Sporządzić tablice liczności dla zmiennych \textit{Temperature} oraz \textit{Preference} biorąc pod uwagę wszystkie dane, jak również w podgrupach ze względu na zmienną \textit{Water Softness}:
+  \subsubsection*{Detergent}
 <<size = "small">>=
 Detergent.df <- data.frame(Detergent)
 Detergent.df %>% group_by(Temperature) %>% summarise(n = sum(Freq))
 Detergent.df %>% filter(Water_softness == "Soft") %>%
-group_by(Temperature) %>% summarise(n = sum(Freq))
+  group_by(Temperature) %>% summarise(n = sum(Freq))
 Detergent.df %>% filter(Water_softness == "Medium") %>%
-group_by(Temperature) %>% summarise(n = sum(Freq))
+  group_by(Temperature) %>% summarise(n = sum(Freq))
 Detergent.df %>% filter(Water_softness == "Hard") %>%
-group_by(Temperature) %>% summarise(n = sum(Freq))
+  group_by(Temperature) %>% summarise(n = sum(Freq))
 @
 
-\subsubsection*{Preference}
+  \subsubsection*{Preference}
 
-<<size = "small">>=
-# Detergent.df %>% group_by(Preference) %>% summarise(n = sum(Freq))
-Detergent.df %>% filter(Water_softness == "Soft") %>%
-group_by(Preference) %>% summarise(n = sum(Freq))
-Detergent.df %>% filter(Water_softness == "Medium") %>%
-group_by(Preference) %>% summarise(n = sum(Freq))
-Detergent.df %>% filter(Water_softness == "Hard") %>%
-group_by(Preference) %>% summarise(n = sum(Freq))
-@
+  <<size = "small">>=
+  # Detergent.df %>% group_by(Preference) %>% summarise(n = sum(Freq))
+  Detergent.df %>% filter(Water_softness == "Soft") %>%
+    group_by(Preference) %>% summarise(n = sum(Freq))
+  Detergent.df %>% filter(Water_softness == "Medium") %>%
+    group_by(Preference) %>% summarise(n = sum(Freq))
+  Detergent.df %>% filter(Water_softness == "Hard") %>%
+    group_by(Preference) %>% summarise(n = sum(Freq))
+  @
 
-\subsection*{Zad 2}
-Sporządzić tabelę wielodzielczą uwzględniającą zmienną \textit{Temperature} i \textit{Water Softness}:
-<<>>=
-ftable(Detergent, col.vars = "Temperature", row.vars = "Water_softness")
-structable(Temperature ~ Water_softness, Detergent) %>% addmargins()
-@
+  \subsection*{Zad 2}
+  Sporządzić tabelę wielodzielczą uwzględniającą zmienną \textit{Temperature} i \textit{Water Softness}:
+  <<>>=
+  ftable(Detergent, col.vars = "Temperature", row.vars = "Water_softness")
+  structable(Temperature ~ Water_softness, Detergent) %>% addmargins()
+  @
 
 \subsection*{Zad 3}
 Sporządzić wykres kołowy i słupkowy dla zmiennej \textit{Water Softness}:
@@ -76,23 +76,24 @@ barplot(A,ylim=c(0,350))
 par(mar = c(0,0,0,0))
 pie(A)
 @
-\subsection*{Zad 4}
-<<fig_3, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:3}Wykres mozaikowy dla Preference i Water softness' ,fig.pos = 'H'>>=
+  \subsection*{Zad 4}
+  Sporządzić wykresy mozaikowe odpowiadające rozpatrywanym danym.
+<<fig_3, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:3}Wykres mozaikowy dla \\text{\\textit{Preference}} i \\text{\\textit{Water softness}}' ,fig.pos = 'H'>>=
 par(mar = c(2, 2, 2, 2))
 mosaicplot(~Water_softness+Preference, data = Detergent)
 @
-<<fig_4, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:4}Wykres mozaikowy dla Preference i M User.' ,fig.pos = 'H'>>=
+<<fig_4, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:4}Wykres mozaikowy dla \\text{\\textit{Preference}} i \\text{\\textit{M User}}.' ,fig.pos = 'H'>>=
 par(mar = c(2, 2, 2, 2))
 mosaicplot(~M_User+Preference, data = Detergent)
 @
-<<fig_5, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:5}Wykres mozaikowy dla Preference i Temperature.' ,fig.pos = 'H'>>=
+<<fig_5, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:5}Wykres mozaikowy dla \\text{\\textit{Preference}} i \\text{\\textit{Temperature}}.' ,fig.pos = 'H'>>=
 par(mar = c(2, 2, 2, 2))
 mosaicplot(~Temperature+Preference, data = Detergent)
 @
 
 \section*{Lista 2}
 \subsection*{Zad 1}
-\textbf{Losowanie ze zwracaniem:}
+\textbf{Losowanie ze zwracaniem:} 
 <<>>=
 ind <- sample(x=nrow(mtcars),size=nrow(mtcars)/10,replace=TRUE)
 @
@@ -106,7 +107,7 @@ mtcars[ind,]
 @
 
 \newpage
-\textbf{Losowanie bez zwracania:}
+\textbf{Losowanie bez zwracania:} 
 <<>>=
 ind <- sample(x=nrow(mtcars),size=nrow(mtcars)/10,replace=FALSE)
 @
@@ -121,26 +122,26 @@ mtcars[ind,]
 
 
 \subsection*{Zad 2}
-
+  
 \textbf{Propozycja algorytmu:}
-\begin{enumerate}
-  \item Generujemy wektor zer o rozmiarze n .
-  \item Dla każdego elementu tego wektora losujemy u z rozkładu jednostajnego ~U(0,1), jeśli u 	$\leq p$ to dodajemy 1 do tego elementu.
-  \item Krok 2 powtarzamy N razy.
-        \newline
-\end{enumerate}
+  \begin{enumerate}
+    \item Generujemy wektor zer o rozmiarze n .
+    \item Dla każdego elementu tego wektora losujemy u z rozkładu jednostajnego ~U(0,1), jeśli u 	$\leq p$ to dodajemy 1 do tego elementu.
+    \item Krok 2 powtarzamy N razy.
+    \newline
+  \end{enumerate}
 
 
 \textbf{Algorytm opisany za pomocą funkcji w R:}
 <<>>=
 bin <- function(n,p,N){
-    X <- rep(0,N)
-    for (i in 1:N) {
-        r = sum(runif(n) < p)
-        X[i] = r
-      }
-    return(X)
+  X <- rep(0,N)
+  for (i in 1:N) {
+    r = sum(runif(n) < p)
+    X[i] = r
   }
+  return(X)
+} 
 @
 gdzie: n - rozmiar próby, p - prawdopodobieństwo, N - ilość wywołań
 \newline
@@ -154,9 +155,9 @@ bin(10,0.4,5)
 \textbf{Sprawdzenie poprawności:}\newline
 Dla zmiennej losowej $X \sim \mathcal{B}(n, p)$ wiemy, że:
 \begin{itemize}
-  \item[] $\mathbb{E}(X) = np$,
+  \item[] $\mathbb{E}(X) = np$, 
   \item[] $\text{Var}(X)= np(1-p)$,
-\end{itemize}
+\end{itemize} 
 Sprawdźmy zatem działanie naszej funkcji dla $n = 1000$ i $p = 0.4$:
 <<cache = T>>=
 test <- bin(1000,0.4,10000)
@@ -170,28 +171,28 @@ Chcemy wygenerował generować zmienna losowa z rozkładu wielomianowego o param
 
 
 \textbf{Propozycja algorytmu:}
-\begin{enumerate}
-  \item Generujemy wektor zer o długości k.
-  \item Generuj wektor prób o długości n, przy czym w każdej próbie mamy do czynienia z wylosowaniem jednego z k zdarzeń o poszczególnym prawdopodobieństwem.
-  \item Sumuj ilość występowania każdego zdarzenia i zapisz je do wektora.
-  \item Krok 1 i 3 powtarzamy N razy.
-        \newline
-\end{enumerate}
-
-
+  \begin{enumerate}
+    \item Generujemy wektor zer o długości k.
+    \item Generuj wektor prób o długości n, przy czym w każdej próbie mamy do czynienia z wylosowaniem jednego z k zdarzeń o poszczególnym prawdopodobieństwem.
+    \item Sumuj ilość występowania każdego zdarzenia i zapisz je do wektora.
+    \item Krok 1 i 3 powtarzamy N razy.
+    \newline
+  \end{enumerate}
+  
+  
 \textbf{Algorytm opisany za pomocą funkcji w R:}
 <<>>=
 multinom.rv <-function(n, p, N){
-    k <- length(p)
-    X <- matrix(0, nrow = k, ncol = N)
-    for (j in 1:N) {
-        ind <- sample(1:k, n, replace = TRUE, prob = p)
-        for (i in 1:n) {
-            X[ind[i],j] = 1 + X[ind[i],j]
-          }
-      }
-    return(X)
+  k <- length(p)
+  X <- matrix(0, nrow = k, ncol = N)
+  for (j in 1:N) {
+    ind <- sample(1:k, n, replace = TRUE, prob = p)
+    for (i in 1:n) {
+      X[ind[i],j] = 1 + X[ind[i],j]
+    }
   }
+  return(X)
+}
 @
 
 
@@ -208,7 +209,7 @@ Dla zmiennej losowej $X \sim \mathcal{W}(n,\{p_1, p_2, \dots,p_k \})$ wiemy, że
 \begin{itemize}
   \item[] $\mathbb{E}(X_i) = np_i$.
   \item[] $\text{Var}(X_i)= np_i(1-p_i)$.
-\end{itemize}
+\end{itemize} 
 Sprawdźmy zatem działanie naszej funkcji dla $n = 100$ i $p =\{ 0.2, 0.3, 0.5 \}$ :
 <<>>=
 test <- multinom.rv(100,c(0.2,0.3,0.5),10000)
@@ -223,57 +224,57 @@ W obu powyższych przypadkach nasze wyniki są bardzo bliskie co wskazuje na pop
 
 \section*{Lista 3}
 W szymulacji wykorzystalismy przedziałów ufności Cloppera-Pearsona, Walda i Asymptotycznych.
-Symulacje przeporwadzimy na posdsawie ralizaji zmiennej loswej $X \sim \mathcal{B}(n, p)$.
+Symulacje przeporwadzimy na posdsawie ralizaji zmiennej loswej $X \sim \mathcal{B}(n, p)$.  
 <<eval = FALSE>>=
 symulation <-function(n = 10, dp= 0.2,MCs = 1000){
-MCs <- MCs
-n <- n
-ps <- seq(0.01, 0.99, dp)
-N <- length(ps)
-
-data <- matrix(0,N,6)
-
-for (k in 1:N) {
-p <- ps[k]
-
-wilson_ok <- 0
-axact_ok  <- 0
-asymp_ok  <- 0
-
-wilson_l <- rep(0,MCs)
-axact_l  <- rep(0,MCs)
-asymp_l  <- rep(0,MCs)
-
-for (i in 1:MCs){
-x <- rbinom(1, n, p)
-wilson <- binom.wilson(x, n)
-exact  <- binom.exact(x, n)
-asymp  <- binom.asymp(x, n)
-
-wilson_l[i] <- wilson$upper - wilson$lower
-axact_l[i] <- exact$upper - exact$lower
-asymp_l[i] <- asymp$upper - asymp$lower
-
-if (wilson["lower"]<p && p < wilson["upper"]) {
-    wilson_ok <- 1 + wilson_ok
+  MCs <- MCs
+  n <- n
+  ps <- seq(0.01, 0.99, dp)
+  N <- length(ps)
+  
+  data <- matrix(0,N,6)
+  
+  for (k in 1:N) {
+    p <- ps[k]
+    
+    wilson_ok <- 0
+    axact_ok  <- 0
+    asymp_ok  <- 0
+    
+    wilson_l <- rep(0,MCs)
+    axact_l  <- rep(0,MCs)
+    asymp_l  <- rep(0,MCs)
+    
+    for (i in 1:MCs){
+      x <- rbinom(1, n, p)
+      wilson <- binom.wilson(x, n)
+      exact  <- binom.exact(x, n)
+      asymp  <- binom.asymp(x, n)
+      
+      wilson_l[i] <- wilson$upper - wilson$lower
+      axact_l[i] <- exact$upper - exact$lower
+      asymp_l[i] <- asymp$upper - asymp$lower
+      
+      if (wilson["lower"]<p && p < wilson["upper"]) {
+        wilson_ok <- 1 + wilson_ok
+      }
+      if (exact["lower"]<p && p < exact["upper"]) {
+        axact_ok <- 1 + axact_ok
+      }
+      if (asymp["lower"]<p && p < asymp["upper"]) {
+        asymp_ok <- 1 + asymp_ok
+      }
+    }
+    
+    data[k,]<- c(  wilson_ok/MCs,
+              axact_ok/MCs,
+              asymp_ok/MCs,
+              
+              mean(wilson_l),
+              mean(axact_l) ,
+              mean(asymp_l) )
   }
-if (exact["lower"]<p && p < exact["upper"]) {
-    axact_ok <- 1 + axact_ok
-  }
-if (asymp["lower"]<p && p < asymp["upper"]) {
-    asymp_ok <- 1 + asymp_ok
-  }
-}
-
-data[k,]<- c(  wilson_ok/MCs,
-axact_ok/MCs,
-asymp_ok/MCs,
-
-mean(wilson_l),
-mean(axact_l) ,
-mean(asymp_l) )
-}
-return(data)
+  return(data)
 }
 @
 Odpolamy nasza szymulacje dla $n=10$ i z krokiem $dp = 0.01$ i zapiszmy wynik w pliku csv:
@@ -298,12 +299,12 @@ Spozadzmy również wykresy
 <<fig_6, fig.width = 11, fig.height = 7, fig.cap ='\\label{fig:6}Wykres prawdopodobieństwa pokrycia dla poszczególnych metod i n równego 10.' ,fig.pos = 'H'>>=
 df_p <- melt(df1,id.vars="p")
 ggplot(df_p,aes(p, value,col=variable))+
-geom_point()+ geom_line()
+  geom_point()+ geom_line()
 @
 <<fig_7,  fig.width = 11, fig.height = 7, fig.cap ='\\label{fig:7}Wykres średniej długości przedziałów dla poszczególnych metod i n równego 10.' ,fig.pos = 'H'>>=
 df_l <- melt(df2,id.vars="p")
 ggplot(df_l,aes(p, value,col=variable))+
-geom_point()+ geom_line()
+  geom_point()+ geom_line()
 @
 Zobaczmy również jak wygladaja powyzsze wykresy ale dla tym razem dla n równego 100
 <<echo = FALSE>>=
@@ -316,26 +317,26 @@ df_l2 <- melt(df2,id.vars="p")
 @
 <<fig_8, fig.width = 11, fig.height = 7, fig.cap ='\\label{fig:8}Wykres prawdopodobieństwa pokrycia dla poszczególnych metod i n równego 10.' ,fig.pos = 'H',echo = FALSE>>=
 ggplot(df_p2,aes(p, value,col=variable))+
-geom_point()+ geom_line()
+  geom_point()+ geom_line()
 @
 <<fig_9, fig.width = 11, fig.height = 7, fig.cap ='\\label{fig:9}Wykres średniej długości przedziałów dla poszczególnych metod i n równego 10.' ,fig.pos = 'H',echo = FALSE>>=
 ggplot(df_l2,aes(p, value,col=variable))+
-geom_point()+ geom_line()
+  geom_point()+ geom_line()
 @
 
 
 % ######################################## może do usuniecia
 <<fig.show="hold", out.width="50%", echo = FALSE, fig.cap ='\\label{fig:9}Wykresy prawdopodobieństwa pokrycia dla poszczególnych metod i n równego odpowiednio 10 i 100.',fig.pos = 'H'>>=
 ggplot(df_p,aes(p, value,col=variable))+
-geom_point()+ geom_line()
+  geom_point()+ geom_line()
 ggplot(df_p2,aes(p, value,col=variable))+
-geom_point()+ geom_line()
+  geom_point()+ geom_line()
 @
 <<fig.show="hold", out.width="50%", echo = FALSE, fig.cap ='\\label{fig:9}Wykresy średniej długości przedziałów dla poszczególnych metod i n równego 10 i 100.',fig.pos = 'H'>>=
 ggplot(df_l,aes(p, value,col=variable))+
-geom_point()+ geom_line()
+  geom_point()+ geom_line()
 ggplot(df_l2,aes(p, value,col=variable))+
-geom_point()+ geom_line()
+  geom_point()+ geom_line()
 @
 % #######################################
 
