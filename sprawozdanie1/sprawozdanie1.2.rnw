@@ -104,7 +104,7 @@ Wylosowane indeksy:
 ind
 @
 Wylosowane elementy z bazy danych:
-<<>>=
+<<size = "small">>=
 mtcars[ind,]
 @
 
@@ -118,7 +118,7 @@ Wylosowane indeksy:
 ind
 @
 Wylosowane elementy z bazy danych:
-<<>>=
+<<size = "small">>=
 mtcars[ind,]
 @
 
