@@ -1,0 +1,413 @@
+% !TeX TXS-program:compile = txs:///knit2pdf
+\documentclass[12pt]{mwart}
+\usepackage[utf8]{inputenc}
+\usepackage[T1,plmath]{polski}
+\usepackage{lmodern}
+
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+
+\title{Sprawozdanie 1}
+\author{Aleksander Jakóbczyk i Kacper Pasterniak}
+\date{}
+
+\begin{document}
+	\maketitle 
+	
+	<<warning=F, message=F,echo = F>>=
+  	library(binom)
+    require(ggplot2)
+    library(reshape2)
+    library(xtable)
+	
+	  library(vcdExtra)
+    library(tidyverse)
+  	library(matrixStats)
+
+  	# pdf.options(encoding = 'ISOLatin2') # znaki polskie w wykresach
+	@
+	
+	\section*{Lista 1}
+  \subsection*{Zad 1}
+  Sporządzić tablice liczności dla zmiennych \textit{Temperature} oraz \textit{Preference} biorąc pod uwagę wszystkie dane, jak również w podgrupach ze względu na zmienną \textit{Water Softness}:
+  \subsubsection*{Detergent}
+<<size = "small">>=
+Detergent.df <- data.frame(Detergent)
+Detergent.df %>% group_by(Temperature) %>% summarise(n = sum(Freq))
+Detergent.df %>% filter(Water_softness == "Soft") %>%
+  group_by(Temperature) %>% summarise(n = sum(Freq))
+Detergent.df %>% filter(Water_softness == "Medium") %>%
+  group_by(Temperature) %>% summarise(n = sum(Freq))
+Detergent.df %>% filter(Water_softness == "Hard") %>%
+  group_by(Temperature) %>% summarise(n = sum(Freq))
+@
+
+  \subsubsection*{Preference}
+
+  <<size = "small">>=
+  # Detergent.df %>% group_by(Preference) %>% summarise(n = sum(Freq))
+  Detergent.df %>% filter(Water_softness == "Soft") %>%
+    group_by(Preference) %>% summarise(n = sum(Freq))
+  Detergent.df %>% filter(Water_softness == "Medium") %>%
+    group_by(Preference) %>% summarise(n = sum(Freq))
+  Detergent.df %>% filter(Water_softness == "Hard") %>%
+    group_by(Preference) %>% summarise(n = sum(Freq))
+  @
+
+  \subsection*{Zad 2}
+  Sporządzić tabelę wielodzielczą uwzględniającą zmienną \textit{Temperature} i \textit{Water Softness}:
+  <<>>=
+  ftable(Detergent, col.vars = "Temperature", row.vars = "Water_softness")
+  structable(Temperature ~ Water_softness, Detergent) %>% addmargins()
+  @
+
+\subsection*{Zad 3}
+Sporządzić wykres kołowy i słupkowy dla zmiennej \textit{Water Softness}:
+<<fig_1, fig.width = 6, fig.height = 2, fig.cap ='\\label{fig:1}Wykres słupkowy dla zmiennej \\text{\\textit{Water Softness}}.' ,fig.pos = 'H'>>=
+par(mar = c(2, 2, 0.5, 1))
+A <- apply(Detergent, "Water_softness", sum)
+barplot(A,ylim=c(0,350))
+@
+<<fig_2, fig.width = 7, fig.height = 4.5, fig.cap ='\\label{fig:2}Wykresy kołowy dla zmiennej \\text{\\textit{Water Softness}}.' ,fig.pos = 'H'>>=
+par(mar = c(0,0,0,0))
+pie(A)
+@
+  \subsection*{Zad 4}
+  Sporządzić wykresy mozaikowe odpowiadające rozpatrywanym danym.
+<<fig_3, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:3}Wykres mozaikowy dla \\text{\\textit{Preference}} i \\text{\\textit{Water softness}}' ,fig.pos = 'H'>>=
+par(mar = c(2, 2, 2, 2))
+mosaicplot(~Water_softness+Preference, data = Detergent)
+@
+<<fig_4, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:4}Wykres mozaikowy dla \\text{\\textit{Preference}} i \\text{\\textit{M User}}.' ,fig.pos = 'H'>>=
+par(mar = c(2, 2, 2, 2))
+mosaicplot(~M_User+Preference, data = Detergent)
+@
+<<fig_5, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:5}Wykres mozaikowy dla \\text{\\textit{Preference}} i \\text{\\textit{Temperature}}.' ,fig.pos = 'H'>>=
+par(mar = c(2, 2, 2, 2))
+mosaicplot(~Temperature+Preference, data = Detergent)
+@
+
+\section*{Lista 2}
+\subsection*{Zad 1}
+Zapoznać się z funkcją \textit{sample} (w pakiecie \textit{stats}). Napisać fragment programu, którego celem jest wylosowanie próbki rozmiaru około 1/10 liczby przypadków danej
+bazy danych (pewnej hipotetycznej), ze zwracaniem oraz bez zwracania.
+\subsubsection*{Losowanie ze zwracaniem:} 
+<<>>=
+ind <- sample(x=nrow(mtcars),size=nrow(mtcars)/10,replace=TRUE)
+@
+Wylosowane indeksy:
+<<>>=
+ind
+@
+Wylosowane elementy z bazy danych:
+<<size = "small">>=
+mtcars[ind,]
+@
+
+\newpage
+\textbf{Losowanie bez zwracania:} 
+<<>>=
+ind <- sample(x=nrow(mtcars),size=nrow(mtcars)/10,replace=FALSE)
+@
+Wylosowane indeksy:
+<<>>=
+ind
+@
+Wylosowane elementy z bazy danych:
+<<size = "small">>=
+mtcars[ind,]
+@
+
+
+\subsection*{Zad 2}
+Zaproponować algorytm generowania liczb z rozkładu dwumianowego i udowodnić,
+że jest poprawny. Napisać program do generowania tych liczb zgodnie z zaproponowanym algorytmem. (W pakiecie R dostępna jest funkcja rbinom.)
+\subsubsection*{Propozycja algorytmu:}
+  \begin{enumerate}
+    \item Generujemy wektor zer o rozmiarze $n$ .
+    \item Dla każdego elementu tego wektora losujemy $u$ z rozkładu jednostajnego ~U(0,1), jeśli  $u \leq p$ to dodajemy 1 do tego elementu.
+    \item Krok 2 powtarzamy $N$ razy.
+    \newline
+  \end{enumerate}
+
+
+\textbf{Algorytm opisany za pomocą funkcji w R:}
+<<>>=
+bin <- function(n,p,N){
+  X <- rep(0,N)
+  for (i in 1:N) {
+    r = sum(runif(n) < p)
+    X[i] = r
+  }
+  return(X)
+} 
+@
+gdzie: n - rozmiar próby, p - prawdopodobieństwo sukcesu, N - ilość wywołań
+\newpage
+
+\textbf{Przykładowe użycie:}
+<<>>=
+bin(10,0.4,5)
+@
+
+
+\textbf{Sprawdzenie poprawności:}\newline
+Dla zmiennej losowej $X \sim \mathcal{B}(n, p)$ wiemy, że:
+\begin{itemize}
+  \item[] $\mathbb{E}(X) = np$, 
+  \item[] $\text{Var}(X)= np(1-p)$,
+\end{itemize} 
+Sprawdźmy zatem działanie naszej funkcji dla $n = 100$ i $p = 0.4$:
+<<cache = T>>=
+test <- bin(100,0.4,10000)
+mean(test)
+var(test)
+@
+Wartości teoretyczne średniej i wariancji dla takich parametrów powinny wynosić kolejno 40 i 24. Nasze wyniki są bardzo bliskie co wskazuje na poprawność metody.
+
+\subsection*{Zad 3}
+Zaproponować algorytm generowania wektora z rozkładu wielomianowego i udowodnić, że jest poprawny. Napisać program do generowania tych wektorów zgodnie z zaproponowanym algorytmem. (W pakiecie R dostępna jest funkcja \textit{rmultinom}.) \\
+
+\textbf{Propozycja algorytmu:}\\
+Chcemy generować zmienna losowa z rozkładu wielomianowego o parametrach $n$ i $p$, gdzie $p$ jest wektorem wag prawdopodobieństw o długości $k$ którego elementy sumują się do jedynki.\\
+  \begin{enumerate}
+    \item Generujemy wektor zer o długości k.
+    \item Generuj wektor prób o długości n, przy czym w każdej próbie mamy do czynienia z wylosowaniem jednego z k zdarzeń o poszczególnym prawdopodobieństwem.
+    \item Sumuj ilość występowania każdego zdarzenia i zapisz je do wektora.
+    \item Krok 1 i 3 powtarzamy N razy.
+    \newline
+  \end{enumerate}
+  
+\newpage
+\textbf{Algorytm opisany za pomocą funkcji w R:}
+<<>>=
+multinom.rv <-function(n, p, N){
+  k <- length(p)
+  X <- matrix(0, nrow = k, ncol = N)
+  for (j in 1:N) {
+    ind <- sample(1:k, n, replace = TRUE, prob = p)
+    for (i in 1:n) {
+      X[ind[i],j] = 1 + X[ind[i],j]
+    }
+  }
+  return(X)
+}
+@
+
+
+\textbf{Przykładowe użycie:}
+<<>>=
+multinom.rv(10,c(0.2,0.3,0.5),5)
+@
+
+
+\textbf{Sprawdzenie poprawności:}\newline
+Niech zmienne losowe $X_1,X_2, \dots,X_k $ oznaczają liczby zajść poszczególnych zdarzeń w
+n próbach, przy czym $X_1 + X_2 + \dots + X_k  = n$.
+Dla zmiennej losowej $X \sim \mathcal{W}(n,\{p_1, p_2, \dots,p_k \})$ wiemy, że:
+\begin{itemize}
+  \item[] $\mathbb{E}(X_i) = np_i$.
+  \item[] $\text{Var}(X_i)= np_i(1-p_i)$.
+\end{itemize} 
+Sprawdźmy zatem działanie naszej funkcji dla $n = 100$ i $p =\{ 0.2, 0.3, 0.5 \}$ :
+<<>>=
+test <- multinom.rv(100,c(0.2,0.3,0.5),10000)
+rowMeans(test)
+@
+Widzimy zatem że symulowane wartości są bardzo bliskie wartości teoretycznych: $20,30,50$.
+<<>>=
+rowVars(test)
+@
+Widzimy zatem że symulowane wartości są bardzo bliskie wartości teoretycznych: $16,21,25$.\\
+W obu powyższych przypadkach nasze wyniki są bardzo bliskie co wskazuje na poprawność metody.
+\subsection*{Zad 4}
+\textbf{Propozycja badania ankietowego} \newline
+Celem badania będzie zebranie informacji na temat zorganizowanego wcześniej Webinaru wydziałowego. Będziemy chcięli dowiedzieć się jak wydarzenie zostało odebrane przez uczestników. Naszą grupą docelową stanowią oczywiście studenci, którzy brali udział w naszym Webinarze. Warunkiem przystąpienia do wydarzenia było wypełnienie formularza zgłoszeniowego, w którym studenci musieli podać adresy e-mail. Dzięki temu posiadamy adres e-mail każdego uczestnika, więc łatwo możemy wysłać im link do ankiety. Poniżej znajduję się fragment przykładowego kwestionariusza: \newline\newline
+\textbf{Część ankiety z pytaniami metryczkowymi:} \newline
+<<echo=F, message= F>>=
+knitr::include_graphics("ankieta1.png")
+@
+\newline
+\textbf{Przykładowe pytania:}\newline
+<<echo=F, message= F>>=
+knitr::include_graphics("ankieta2.png")
+@
+\newline
+Taką ankiete możemy stworzyć za pomocą darmowych narzędzi dostępnych w internecie, na przykład Formularze Google.
+\newline
+\newline
+\newline
+\section*{Lista 3}
+\subsection*{Zad 1}
+Przeprowadzić symulacje, których celem jest porównanie prawdopodobieństwa pokrycia i długości przedziałów ufności Cloppera-Pearsona, Walda i trzeciego dowolnego typu przedziału ufności zaimplementowanego w funkcji \textit{binom.confint} pakietu \textit{binom}. Uwzględnić poziom ufności 0.95, różne rozmiary próby i różne wartości prawdopodobieństwa $p$. Wyniki zamieścić w tabelach i na rysunkach. Sformułować wnioski, które umożliwią praktykowi wybór konkretnego przedziału ufności do wyznaczenia jego realizacji dla konkretnych danych.\\
+
+W symulacji wykorzystaliśmy przedziały ufności Cloppera-Pearsona, Walda i Asymptotyczne.
+Symulacje przeprowadzimy na podstawie realizacji zmiennej loswej $X \sim \mathcal{B}(n, p)$.  
+<<eval = FALSE>>=
+symulation <-function(n = 10, dp= 0.2, MCs = 1000){
+  ps <- seq(0.01, 0.99, dp)
+  N <- length(ps)
+  data <- matrix(0,N,6)
+  
+  for (k in 1:N) {
+    p <- ps[k]
+    wilson_ok <- 0
+    axact_ok  <- 0
+    asymp_ok  <- 0
+    wilson_l <- rep(0,MCs)
+    axact_l  <- rep(0,MCs)
+    asymp_l  <- rep(0,MCs)
+    
+    for (i in 1:MCs){
+      x <- rbinom(1, n, p)
+      wilson <- binom.wilson(x, n)
+      exact  <- binom.exact(x, n)
+      asymp  <- binom.asymp(x, n)
+      wilson_l[i] <- wilson$upper - wilson$lower
+      axact_l[i] <- exact$upper - exact$lower
+      asymp_l[i] <- asymp$upper - asymp$lower
+      
+      if (wilson["lower"]<p && p < wilson["upper"]) {
+        wilson_ok <- 1 + wilson_ok
+      }
+      if (exact["lower"]<p && p < exact["upper"]) {
+        axact_ok <- 1 + axact_ok
+      }
+      if (asymp["lower"]<p && p < asymp["upper"]) {
+        asymp_ok <- 1 + asymp_ok
+      }
+    }
+    
+    data[k,]<- c( wilson_ok/MCs, axact_ok/MCs, asymp_ok/MCs,
+                  mean(wilson_l), mean(axact_l), mean(asymp_l))
+  }
+  return(data)
+}
+@
+Odpolamy nasza szymulacje dla $n=10$ i z krokiem $dp = 0.01$ i zapiszmy wynik w pliku csv:
+<<eval = FALSE>>=
+data <- symulation(n = 10, dp = 0.01)
+write.csv(df_l, "data_n_10.csv")
+@
+
+Stwórzmy teraz ramki danych prawdopodobieństw pokrycia
+<<>>=
+data <- read.csv("data_n_10.csv")
+ps <- seq(0.01, 0.99, 0.01)
+df1 <- data.frame(wilsonp = data[,1], axact = data[,2],
+                    asymp = data[,3], p = ps)
+head(df1)
+@
+Stwórzmy teraz ramki danych średniej długości przedziałów
+<<>>=
+df2 <- data.frame(wilsonp = data[,4], axact = data[,5], 
+                    asymp = data[,6], p = ps)
+head(df2)
+@
+Spozadzmy również wykresy
+<<fig_6, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:6}Wykres prawdopodobieństwa pokrycia dla poszczególnych metod i n równego 10.' ,fig.pos = 'H'>>=
+df_p <- melt(df1,id.vars="p")
+ggplot(df_p,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+@
+<<fig_7,  fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:7}Wykres średniej długości przedziałów dla poszczególnych metod i n równego 10.' ,fig.pos = 'H'>>=
+df_l <- melt(df2,id.vars="p")
+ggplot(df_l,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+@
+Zobaczmy również jak wygladaja powyzsze wykresy ale tym razem dla n równego 100
+<<echo = FALSE>>=
+data <- read.csv("data_n_100.csv")
+ps <- seq(0.01, 0.99, 0.01)
+df1 <- data.frame(wilsonp = data[,1], axact = data[,2],asymp = data[,3],p =ps)
+df2 <- data.frame(wilsonp = data[,4], axact = data[,5],asymp = data[,6], p =ps)
+df_p2 <- melt(df1,id.vars="p")
+df_l2 <- melt(df2,id.vars="p")
+@
+<<fig_8, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:8}Wykres prawdopodobieństwa pokrycia dla poszczególnych metod i n równego 100.' ,fig.pos = 'H', echo = FALSE>>=
+ggplot(df_p2,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+@
+<<fig_9, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:9}Wykres średniej długości przedziałów dla poszczególnych metod i n równego 100.' ,fig.pos = 'H', echo = FALSE>>=
+ggplot(df_l2,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+@
+\newpage
+\subsection*{Porównanie Rysunku \ref{fig:6} z Rysunkiem \ref{fig:8} oraz Rysunku \ref{fig:7} z Rysunkiem \ref{fig:9}}
+
+% ######################################## może do usuniecia
+<<fig_10, fig.show="hold", out.width="50%", fig.cap ='\\label{fig:10}Wykresy prawdopodobieństwa pokrycia dla poszczególnych metod i n równego odpowiednio 10 i 100.',fig.pos = 'H',echo = FALSE>>=
+ggplot(df_p,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+ggplot(df_p2,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+@
+<<fig_11, fig.show="hold", out.width="50%", fig.cap ='\\label{fig:11}Wykresy średniej długości przedziałów dla poszczególnych metod i n równego 10 i 100.',fig.pos = 'H',echo = FALSE>>=
+ggplot(df_l,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+ggplot(df_l2,aes(p, value,col=variable))+
+  geom_point()+ geom_line()
+@
+% #######################################
+Jak możemy zobaczyć z powyższych wykresów, przedziały Cloppera-Pearsona mają największe prawdopodobieństwo pokrycia oraz największą średnią długość dla każdego $p$, świadczy to, że metoda Cloppera-Pearsona będzie najlepszym wyborem spośród testowanych metod. 
+
+\newpage
+\subsection*{Zad 2}
+Załóżmy, że 200 losowo wybranych klientów (w różnym wieku) kilku (losowo wybranych) aptek zapytano, jaki lek przeciwbólowy zwykle stosują. Zebrane dane zawarte są w tablicy 1. Na podstawie tych danych, wyznaczyć realizacje przedziałów ufności, na poziomie ufności 0.95. \newline
+\newline
+Do wyboru najlepszych przedziałów ufności stosujemy funkcję $binom.confint$. Funkcja ta zwraca tabelkę z porównaniem 11 metod. Przedziały będziemy porównywać na podstawie ich długości, im dłuższy tym metoda jest lepsza. Długość takiego przedziału bedzie opisana w tabelce w kolumnie $ls$.\newline
+\subsubsection*{a) Prawdopodobieństwo stosowania leku ibuprofen (bez względu na grupę wiekową)}
+<<size = "small">>=
+conf <- binom.confint(50,200)
+ls <- conf$"upper"- conf$"lower"
+cbind(conf,ls)
+@
+Dla tych danych najlepsza okazała się metoda Pearsona-Kloppera, która w tabelce występuję pod nazwą $exact$.
+<<size = "small">>=
+cbind(conf,ls)[ls == max(ls),]
+@
+
+\newpage
+\subsubsection*{b) Prawdopodobieństwo stosowania leku ibuprofen przez klienta w wieku do 35
+lat}
+<<size = "small">>=
+conf <- binom.confint(0,90)
+ls <- conf$"upper"- conf$"lower"
+cbind(conf,ls)
+@
+
+Najlepszy w tym przypadku okazał się test $Agresti-Coull'a$.
+<<size = "small">>=
+cbind(conf,ls)[ls == max(ls),]
+@
+
+
+\subsubsection*{c) Prawdopodobieństwo stosowania leku apap (bez względu na grupę wiekową)}
+<<size = "small">>=
+conf <- binom.confint(44,200)
+ls <- conf$"upper"- conf$"lower"
+cbind(conf,ls)
+@
+Po raz drugi test $Persona-Kloppera$ okazuję się najlepszy.
+<<size = "small">>=
+cbind(conf,ls)[ls == max(ls),]
+@
+
+
+\subsubsection*{d) Prawdopodobieństwo stosowania leku apap przez klienta w wieku do 35 lat}
+<<size = "small">>=
+conf <- binom.confint(22,90)
+ls <- conf$"upper"- conf$"lower"
+cbind(conf,ls)
+@
+W podpunkcie $d) $ najlepszym testem jest po raz trzeci test $Persona-Kloppera$.
+<<size = "small">>=
+cbind(conf,ls)[ls == max(ls),]
+@
+\textbf{Wnioski:} \newline
+Zauważamy, że im mamy wiekszą liczbę sukcesów tym metody zwracają bardziej zbliżone wyniki. Najwiekszą rozbieżność mamy przy testowaniu dla liczby sukcesów 0, wtedy niektóre przedziały mają nawet długość 0, a inne około 0.02. Test $Persona-Kloppera$, który w funckcji $binom.confint$ nazywa się $exact$, okazał się najlepszy w 3 podpunktach, więc możemy uznać, że jest to najlepsza metoda, którą możemy wykorzystać konstruując przedziały ufności dla tych danych.
+\end{document}
