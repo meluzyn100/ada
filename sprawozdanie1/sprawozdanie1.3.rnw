@@ -90,11 +90,17 @@ mosaicplot(~M_User+Preference, data = Detergent)
 par(mar = c(2, 2, 2, 2))
 mosaicplot(~Temperature+Preference, data = Detergent)
 @
-
+Wykresy mozaikowe są bardzo proste w analizie. Wykres tworzy nam prostokąty, dzięki czemu łatwo zauważyć które kombinacje zmiennych są najliczniejsze. Wysokość takiego prostokąta odpowiada liczności zmiennej na osi OX, a szerokość odpowiada liczności zmiennej na osi OY.
 \section*{Lista 2}
 \subsection*{Zad 1}
 Zapoznać się z funkcją \textit{sample} (w pakiecie \textit{stats}). Napisać fragment programu, którego celem jest wylosowanie próbki rozmiaru około 1/10 liczby przypadków danej
 bazy danych (pewnej hipotetycznej), ze zwracaniem oraz bez zwracania.
+\newline\newline
+Będziemy korzystać z funkcji $sample$. Wylosujemy elementy z bazy danych o nazwie $mtcars$. Jest to zbiór informacji na temat specyfikacji różnych samochodów, poniżej widzimy pięć pierwszych wierszy:
+<<>>=
+head(mtcars,5)
+@
+
 \subsubsection*{Losowanie ze zwracaniem:} 
 <<>>=
 ind <- sample(x=nrow(mtcars),size=nrow(mtcars)/10,replace=TRUE)
@@ -107,8 +113,6 @@ Wylosowane elementy z bazy danych:
 <<size = "small">>=
 mtcars[ind,]
 @
-
-\newpage
 \textbf{Losowanie bez zwracania:} 
 <<>>=
 ind <- sample(x=nrow(mtcars),size=nrow(mtcars)/10,replace=FALSE)
@@ -122,7 +126,7 @@ Wylosowane elementy z bazy danych:
 mtcars[ind,]
 @
 
-
+\newpage
 \subsection*{Zad 2}
 Zaproponować algorytm generowania liczb z rozkładu dwumianowego i udowodnić,
 że jest poprawny. Napisać program do generowania tych liczb zgodnie z zaproponowanym algorytmem. (W pakiecie R dostępna jest funkcja rbinom.)
@@ -146,9 +150,7 @@ bin <- function(n,p,N){
   return(X)
 } 
 @
-gdzie: n - rozmiar próby, p - prawdopodobieństwo sukcesu, N - ilość wywołań
-\newpage
-
+gdzie: n - rozmiar próby, p - prawdopodobieństwo sukcesu, N - ilość wywołań\newline
 \textbf{Przykładowe użycie:}
 <<>>=
 bin(10,0.4,5)
@@ -168,7 +170,7 @@ mean(test)
 var(test)
 @
 Wartości teoretyczne średniej i wariancji dla takich parametrów powinny wynosić kolejno 40 i 24. Nasze wyniki są bardzo bliskie co wskazuje na poprawność metody.
-
+\newpage
 \subsection*{Zad 3}
 Zaproponować algorytm generowania wektora z rozkładu wielomianowego i udowodnić, że jest poprawny. Napisać program do generowania tych wektorów zgodnie z zaproponowanym algorytmem. (W pakiecie R dostępna jest funkcja \textit{rmultinom}.) \\
 
@@ -181,8 +183,7 @@ Chcemy generować zmienna losowa z rozkładu wielomianowego o parametrach $n$ i 
     \item Krok 1 i 3 powtarzamy N razy.
     \newline
   \end{enumerate}
-  
-\newpage
+%\newline
 \textbf{Algorytm opisany za pomocą funkcji w R:}
 <<>>=
 multinom.rv <-function(n, p, N){
@@ -224,6 +225,7 @@ rowVars(test)
 @
 Widzimy zatem że symulowane wartości są bardzo bliskie wartości teoretycznych: $16,21,25$.\\
 W obu powyższych przypadkach nasze wyniki są bardzo bliskie co wskazuje na poprawność metody.
+\newpage
 \subsection*{Zad 4}
 \textbf{Propozycja badania ankietowego} \newline
 Celem badania będzie zebranie informacji na temat zorganizowanego wcześniej Webinaru wydziałowego. Będziemy chcięli dowiedzieć się jak wydarzenie zostało odebrane przez uczestników. Naszą grupą docelową stanowią oczywiście studenci, którzy brali udział w naszym Webinarze. Warunkiem przystąpienia do wydarzenia było wypełnienie formularza zgłoszeniowego, w którym studenci musieli podać adresy e-mail. Dzięki temu posiadamy adres e-mail każdego uczestnika, więc łatwo możemy wysłać im link do ankiety. Poniżej znajduję się fragment przykładowego kwestionariusza: \newline\newline
@@ -245,8 +247,9 @@ Taką ankiete możemy stworzyć za pomocą darmowych narzędzi dostępnych w int
 \subsection*{Zad 1}
 Przeprowadzić symulacje, których celem jest porównanie prawdopodobieństwa pokrycia i długości przedziałów ufności Cloppera-Pearsona, Walda i trzeciego dowolnego typu przedziału ufności zaimplementowanego w funkcji \textit{binom.confint} pakietu \textit{binom}. Uwzględnić poziom ufności 0.95, różne rozmiary próby i różne wartości prawdopodobieństwa $p$. Wyniki zamieścić w tabelach i na rysunkach. Sformułować wnioski, które umożliwią praktykowi wybór konkretnego przedziału ufności do wyznaczenia jego realizacji dla konkretnych danych.\\
 
-W symulacji wykorzystaliśmy przedziały ufności Cloppera-Pearsona, Walda i Asymptotyczne.
-Symulacje przeprowadzimy na podstawie realizacji zmiennej loswej $X \sim \mathcal{B}(n, p)$.  
+W symulacji wykorzystamy przedziały ufności Cloppera-Pearsona, Walda i Asymptotyczne.Jako trzecią metodę wybraliśmy test asymptotyczny, ponieważ znacząco różni się od dwóch pozostałych. Wykorzystuje on Centralne Twierdzenie Graniczne, więc powinien bardzo dobrze działać dla próbki o dużym rozmiarze.
+Symulacje przeprowadzimy na podstawie realizacji zmiennej losowej: $X \sim \mathcal{B}(n, p)$. Wyznaczymy prawdopodobieństwa pokrycia oraz długości przedziałów ufności, a wykorzystamy do tego symulacje Monte Carlo.  \newline\newline
+Poniżej znajduje się kod z symulacją:
 <<eval = FALSE>>=
 symulation <-function(n = 10, dp= 0.2, MCs = 1000){
   ps <- seq(0.01, 0.99, dp)
@@ -288,13 +291,13 @@ symulation <-function(n = 10, dp= 0.2, MCs = 1000){
   return(data)
 }
 @
-Odpolamy nasza szymulacje dla $n=10$ i z krokiem $dp = 0.01$ i zapiszmy wynik w pliku csv:
+Symulacje przeprowadzamy dla $n=10$ z krokiem równym $dp = 0.01$. Wyniki zapisujemy w pliku csv, dzięki czemu nie musimy za każdym razem czekać na wyniki.
 <<eval = FALSE>>=
 data <- symulation(n = 10, dp = 0.01)
 write.csv(df_l, "data_n_10.csv")
 @
 
-Stwórzmy teraz ramki danych prawdopodobieństw pokrycia
+Stwórzmy teraz ramki danych prawdopodobieństw pokrycia:
 <<>>=
 data <- read.csv("data_n_10.csv")
 ps <- seq(0.01, 0.99, 0.01)
@@ -302,13 +305,13 @@ df1 <- data.frame(wilsonp = data[,1], axact = data[,2],
                     asymp = data[,3], p = ps)
 head(df1)
 @
-Stwórzmy teraz ramki danych średniej długości przedziałów
+Stwórzmy teraz ramki danych średniej długości przedziałów:
 <<>>=
 df2 <- data.frame(wilsonp = data[,4], axact = data[,5], 
                     asymp = data[,6], p = ps)
 head(df2)
 @
-Spozadzmy również wykresy
+Sprawdzamy również wykresy:
 <<fig_6, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:6}Wykres prawdopodobieństwa pokrycia dla poszczególnych metod i n równego 10.' ,fig.pos = 'H'>>=
 df_p <- melt(df1,id.vars="p")
 ggplot(df_p,aes(p, value,col=variable))+
@@ -319,7 +322,7 @@ df_l <- melt(df2,id.vars="p")
 ggplot(df_l,aes(p, value,col=variable))+
   geom_point()+ geom_line()
 @
-Zobaczmy również jak wygladaja powyzsze wykresy ale tym razem dla n równego 100
+Zobaczmy również jak wygladaja powyższe wykresy, ale tym razem dla n równego 100:
 <<echo = FALSE>>=
 data <- read.csv("data_n_100.csv")
 ps <- seq(0.01, 0.99, 0.01)
@@ -336,9 +339,7 @@ ggplot(df_p2,aes(p, value,col=variable))+
 ggplot(df_l2,aes(p, value,col=variable))+
   geom_point()+ geom_line()
 @
-\newpage
-\subsection*{Porównanie Rysunku \ref{fig:6} z Rysunkiem \ref{fig:8} oraz Rysunku \ref{fig:7} z Rysunkiem \ref{fig:9}}
-
+\subsection*{Porównanie Rysunku \ref{fig:6} z Rysunkiem \ref{fig:8}:} 
 % ######################################## może do usuniecia
 <<fig_10, fig.show="hold", out.width="50%", fig.cap ='\\label{fig:10}Wykresy prawdopodobieństwa pokrycia dla poszczególnych metod i n równego odpowiednio 10 i 100.',fig.pos = 'H',echo = FALSE>>=
 ggplot(df_p,aes(p, value,col=variable))+
@@ -346,6 +347,8 @@ ggplot(df_p,aes(p, value,col=variable))+
 ggplot(df_p2,aes(p, value,col=variable))+
   geom_point()+ geom_line()
 @
+\newpage
+\subsection*{Porównanie Rysunku \ref{fig:7} z Rysunkiem \ref{fig:9}:}
 <<fig_11, fig.show="hold", out.width="50%", fig.cap ='\\label{fig:11}Wykresy średniej długości przedziałów dla poszczególnych metod i n równego 10 i 100.',fig.pos = 'H',echo = FALSE>>=
 ggplot(df_l,aes(p, value,col=variable))+
   geom_point()+ geom_line()
@@ -353,22 +356,23 @@ ggplot(df_l2,aes(p, value,col=variable))+
   geom_point()+ geom_line()
 @
 % #######################################
-Jak możemy zobaczyć z powyższych wykresów, przedziały Cloppera-Pearsona mają największe prawdopodobieństwo pokrycia oraz największą średnią długość dla każdego $p$, świadczy to, że metoda Cloppera-Pearsona będzie najlepszym wyborem spośród testowanych metod. 
+\textbf{Wnioski:}\newline
+Jak możemy zobaczyć z powyższych wykresów, przedziały Cloppera-Pearsona mają największe prawdopodobieństwo pokrycia oraz największą średnią długość dla każdego $p$, świadczy to, że metoda Cloppera-Pearsona będzie najlepszym wyborem spośród testowanych metod. Zdecydowanie najgorszym okazał się test asymptotyczny, okazało się, że ta metoda wymaga jeszcze większych rozmiarów próbki.
 
 \newpage
 \subsection*{Zad 2}
 Załóżmy, że 200 losowo wybranych klientów (w różnym wieku) kilku (losowo wybranych) aptek zapytano, jaki lek przeciwbólowy zwykle stosują. Zebrane dane zawarte są w tablicy 1. Na podstawie tych danych, wyznaczyć realizacje przedziałów ufności, na poziomie ufności 0.95. \newline
 \newline
-Do wyboru najlepszych przedziałów ufności stosujemy funkcję $binom.confint$. Funkcja ta zwraca tabelkę z porównaniem 11 metod. Przedziały będziemy porównywać na podstawie ich długości, im dłuższy tym metoda jest lepsza. Długość takiego przedziału bedzie opisana w tabelce w kolumnie $ls$.\newline
+Do wyboru najlepszych przedziałów ufności stosujemy funkcję $binom.confint$. Funkcja ta zwraca tabelkę z porównaniem 11 metod. Przedziały będziemy porównywać na podstawie ich długości, im węższy tym metoda jest lepsza. Długość takiego przedziału bedzie opisana w tabelce w kolumnie $ls$.\newline
 \subsubsection*{a) Prawdopodobieństwo stosowania leku ibuprofen (bez względu na grupę wiekową)}
 <<size = "small">>=
 conf <- binom.confint(50,200)
 ls <- conf$"upper"- conf$"lower"
 cbind(conf,ls)
 @
-Dla tych danych najlepsza okazała się metoda Pearsona-Kloppera, która w tabelce występuję pod nazwą $exact$.
+Dla tych danych najlepsza okazała się $metoda Bayes'a$.
 <<size = "small">>=
-cbind(conf,ls)[ls == max(ls),]
+cbind(conf,ls)[ls == min(ls),]
 @
 
 \newpage
@@ -380,9 +384,9 @@ ls <- conf$"upper"- conf$"lower"
 cbind(conf,ls)
 @
 
-Najlepszy w tym przypadku okazał się test $Agresti-Coull'a$.
+Najlepszy w tym przypadku okazał się test asymptotyczny.
 <<size = "small">>=
-cbind(conf,ls)[ls == max(ls),]
+cbind(conf,ls)[ls == min(ls),]
 @
 
 
@@ -392,9 +396,9 @@ conf <- binom.confint(44,200)
 ls <- conf$"upper"- conf$"lower"
 cbind(conf,ls)
 @
-Po raz drugi test $Persona-Kloppera$ okazuję się najlepszy.
+Po raz drugi test $Bayes'a$ okazuję się najlepszy.
 <<size = "small">>=
-cbind(conf,ls)[ls == max(ls),]
+cbind(conf,ls)[ls == min(ls),]
 @
 
 
@@ -404,10 +408,10 @@ conf <- binom.confint(22,90)
 ls <- conf$"upper"- conf$"lower"
 cbind(conf,ls)
 @
-W podpunkcie $d) $ najlepszym testem jest po raz trzeci test $Persona-Kloppera$.
+W podpunkcie $d) $ najlepszym testem jest po raz trzeci test $Bayes'a$.
 <<size = "small">>=
-cbind(conf,ls)[ls == max(ls),]
+cbind(conf,ls)[ls == min(ls),]
 @
 \textbf{Wnioski:} \newline
-Zauważamy, że im mamy wiekszą liczbę sukcesów tym metody zwracają bardziej zbliżone wyniki. Najwiekszą rozbieżność mamy przy testowaniu dla liczby sukcesów 0, wtedy niektóre przedziały mają nawet długość 0, a inne około 0.02. Test $Persona-Kloppera$, który w funckcji $binom.confint$ nazywa się $exact$, okazał się najlepszy w 3 podpunktach, więc możemy uznać, że jest to najlepsza metoda, którą możemy wykorzystać konstruując przedziały ufności dla tych danych.
+Zauważamy, że im mamy wiekszą liczbę sukcesów tym metody zwracają bardziej zbliżone wyniki. Najwiekszą rozbieżność mamy przy testowaniu dla liczby sukcesów równej 0, wtedy niektóre przedziały mają nawet długość 0, a inne około 0.02. Test $Bayes'a$ okazał się najlepszy w 3 podpunktach, więc możemy uznać, że jest to najlepsza metoda, którą możemy wykorzystać konstruując przedziały ufności dla tych danych.
 \end{document}
