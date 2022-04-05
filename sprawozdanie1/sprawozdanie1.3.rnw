@@ -228,7 +228,7 @@ W obu powyższych przypadkach nasze wyniki są bardzo bliskie co wskazuje na pop
 \newpage
 \subsection*{Zad 4}
 \textbf{Propozycja badania ankietowego} \newline
-Celem badania będzie zebranie informacji na temat zorganizowanego wcześniej Webinaru wydziałowego. Będziemy chcięli dowiedzieć się jak wydarzenie zostało odebrane przez uczestników. Naszą grupą docelową stanowią oczywiście studenci, którzy brali udział w naszym Webinarze. Warunkiem przystąpienia do wydarzenia było wypełnienie formularza zgłoszeniowego, w którym studenci musieli podać adresy e-mail. Dzięki temu posiadamy adres e-mail każdego uczestnika, więc łatwo możemy wysłać im link do ankiety. Poniżej znajduję się fragment przykładowego kwestionariusza: \newline\newline
+Celem badania będzie zebranie informacji na temat zorganizowanego wcześniej Webinaru wydziałowego. Będziemy chcieli dowiedzieć się jak wydarzenie zostało odebrane przez uczestników. Naszą grupą docelową stanowią oczywiście studenci, którzy brali udział w naszym Webinarze. Warunkiem przystąpienia do wydarzenia było wypełnienie formularza zgłoszeniowego, w którym studenci musieli podać adresy e-mail. Dzięki temu posiadamy adres e-mail każdego uczestnika, więc łatwo możemy wysłać im link do ankiety. Poniżej znajduję się fragment przykładowego kwestionariusza: \newline\newline
 \textbf{Część ankiety z pytaniami metryczkowymi:} \newline
 <<echo=F, message= F>>=
 knitr::include_graphics("ankieta1.png")
@@ -239,7 +239,7 @@ knitr::include_graphics("ankieta1.png")
 knitr::include_graphics("ankieta2.png")
 @
 \newline
-Taką ankiete możemy stworzyć za pomocą darmowych narzędzi dostępnych w internecie, na przykład Formularze Google.
+Taką ankietę możemy stworzyć za pomocą darmowych narzędzi dostępnych w internecie, na przykład Formularze Google.
 \newline
 \newline
 \newline
@@ -322,7 +322,7 @@ df_l <- melt(df2,id.vars="p")
 ggplot(df_l,aes(p, value,col=variable))+
   geom_point()+ geom_line()
 @
-Zobaczmy również jak wygladaja powyższe wykresy, ale tym razem dla n równego 100:
+Zobaczmy również jak wygladają powyższe wykresy, ale tym razem dla n równego 100:
 <<echo = FALSE>>=
 data <- read.csv("data_n_100.csv")
 ps <- seq(0.01, 0.99, 0.01)
@@ -363,7 +363,7 @@ Jak możemy zobaczyć z powyższych wykresów, przedziały Cloppera-Pearsona maj
 \subsection*{Zad 2}
 Załóżmy, że 200 losowo wybranych klientów (w różnym wieku) kilku (losowo wybranych) aptek zapytano, jaki lek przeciwbólowy zwykle stosują. Zebrane dane zawarte są w tablicy 1. Na podstawie tych danych, wyznaczyć realizacje przedziałów ufności, na poziomie ufności 0.95. \newline
 \newline
-Do wyboru najlepszych przedziałów ufności stosujemy funkcję $binom.confint$. Funkcja ta zwraca tabelkę z porównaniem 11 metod. Przedziały będziemy porównywać na podstawie ich długości, im węższy tym metoda jest lepsza. Długość takiego przedziału bedzie opisana w tabelce w kolumnie $ls$.\newline
+Do wyboru najlepszych przedziałów ufności stosujemy funkcję $binom.confint$. Funkcja ta zwraca tabelkę z porównaniem 11 metod. Przedziały będziemy porównywać na podstawie ich długości, im węższy tym metoda jest lepsza. Długość takiego przedziału będzie opisana w tabelce w kolumnie $ls$.\newline
 \subsubsection*{a) Prawdopodobieństwo stosowania leku ibuprofen (bez względu na grupę wiekową)}
 <<size = "small">>=
 conf <- binom.confint(50,200)
@@ -413,5 +413,5 @@ W podpunkcie $d) $ najlepszym testem jest po raz trzeci test $Bayes'a$.
 cbind(conf,ls)[ls == min(ls),]
 @
 \textbf{Wnioski:} \newline
-Zauważamy, że im mamy wiekszą liczbę sukcesów tym metody zwracają bardziej zbliżone wyniki. Najwiekszą rozbieżność mamy przy testowaniu dla liczby sukcesów równej 0, wtedy niektóre przedziały mają nawet długość 0, a inne około 0.02. Test $Bayes'a$ okazał się najlepszy w 3 podpunktach, więc możemy uznać, że jest to najlepsza metoda, którą możemy wykorzystać konstruując przedziały ufności dla tych danych.
+Zauważamy, że im mamy większą liczbę sukcesów tym metody zwracają bardziej zbliżone wyniki. Największą rozbieżność mamy przy testowaniu dla liczby sukcesów równej 0, wtedy niektóre przedziały mają nawet długość 0, a inne około 0.02. Test $Bayes'a$ okazał się najlepszy w 3 podpunktach, więc możemy uznać, że jest to najlepsza metoda, którą możemy wykorzystać konstruując przedziały ufności dla tych danych.
 \end{document}
