@@ -56,7 +56,15 @@ Detergent.df %>% filter(Water_softness == "Hard") %>%
     group_by(Preference) %>% summarise(n = sum(Freq))
   Detergent.df %>% filter(Water_softness == "Hard") %>%
     group_by(Preference) %>% summarise(n = sum(Freq))
-  @
+  
+  <<results= 'asis'>>=
+  data <- matrix(c (32,44,
+                    22,38), 2, 2, byrow = T)
+
+    
+  print(data)
+  
+	@
 
   \subsection*{Zad 2}
   Sporządzić tabelę wielodzielczą uwzględniającą zmienną \textit{Temperature} i \textit{Water Softness}:
