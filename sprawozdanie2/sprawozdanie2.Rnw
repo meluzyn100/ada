@@ -1,0 +1,79 @@
+% !TeX TXS-program:compile = txs:///knit2pdf
+\documentclass[12pt]{mwart}
+\usepackage[utf8]{inputenc}
+\usepackage[T1,plmath]{polski}
+\usepackage{lmodern}
+
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+
+\title{Sprawozdanie 2}
+\author{Aleksander Jakóbczyk i Kacper Pasterniak}
+\date{}
+
+\begin{document}
+	\maketitle 
+	
+	<<warning=F, message=F,echo = F>>=
+  	library(binom)
+    require(ggplot2)
+    library(reshape2)
+    library(xtable)
+	
+	  library(vcdExtra)
+    library(tidyverse)
+  	library(matrixStats)
+
+  	# pdf.options(encoding = 'ISOLatin2') # znaki polskie w wykresach
+	@
+	
+	\section*{Lista 5,6 i 7}
+  \subsection*{Zad 2}
+ Załóżmy, że 200 losowo wybranych klientów (w różnym wieku) kilku (losowo wybranych) aptek zapytano, jaki lek przeciwbólowy zwykle stosują. Zebrane dane zawarte
+są w tablicy 1.
+
+tutaj chyba dodam ta tabelke jeszcze
+
+\subsection*{a)}
+Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest mniejsze bądź równe 1/4:
+\subsection*{b)}
+Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest równe 1/2:
+\subsection*{c)}
+Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Ibuprom jest większe bądź równe 1/5:
+\subsection*{d)}
+Powtórzyć punkt (a), (b) i (c), ale dla osoby z badanej populacji do lat 35:
+
+  \subsection*{Zad 3}
+  Na podstawie danych w tablicy 1, korzystając z testu Fishera, na poziomie istotności $\alpha = 0.05$, zweryfikować hipotezę, że prawdopodobieństwo, że osoba do lat 35 zażywa Panadol jest równe prawdopodobieństwu, że osoba od 36 lat do 55 lat zażywa Panadol.
+
+
+Czy na podstawie uzyskanego wyniku można (na zadanym poziomie istotności) odrzucić hipotezę o niezależności wyboru leku Panadol w leczeniu bólu od wieku, przy uwzględnieniu tylko dwóch grup wiekowych - do lat 35 i od 36 do 55 lat?
+
+
+ \subsection*{Zad 4}
+ Korzystając z funkcji chisq.test w pakiecie R, na poziomie istotności 0.05, zweryfikować hipotezę o niezależności stopnia zadowolenia z pracy i wynagrodzenia na podstawie danych w tablicy 2. Zwrócić uwagę na stosowaną w tej funkcji poprawkę.
+ 
+ tez dodam tabelke
+ 
+ 
+ \subsection*{Zad 5}
+Napisać deklarację funkcji, która dla danych w tablicy dwudzielczej oblicza wartość poziomu krytycznego (p-value) w asymptotycznym teście niezależności opartym na ilorazie wiarogodności. Korzystając z napisanej funkcji, obliczyć tę wartość dla danych z zadania 4.
+
+\section*{Lista 8 i 9}
+\subsection*{Zad 1}
+Na podstawie danych z przykładu 1 na wykładzie 7, obliczyć wartości odpowiednich
+miar współzmienności zmiennych Segregacja (odpowiedź na pytanie dotyczace segregacji śmieci) i Wiek oraz Segregacja i Miejsce zamieszkania. W przypadku zmiennej
+Wiek, wartości miar obliczyć przy “wyjściowych” kategoriach wiekowych, jak również przy połączonych kategoriach wiekowych (jak w przykładzie). Podać interpretację tych wartości. Następnie przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów oraz utworzyć odpowiednie wykresy.
+
+\subsection*{Zad 2}
+Załóżmy, że 200 klientów (w różnym wieku) kilku aptek zapytano, jaki lek przeciwbólowy zwykle stosują. Zebrane dane zawarte są w tablicy 2. Na podstawie tych danych, obliczyć odpowiednie miary współzmienności oraz przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów
+oraz utworzyć odpowiednie wykresy.
+
+\subsection*{Zad 3}
+Na podstawie danych zawartych w tablicy 1, obliczyć (odpowiednią) miarę współzmienności zmiennych Wynagrodzenie i Stopień zadowolenia z pracy (dane te są trochę inne niż te rozpatrywane na poprzednij liście). Następnie, przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów oraz utworzyć odpowiednie wykresy.
+
+\end{document}
