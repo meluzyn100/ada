@@ -109,7 +109,16 @@ Na podstawie danych w tablicy 1, korzystając z testu Fishera, na poziomie istot
 
 Czy na podstawie uzyskanego wyniku można (na zadanym poziomie istotności) odrzucić hipotezę o niezależności wyboru leku Panadol w leczeniu bólu od wieku, przy uwzględnieniu tylko dwóch grup wiekowych - do lat 35 i od 36 do 55 lat?
 
-
+<<>>=
+data2 <- matrix(c(18,72,3,77),nrow = 2, ncol = 2)
+dimnames(data2) <- list(
+	Wiek_ankietowanych = c("Panadol", "Inny"),
+	Lek = c("do lat 35", "od 36 do 55"))
+print(data2)
+fisher.test(data2)$p.value
+@
+Jak widzmy p-wartość jest mniejsza niż 0.05, zatem odzucamy hipoteze o niezależności rozkłądów.
+Zatem badane rozkłady warunkowe nie są jednorodne.
 \subsection*{Zad 4}
 Korzystając z funkcji chisq.test w pakiecie R, na poziomie istotności 0.05, zweryfikować hipotezę o niezależności stopnia zadowolenia z pracy i wynagrodzenia na podstawie danych w tablicy 2. Zwrócić uwagę na stosowaną w tej funkcji poprawkę.
 

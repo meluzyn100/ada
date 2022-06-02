@@ -243,17 +243,38 @@ Tak samo jak w podpunkcie \textbf{b)} odrzucamy badaną hipotezy.
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-W tym przypadku widzimy, że p-wartoś w każdym teście jest mniejsze niż 0,05, zatem odrzucamy hipotezę, 
-że prawdopodobieństwo, że losowo wybrana osoba w wieku do 35 lat z badanej populacji w przypadku bólu zażywa Ibuprom jest większe bądź równe 1/5. 
-
-Wynik ten jest inny niż w podpunkcie \textbf{c)}
+W tym przypadku widzimy że p-wartości w kazym z wykonanych testów
 \subsection*{Zad 3}
 Na podstawie danych w tablicy 1, korzystając z testu Fishera, na poziomie istotności $\alpha = 0.05$, zweryfikować hipotezę, że prawdopodobieństwo, że osoba do lat 35 zażywa Panadol jest równe prawdopodobieństwu, że osoba od 36 lat do 55 lat zażywa Panadol.
 
 
 Czy na podstawie uzyskanego wyniku można (na zadanym poziomie istotności) odrzucić hipotezę o niezależności wyboru leku Panadol w leczeniu bólu od wieku, przy uwzględnieniu tylko dwóch grup wiekowych - do lat 35 i od 36 do 55 lat?
 
-
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{data2} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{18}\hlstd{,}\hlnum{72}\hlstd{,}\hlnum{3}\hlstd{,}\hlnum{77}\hlstd{),}\hlkwc{nrow} \hlstd{=} \hlnum{2}\hlstd{,} \hlkwc{ncol} \hlstd{=} \hlnum{2}\hlstd{)}
+\hlkwd{dimnames}\hlstd{(data2)} \hlkwb{<-} \hlkwd{list}\hlstd{(}
+        \hlkwc{Wiek_ankietowanych} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"Panadol"}\hlstd{,} \hlstr{"Inny"}\hlstd{),}
+        \hlkwc{Lek} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"do lat 35"}\hlstd{,} \hlstr{"od 36 do 55"}\hlstd{))}
+\hlkwd{print}\hlstd{(data2)}
+\end{alltt}
+\begin{verbatim}
+##                   Lek
+## Wiek_ankietowanych do lat 35 od 36 do 55
+##            Panadol        18           3
+##            Inny           72          77
+\end{verbatim}
+\begin{alltt}
+\hlkwd{fisher.test}\hlstd{(data2)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.001788538
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+Jak widzmy p-wartość jest mniejsza niż 0.05, zatem odzucamy hipoteze o niezależności rozkłądów.
+Zatem badane rozkłady warunkowe nie są jednorodne.
 \subsection*{Zad 4}
 Korzystając z funkcji chisq.test w pakiecie R, na poziomie istotności 0.05, zweryfikować hipotezę o niezależności stopnia zadowolenia z pracy i wynagrodzenia na podstawie danych w tablicy 2. Zwrócić uwagę na stosowaną w tej funkcji poprawkę.
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.10.11)  2 JUN 2022 11:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.10.11)  2 JUN 2022 13:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -498,27 +498,28 @@ Overfull \hbox (0.14305pt too wide) in paragraph at lines 239--239
 [][]\T1/lmtt/b/n/12 prop.test[][]\T1/lmtt/m/n/12 ([][]0[][],[] []90[][],[] []p[][]=[][]1[][]/[][]5[][],[] []alternative[] []=[] []"l"[][],[] []correct[] []= F)[][]$[][]p.value[][] 
  []
 
+Package color Info: Redefining color shadecolor on input line 254.
 [3]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 279.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 300.
  [4]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 279.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 300.
  (/home/olek/semest_6/ADA/raporty/ada/sprawozdanie2/sprawozdanie2.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 279.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 279.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 300.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 300.
 Package rerunfilecheck Info: File `sprawozdanie2.out' has not changed.
 (rerunfilecheck)             Checksum: 712735DAE023386285A0A924B035C3F4;693.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 279.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 300.
  ) 
 Here is how much of TeX's memory you used:
  7078 strings out of 481239
  104960 string characters out of 5920376
- 364166 words of memory out of 5000000
+ 365166 words of memory out of 5000000
  22158 multiletter control sequences out of 15000+600000
  561149 words of font info for 50 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  34i,7n,32p,459b,362s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf/fonts/enc/dvips/lm/lm-ec.enc}</usr/share/texmf/fonts/type1/public/lm/lmbx12.pfb></usr/share/texmf/fonts/type1/public/lm/lmmi12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr12.pfb></usr/share/texmf/fonts/type1/public/lm/lmr17.pfb></usr/share/texmf/fonts/type1/public/lm/lmtk10.pfb></usr/share/texmf/fonts/type1/public/lm/lmtt12.pfb>
-Output written on /home/olek/semest_6/ADA/raporty/ada/sprawozdanie2/sprawozdanie2.pdf (4 pages, 139033 bytes).
+Output written on /home/olek/semest_6/ADA/raporty/ada/sprawozdanie2/sprawozdanie2.pdf (4 pages, 140750 bytes).
 PDF statistics:
  110 PDF objects out of 1000 (max. 8388607)
  97 compressed objects within 1 object stream
