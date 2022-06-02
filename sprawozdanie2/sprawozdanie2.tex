@@ -1,0 +1,279 @@
+% !TeX TXS-program:compile = txs:///knit2pdf
+\documentclass[12pt]{mwart}\usepackage[]{graphicx}\usepackage[]{color}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[utf8]{inputenc}
+\usepackage[T1,plmath]{polski}
+\usepackage{lmodern}
+
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage[hidelinks]{hyperref}
+\usepackage{float}
+
+\title{Sprawozdanie 2}
+\author{Aleksander Jakóbczyk i Kacper Pasterniak}
+\date{}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+\maketitle
+
+
+
+\section*{Lista 5,6 i 7}
+\subsection*{Zad 2}
+Załóżmy, że 200 losowo wybranych klientów (w różnym wieku) kilku (losowo wybranych) aptek zapytano, jaki lek przeciwbólowy zwykle stosują. Zebrane dane zawarte
+są w tablicy 1.
+
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{print}\hlstd{(data)}
+\end{alltt}
+\begin{verbatim}
+##                   Lek
+## Wiek_ankietowanych do lat 35 od 36 do 55 powyżej 55 suma
+##        Lbuprom            35           0          0   35
+##        Aap                22          22          0   44
+##        Paracetamol        15          15         15   45
+##        Ibuprofen           0          40         10   50
+##        Panadol            18           3          5   26
+##        Suma               90          80         30  200
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+\subsection*{a)}
+Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest mniejsze bądź równe 1/4:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{binom.test}\hlstd{(}\hlnum{44}\hlstd{,} \hlnum{200}\hlstd{,} \hlkwc{p}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{4}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"g"}\hlstd{)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.8562401
+\end{verbatim}
+\begin{alltt}
+\hlkwd{prop.test}\hlstd{(}\hlnum{44}\hlstd{,} \hlnum{200}\hlstd{,} \hlkwc{p}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{4}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"g"}\hlstd{,} \hlkwc{correct} \hlstd{= T)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.8154462
+\end{verbatim}
+\begin{alltt}
+\hlkwd{prop.test}\hlstd{(}\hlnum{44}\hlstd{,} \hlnum{200}\hlstd{,} \hlkwc{p}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{4}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"g"}\hlstd{,} \hlkwc{correct} \hlstd{= F)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.8364066
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+Każda z powyższych p-wartości jest większa niż 0,05, zatem w zadanym z powyższych testów nie możemy odrzucić hipotezy, że prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest mniejsze bądź równe 1/4.
+
+\subsection*{b)}
+Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest równe 1/2:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{binom.test}\hlstd{(}\hlnum{44}\hlstd{,} \hlnum{200}\hlstd{,}\hlkwc{p} \hlstd{=} \hlnum{0.5}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"t"}\hlstd{)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 6.837911e-16
+\end{verbatim}
+\begin{alltt}
+\hlkwd{prop.test}\hlstd{(}\hlnum{44}\hlstd{,} \hlnum{200}\hlstd{,} \hlkwc{p} \hlstd{=} \hlnum{0.5}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"t"}\hlstd{,} \hlkwc{correct} \hlstd{= T)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 4.197514e-15
+\end{verbatim}
+\begin{alltt}
+\hlkwd{prop.test}\hlstd{(}\hlnum{44}\hlstd{,} \hlnum{200}\hlstd{,} \hlkwc{p} \hlstd{=} \hlnum{0.5}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"t"}\hlstd{,} \hlkwc{correct} \hlstd{= F)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 2.382836e-15
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+Widzimy zatem, że p-wartości w każdym teście są mniejsze niż 0,05, zatem odrzucamy hipotezę, że prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest równe 1/2.
+
+\subsection*{c)}
+Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Ibuprom jest większe bądź równe 1/5:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{binom.test}\hlstd{(}\hlnum{50}\hlstd{,} \hlnum{200}\hlstd{,}\hlkwc{p}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{5}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"l"}\hlstd{)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.9655032
+\end{verbatim}
+\begin{alltt}
+\hlkwd{prop.test}\hlstd{(}\hlnum{50}\hlstd{,} \hlnum{200}\hlstd{,} \hlkwc{p}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{5}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"l"}\hlstd{,} \hlkwc{correct} \hlstd{= T)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.9534609
+\end{verbatim}
+\begin{alltt}
+\hlkwd{prop.test}\hlstd{(}\hlnum{50}\hlstd{,} \hlnum{200}\hlstd{,} \hlkwc{p}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{5}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"l"}\hlstd{,} \hlkwc{correct} \hlstd{= F)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.9614501
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+Każda z powyższych p-wartości jest większa niż 0,05, zatem w zadanym z powyższych testów nie możemy odrzucić hipotezy, że prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Ibuprom jest większe bądź równe 1/5.
+
+\subsection*{d)}
+Powtórzyć punkt (a), (b) i (c), ale dla osoby z badanej populacji do lat 35:
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{binom.test}\hlstd{(}\hlnum{22}\hlstd{,} \hlnum{90}\hlstd{,} \hlkwc{p}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{4}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"g"}\hlstd{)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.5885826
+\end{verbatim}
+\begin{alltt}
+\hlkwd{prop.test}\hlstd{(}\hlnum{22}\hlstd{,} \hlnum{90}\hlstd{,} \hlkwc{p}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{4}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"g"}\hlstd{,} \hlkwc{correct} \hlstd{= T)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.5
+\end{verbatim}
+\begin{alltt}
+\hlkwd{prop.test}\hlstd{(}\hlnum{22}\hlstd{,} \hlnum{90}\hlstd{,} \hlkwc{p}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{4}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"g"}\hlstd{,} \hlkwc{correct} \hlstd{= F)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.5484381
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+Tak samo jak w podpunkcie \textbf{a)} nie odrzucamy badanej hipotezy.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{binom.test}\hlstd{(}\hlnum{22}\hlstd{,} \hlnum{90}\hlstd{,}\hlkwc{p} \hlstd{=} \hlnum{0.5}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"t"}\hlstd{)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 1.249258e-06
+\end{verbatim}
+\begin{alltt}
+\hlkwd{prop.test}\hlstd{(}\hlnum{22}\hlstd{,} \hlnum{90}\hlstd{,} \hlkwc{p} \hlstd{=} \hlnum{0.5}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"t"}\hlstd{,} \hlkwc{correct} \hlstd{= T)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 2.101436e-06
+\end{verbatim}
+\begin{alltt}
+\hlkwd{prop.test}\hlstd{(}\hlnum{22}\hlstd{,} \hlnum{90}\hlstd{,} \hlkwc{p} \hlstd{=} \hlnum{0.5}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"t"}\hlstd{,} \hlkwc{correct} \hlstd{= F)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 1.241945e-06
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+Tak samo jak w podpunkcie \textbf{b)} odrzucamy badaną hipotezy.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{binom.test}\hlstd{(}\hlnum{0}\hlstd{,} \hlnum{90}\hlstd{,}\hlkwc{p}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{5}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"l"}\hlstd{)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 1.897138e-09
+\end{verbatim}
+\begin{alltt}
+\hlkwd{prop.test}\hlstd{(}\hlnum{0}\hlstd{,} \hlnum{90}\hlstd{,} \hlkwc{p}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{5}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"l"}\hlstd{,} \hlkwc{correct} \hlstd{= T)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 1.997379e-06
+\end{verbatim}
+\begin{alltt}
+\hlkwd{prop.test}\hlstd{(}\hlnum{0}\hlstd{,} \hlnum{90}\hlstd{,} \hlkwc{p}\hlstd{=}\hlnum{1}\hlopt{/}\hlnum{5}\hlstd{,} \hlkwc{alternative} \hlstd{=} \hlstr{"l"}\hlstd{,} \hlkwc{correct} \hlstd{= F)}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 1.050718e-06
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+W tym przypadku widzimy, że p-wartoś w każdym teście jest mniejsze niż 0,05, zatem odrzucamy hipotezę, 
+że prawdopodobieństwo, że losowo wybrana osoba w wieku do 35 lat z badanej populacji w przypadku bólu zażywa Ibuprom jest większe bądź równe 1/5. 
+
+Wynik ten jest inny niż w podpunkcie \textbf{c)}
+\subsection*{Zad 3}
+Na podstawie danych w tablicy 1, korzystając z testu Fishera, na poziomie istotności $\alpha = 0.05$, zweryfikować hipotezę, że prawdopodobieństwo, że osoba do lat 35 zażywa Panadol jest równe prawdopodobieństwu, że osoba od 36 lat do 55 lat zażywa Panadol.
+
+
+Czy na podstawie uzyskanego wyniku można (na zadanym poziomie istotności) odrzucić hipotezę o niezależności wyboru leku Panadol w leczeniu bólu od wieku, przy uwzględnieniu tylko dwóch grup wiekowych - do lat 35 i od 36 do 55 lat?
+
+
+\subsection*{Zad 4}
+Korzystając z funkcji chisq.test w pakiecie R, na poziomie istotności 0.05, zweryfikować hipotezę o niezależności stopnia zadowolenia z pracy i wynagrodzenia na podstawie danych w tablicy 2. Zwrócić uwagę na stosowaną w tej funkcji poprawkę.
+
+tez dodam tabelke
+
+
+\subsection*{Zad 5}
+Napisać deklarację funkcji, która dla danych w tablicy dwudzielczej oblicza wartość poziomu krytycznego (p-value) w asymptotycznym teście niezależności opartym na ilorazie wiarogodności. Korzystając z napisanej funkcji, obliczyć tę wartość dla danych z zadania 4.
+
+\section*{Lista 8 i 9}
+\subsection*{Zad 1}
+Na podstawie danych z przykładu 1 na wykładzie 7, obliczyć wartości odpowiednich
+miar współzmienności zmiennych Segregacja (odpowiedź na pytanie dotyczace segregacji śmieci) i Wiek oraz Segregacja i Miejsce zamieszkania. W przypadku zmiennej
+Wiek, wartości miar obliczyć przy “wyjściowych” kategoriach wiekowych, jak również przy połączonych kategoriach wiekowych (jak w przykładzie). Podać interpretację tych wartości. Następnie przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów oraz utworzyć odpowiednie wykresy.
+
+\subsection*{Zad 2}
+Załóżmy, że 200 klientów (w różnym wieku) kilku aptek zapytano, jaki lek przeciwbólowy zwykle stosują. Zebrane dane zawarte są w tablicy 2. Na podstawie tych danych, obliczyć odpowiednie miary współzmienności oraz przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów
+oraz utworzyć odpowiednie wykresy.
+
+\subsection*{Zad 3}
+Na podstawie danych zawartych w tablicy 1, obliczyć (odpowiednią) miarę współzmienności zmiennych Wynagrodzenie i Stopień zadowolenia z pracy (dane te są trochę inne niż te rozpatrywane na poprzednij liście). Następnie, przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów oraz utworzyć odpowiednie wykresy.
+
+\end{document}

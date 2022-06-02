@@ -16,51 +16,107 @@
 \date{}
 
 \begin{document}
-	\maketitle 
-	
-	<<warning=F, message=F,echo = F>>=
-  	library(binom)
-    require(ggplot2)
-    library(reshape2)
-    library(xtable)
-	
-	  library(vcdExtra)
-    library(tidyverse)
-  	library(matrixStats)
+\maketitle
 
-  	# pdf.options(encoding = 'ISOLatin2') # znaki polskie w wykresach
-	@
-	
-	\section*{Lista 5,6 i 7}
-  \subsection*{Zad 2}
- Załóżmy, że 200 losowo wybranych klientów (w różnym wieku) kilku (losowo wybranych) aptek zapytano, jaki lek przeciwbólowy zwykle stosują. Zebrane dane zawarte
+<<warning=F, message=F,echo = F>>=
+library(binom)
+require(ggplot2)
+library(reshape2)
+library(xtable)
+
+library(vcdExtra)
+library(tidyverse)
+library(matrixStats)
+
+# pdf.options(encoding = 'ISOLatin2') # znaki polskie w wykresach
+
+library(stats)
+@
+
+\section*{Lista 5,6 i 7}
+\subsection*{Zad 2}
+Załóżmy, że 200 losowo wybranych klientów (w różnym wieku) kilku (losowo wybranych) aptek zapytano, jaki lek przeciwbólowy zwykle stosują. Zebrane dane zawarte
 są w tablicy 1.
 
-tutaj chyba dodam ta tabelke jeszcze
+<<echo = F>>=
+data <- matrix(c(
+	35,  0,  0, 35,
+	22, 22,  0, 44, 
+	15, 15, 15, 45,
+	 0, 40, 10, 50,
+	18,  3,  5, 26,
+	90, 80, 30, 200), 6, 4, byrow = T)
+dimnames(data) <- list(
+	Wiek_ankietowanych = 
+	c("Lbuprom", "Aap", "Paracetamol","Ibuprofen","Panadol","Suma"),
+	Lek = c("do lat 35", "od 36 do 55","powyżej 55","suma"))
+@
 
+<<>>=
+print(data)
+@
 \subsection*{a)}
 Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest mniejsze bądź równe 1/4:
+<<>>=
+binom.test(44, 200, p=1/4, alternative = "g")$p.value
+prop.test(44, 200, p=1/4, alternative = "g", correct = T)$p.value
+prop.test(44, 200, p=1/4, alternative = "g", correct = F)$p.value
+@
+Każda z powyższych p-wartości jest większa niż 0,05, zatem w zadanym z powyższych testów nie możemy odrzucić hipotezy, że prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest mniejsze bądź równe 1/4.
+
 \subsection*{b)}
 Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest równe 1/2:
+<<>>=
+binom.test(44, 200,p = 0.5, alternative = "t")$p.value
+prop.test(44, 200, p = 0.5, alternative = "t", correct = T)$p.value
+prop.test(44, 200, p = 0.5, alternative = "t", correct = F)$p.value
+@
+Widzimy zatem, że p-wartości w każdym teście są mniejsze niż 0,05, zatem odrzucamy hipotezę, że prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest równe 1/2.
+
 \subsection*{c)}
 Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Ibuprom jest większe bądź równe 1/5:
+<<>>=
+binom.test(50, 200,p=1/5, alternative = "l")$p.value
+prop.test(50, 200, p=1/5, alternative = "l", correct = T)$p.value
+prop.test(50, 200, p=1/5, alternative = "l", correct = F)$p.value
+@
+Każda z powyższych p-wartości jest większa niż 0,05, zatem w zadanym z powyższych testów nie możemy odrzucić hipotezy, że prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Ibuprom jest większe bądź równe 1/5.
+
 \subsection*{d)}
 Powtórzyć punkt (a), (b) i (c), ale dla osoby z badanej populacji do lat 35:
+<<>>=
+binom.test(22, 90, p=1/4, alternative = "g")$p.value
+prop.test(22, 90, p=1/4, alternative = "g", correct = T)$p.value
+prop.test(22, 90, p=1/4, alternative = "g", correct = F)$p.value
+@
+Tak samo jak w podpunkcie \textbf{a)} nie odrzucamy badanej hipotezy.
+<<>>=
+binom.test(22, 90,p = 0.5, alternative = "t")$p.value
+prop.test(22, 90, p = 0.5, alternative = "t", correct = T)$p.value
+prop.test(22, 90, p = 0.5, alternative = "t", correct = F)$p.value
+@
+Tak samo jak w podpunkcie \textbf{b)} odrzucamy badaną hipotezy.
 
-  \subsection*{Zad 3}
-  Na podstawie danych w tablicy 1, korzystając z testu Fishera, na poziomie istotności $\alpha = 0.05$, zweryfikować hipotezę, że prawdopodobieństwo, że osoba do lat 35 zażywa Panadol jest równe prawdopodobieństwu, że osoba od 36 lat do 55 lat zażywa Panadol.
+<<>>=
+binom.test(0, 90,p=1/5, alternative = "l")$p.value
+prop.test(0, 90, p=1/5, alternative = "l", correct = T)$p.value
+prop.test(0, 90, p=1/5, alternative = "l", correct = F)$p.value
+@
+W tym przypadku widzimy że p-wartości w kazym z wykonanych testów
+\subsection*{Zad 3}
+Na podstawie danych w tablicy 1, korzystając z testu Fishera, na poziomie istotności $\alpha = 0.05$, zweryfikować hipotezę, że prawdopodobieństwo, że osoba do lat 35 zażywa Panadol jest równe prawdopodobieństwu, że osoba od 36 lat do 55 lat zażywa Panadol.
 
 
 Czy na podstawie uzyskanego wyniku można (na zadanym poziomie istotności) odrzucić hipotezę o niezależności wyboru leku Panadol w leczeniu bólu od wieku, przy uwzględnieniu tylko dwóch grup wiekowych - do lat 35 i od 36 do 55 lat?
 
 
- \subsection*{Zad 4}
- Korzystając z funkcji chisq.test w pakiecie R, na poziomie istotności 0.05, zweryfikować hipotezę o niezależności stopnia zadowolenia z pracy i wynagrodzenia na podstawie danych w tablicy 2. Zwrócić uwagę na stosowaną w tej funkcji poprawkę.
- 
- tez dodam tabelke
- 
- 
- \subsection*{Zad 5}
+\subsection*{Zad 4}
+Korzystając z funkcji chisq.test w pakiecie R, na poziomie istotności 0.05, zweryfikować hipotezę o niezależności stopnia zadowolenia z pracy i wynagrodzenia na podstawie danych w tablicy 2. Zwrócić uwagę na stosowaną w tej funkcji poprawkę.
+
+tez dodam tabelke
+
+
+\subsection*{Zad 5}
 Napisać deklarację funkcji, która dla danych w tablicy dwudzielczej oblicza wartość poziomu krytycznego (p-value) w asymptotycznym teście niezależności opartym na ilorazie wiarogodności. Korzystając z napisanej funkcji, obliczyć tę wartość dla danych z zadania 4.
 
 \section*{Lista 8 i 9}

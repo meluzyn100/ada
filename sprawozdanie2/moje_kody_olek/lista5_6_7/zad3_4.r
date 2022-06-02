@@ -11,4 +11,4 @@ fisher.test(dane)
 dane2 <- matrix(c(20,22,13,7,24,38,28,18,80,104,81,54,82,125,113,92),nrow = 4,ncol = 4)
 chisq.test(dane2)
 ?chisq.test
-#przedstaw dane H0,H1 jak wywołuje sie dane i interpretacja
+#przedstaw dane H0,H1 jak wywołuje sie dane i interpretacjas
