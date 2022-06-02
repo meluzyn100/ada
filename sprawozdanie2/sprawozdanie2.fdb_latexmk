@@ -1,8 +1,8 @@
 # Fdb version 3
-["pdflatex"] 1654170320 "/home/olek/semest_6/ADA/raporty/ada/sprawozdanie2/sprawozdanie2.tex" "/home/olek/semest_6/ADA/raporty/ada/sprawozdanie2/sprawozdanie2.pdf" "sprawozdanie2" 1654170416
+["pdflatex"] 1654170320 "/home/olek/semest_6/ADA/raporty/ada/sprawozdanie2/sprawozdanie2.tex" "/home/olek/semest_6/ADA/raporty/ada/sprawozdanie2/sprawozdanie2.pdf" "sprawozdanie2" 1654170433
   "/etc/texmf/web2c/texmf.cnf" 1633909665 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/olek/semest_6/ADA/raporty/ada/sprawozdanie2/sprawozdanie2.aux" 1654170321 1878 78c0c953a8271b87175eb72c8a6eb52c ""
-  "/home/olek/semest_6/ADA/raporty/ada/sprawozdanie2/sprawozdanie2.tex" 1654170416 14309 cffce37a4499b7dc0c07ef526e605747 ""
+  "/home/olek/semest_6/ADA/raporty/ada/sprawozdanie2/sprawozdanie2.tex" 1654170433 14309 cffce37a4499b7dc0c07ef526e605747 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1246382020 916 f87d7c45f9c908e672703b83b72241a3 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam7.tfm" 1246382020 928 2dc8d444221b7a635bb58038579b861a ""
@@ -107,11 +107,11 @@
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1633909734 8255908 a398129b8918ea7ab9adb38075c4d874 ""
   "sprawozdanie2.aux" 1654170321 1878 78c0c953a8271b87175eb72c8a6eb52c "pdflatex"
   "sprawozdanie2.out" 1654170321 693 712735dae023386285a0a924b035c3f4 "pdflatex"
-  "sprawozdanie2.tex" 1654170416 14309 cffce37a4499b7dc0c07ef526e605747 ""
+  "sprawozdanie2.tex" 1654170433 14309 cffce37a4499b7dc0c07ef526e605747 ""
   (generated)
   "/home/olek/semest_6/ADA/raporty/ada/sprawozdanie2/sprawozdanie2.log"
-  "sprawozdanie2.out"
-  "sprawozdanie2.aux"
-  "sprawozdanie2.pdf"
   "sprawozdanie2.log"
   "/home/olek/semest_6/ADA/raporty/ada/sprawozdanie2/sprawozdanie2.pdf"
+  "sprawozdanie2.out"
+  "sprawozdanie2.pdf"
+  "sprawozdanie2.aux"
