@@ -5,3 +5,6 @@ testy/*
 *.log
 *.gz
 *.tex
+*.fdb_latexmk
+*.fls
+*.gz
