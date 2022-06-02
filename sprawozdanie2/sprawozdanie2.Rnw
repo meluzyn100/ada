@@ -31,6 +31,8 @@ library(matrixStats)
 # pdf.options(encoding = 'ISOLatin2') # znaki polskie w wykresach
 
 library(stats)
+library(base)
+library(matlib)
 @
 
 \section*{Lista 5,6 i 7}
@@ -153,29 +155,31 @@ Wyliczenie p-wartości dla testu opartego na ilorazie wiarogodności oparte jest
 	G^2 = -2 \log(\lambda) , \quad \lambda = \prod_{i,j} \left( \frac{n_{i+}n_{+j}}{n n_{ij}}\right)^{n_{ij}}
 \end{gather*}
 
-Powyższa statystyka przy założeniu hipotezy o niezależności, dąży przy \(n \rightarrow \infty\) 
-do rozkładu \( \chi^2 \) z \( (R-1)(C-1) \) stopniami swobody, gdzie \(R\) i \(C\) 
+Powyższa statystyka przy założeniu hipotezy o niezależności, dąży przy \(n \rightarrow \infty\)
+do rozkładu \( \chi^2 \) z \( (R-1)(C-1) \) stopniami swobody, gdzie \(R\) i \(C\)
 są odpowiedni liczbą wierszy i kolumn testowanej tabeli.
+
 <<>>=
 p <- function(dane) {
-	y_xo <- rowSums(dane)
-	y_ox <- colSums(dane)
+y_xo <- rowSums(dane)
+y_ox <- colSums(dane)
 
-	n <- sum(dane)
-	r <-nrow(dane)
-	c <- ncol(dane)
-	x <- 1
-	for (i in 1:r) {
-	for (j in 1:c) {
-	y_ij <- dane[i,j]
-	x <- ( ( y_xo[i]*y_ox[j] ) / (y_ij*n) )^y_ij * x
-	}
-	}
-	g_2 <- -2 * log(x)
-	return( 1-pchisq(g_2, (c-1)*(r-1)) )
-	}
-p(data3[1:4,1:4])
+n <- sum(dane)
+r <-nrow(dane)
+c <- ncol(dane)
+x <- 1
+for (i in 1:r) {
+for (j in 1:c) {
+y_ij <- dane[i,j]
+x <- ( ( y_xo[i]*y_ox[j] ) / (y_ij*n) )^y_ij * x
+}
+}
+g_2 <- -2 * log(x)
+return( 1-pchisq(g_2, (c-1)*(r-1)) )
+}
+p(data3[1:4,1:4])[[1]]
 @
+Jak możemy zobaczyć p-wartości jest wieksza niż 0.05, zatem niemapy podstaw aby odrzucić hipoteze o niezależności rozkłądów warónkowych.
 
 
 \section*{Lista 8 i 9}
@@ -183,12 +187,145 @@ p(data3[1:4,1:4])
 Na podstawie danych z przykładu 1 na wykładzie 7, obliczyć wartości odpowiednich
 miar współzmienności zmiennych Segregacja (odpowiedź na pytanie dotyczace segregacji śmieci) i Wiek oraz Segregacja i Miejsce zamieszkania. W przypadku zmiennej
 Wiek, wartości miar obliczyć przy “wyjściowych” kategoriach wiekowych, jak również przy połączonych kategoriach wiekowych (jak w przykładzie). Podać interpretację tych wartości. Następnie przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów oraz utworzyć odpowiednie wykresy.
+\subsubsection*{Wspułczynnik \(\tau\) Goodmana}
+Wykłąd 7 jakis opis
+
+\begin{gather*}
+	\tau = \frac{\sum_{i=1}^R\sum_{j=1}^C p_{i,j}^2/p_{i+} -\sum_{j=1}^Cp_{+j}^2 }{1-\sum_{j=1}^Cp_{+j}^2}
+\end{gather*}
+<<>>=
+tau <- function(data) {
+	p <- data/sum(data)
+	pi. <- rowSums(p)
+	p.i <- colSums(p)
+	R <- nrow(data)
+	C <- ncol(data)
+
+	d1 <- 0
+	for (i in 1:R) {
+	for (j in 1:C) {
+	d1 <- p[i, j]^2/pi.[i] + d1
+	}
+	}
+	d2 <- sum(p.i^2)
+	return( ( d1 - d2 )/(1 - d2) )
+}
+@
+
+Tabela z przykłądu 1 wykłąd 7:
+<<echo = F>>=
+data4 <- matrix(c(
+888, 369, 50, 457,
+263,  95, 10,  99,
+208,  29,  2,  44,
+78,   9,  0,  19,
+1,   0,  0,   4),
+nrow=5,ncol = 4,byrow = T)
+dimnames(data4) <- list(
+c("18-25","26-35","36-45","46-59","60+"),
+c("    A",    "B",    "C",          "D"))
+@
+
+<<>>=
+data4
+tau(data4)[[1]]
+@
+Jak możemy zobaczyć otrzymana wartosc współcznnika \(\tau\) jest bliska zerum, swaidcz to o mardzo małej współzmienności badanych zmiennych losowych.
+
+<<>>=
+analiza <- function(data) {
+  p <- data/sum(data)
+  r <- rowSums(p)
+  c <- colSums(p)
+  R <- nrow(data)
+  C <- ncol(data)
+  P<- matrix(p,R,C)
+  D_r <- diag(r)
+  D_c <- diag(c)
+  A <- sqrt( inv(D_r) ) %*% ( P - r %*% t(c) ) %*% sqrt( inv(D_c) )
+  s <- svd(A)
+  U <- s$u
+  D <- diag(s$d)
+  V <- s$v
+  F <- sqrt( inv(D_r) ) %*% U %*% D
+  G <- sqrt( inv(D_c) ) %*% V %*% D
+  F_df <- data.frame(
+    x = c(F[,1],G[,1]),
+    y = c(F[,2],G[,2]),
+    name = c(rownames(p),colnames(p)),
+    col = c(rep("V1",R),rep("V2",C))
+  )
+  return(F_df)
+}
+df1 <-analiza(data4)
+@
+
+<<fig_1, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:1}Analiza korespondecji dla tabeli za Przykładu 1 Wykłąd 7.' ,fig.pos = 'H'>>=
+ggplot(df1, aes(x, y, label = name ,colour = col) ) +
+	geom_point() + geom_text(vjust = -1) +
+	scale_color_manual(values=c("#0000ff","#ff0000"))
+@
+
+
 
 \subsection*{Zad 2}
 Załóżmy, że 200 klientów (w różnym wieku) kilku aptek zapytano, jaki lek przeciwbólowy zwykle stosują. Zebrane dane zawarte są w tablicy 2. Na podstawie tych danych, obliczyć odpowiednie miary współzmienności oraz przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów
 oraz utworzyć odpowiednie wykresy.
+<<echo = F>>=
+data5 <- matrix(c(
+25,  0,  0,
+22, 22,  0,  
+15, 15, 15,  
+ 0, 40, 10,  
+18,  3,  5),
+nrow=5,ncol = 3,byrow = T)
+dimnames(data5) <- list(
+lek = c("Lbuprom", "Aap", "Paracetamol","Ibuprofen","Panadol"),
+Wiek = c("do lat 35", "od 36 do 55","powyżej 55"))
+@
+<<>>=
+data5
+@
+<<>>=
+data5
+tau(data5)[[1]]
+@
+Jak możemy zobaczyć otrzymana wartosc współcznnika \(\tau\) nie jest zbyt duża, swaidcz to o średniej współzmienności badanych zmiennych losowych.
+
+<<fig_2, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:2}Analiza korespondecji dla Tabeli 1.' ,fig.pos = 'H'>>=
+df2 <-analiza(data5)
+ggplot(df2, aes(x, y, label = name ,colour = col) ) +
+	geom_point() + geom_text(vjust = -1) +
+	scale_color_manual(values=c("#0000ff","#ff0000"))
+@
 
 \subsection*{Zad 3}
 Na podstawie danych zawartych w tablicy 1, obliczyć (odpowiednią) miarę współzmienności zmiennych Wynagrodzenie i Stopień zadowolenia z pracy (dane te są trochę inne niż te rozpatrywane na poprzednij liście). Następnie, przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów oraz utworzyć odpowiednie wykresy.
+<<echo = F>>=
+	data6 <- matrix(c(
+	32, 44,  60,  70, 
+	22, 38, 104, 125, 
+	13, 48,  61, 113, 
+	 3,  18, 54,  96
+	), 4, 4, byrow = T)
+
+	dimnames(data6)<- list(
+	Wynagrodzenie = c("do 6000", "6000-15000", "15000-25000","powyzej 25000"),
+	Zadowolenia = c("b. niezadow.", "niezadow.","zadow.","b. zadow."))
+@
+
+<<>>=
+data6
+tau(data6)[[1]]
+@
+Jak możemy zobaczyć otrzymana wartosc współcznnika \(\tau\) jest bliska zerum, swaidcz to o mardzo małej współzmienności badanych zmiennych losowych.
+
+<<fig_3, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:3}Analiza korespondecji dla Tabeli 2.' ,fig.pos = 'H'>>=
+df3 <-analiza(data6)
+ggplot(df3, aes(x, y, label = name ,colour = col) ) +
+	geom_point() + geom_text(vjust = -1) +
+	scale_color_manual(values=c("#0000ff","#ff0000"))
+@
+
 
 \end{document}
