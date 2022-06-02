@@ -1,2 +1,7 @@
 token.txt
 testy/*
+*.aux
+*.fdb_latexmk
+*.log
+*.gz
+*.tex
