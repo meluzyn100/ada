@@ -278,8 +278,36 @@ Zatem badane rozkłady warunkowe nie są jednorodne.
 \subsection*{Zad 4}
 Korzystając z funkcji chisq.test w pakiecie R, na poziomie istotności 0.05, zweryfikować hipotezę o niezależności stopnia zadowolenia z pracy i wynagrodzenia na podstawie danych w tablicy 2. Zwrócić uwagę na stosowaną w tej funkcji poprawkę.
 
-tez dodam tabelke
 
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{data3}
+\end{alltt}
+\begin{verbatim}
+##                Zadowolenia
+## Wynagrodzenie   b. niezadow. niezadow. zadow. b. zadow. Suma
+##   do 6000                 20        24     80        82  206
+##   6000-15000              22        38    104       125  289
+##   15000-25000             13        28     81       113  235
+##   powyzej 25000            7        18     54        92  171
+##   Suma                    62       108      5        26  901
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{chisq.test}\hlstd{(data3[}\hlnum{1}\hlopt{:}\hlnum{4}\hlstd{,}\hlnum{1}\hlopt{:}\hlnum{4}\hlstd{])}\hlopt{$}\hlstd{p.value}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.2139542
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+Jak możemy zobaczyć p-wartości jest wieksza niż 0.05, zatem niemapy podstaw aby odrzucić hipoteze o niezależności rozkłądów warónkowych. 
 
 \subsection*{Zad 5}
 Napisać deklarację funkcji, która dla danych w tablicy dwudzielczej oblicza wartość poziomu krytycznego (p-value) w asymptotycznym teście niezależności opartym na ilorazie wiarogodności. Korzystając z napisanej funkcji, obliczyć tę wartość dla danych z zadania 4.
