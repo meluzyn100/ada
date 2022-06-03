@@ -49,7 +49,7 @@ gdzie:
  \begin{itemize}
     \item[$\blacksquare$] x jest liczbą sukcesów,
     \item[$\blacksquare$] n to liczba prób,
-    \item[$\blacksquare$] p prawdopodobieństwo sukcesu,
+    \item[$\blacksquare$] p to prawdopodobieństwo sukcesu,
     \item[$\blacksquare$] alternative oznacza hipotezę alternatywną $H_{1}$,
     \item[$\blacksquare$] conf.level - poziom ufności.
   \end{itemize}
@@ -103,7 +103,7 @@ knitr::include_graphics("jpegi/tab1.jpg")
 Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest mniejsze bądź równe 1/4:
 <<>>=
 binom.test(44, 200, p=1/4, alternative = "g")$p.value
-	prop.test(44, 200, p=1/4, alternative = "g", correct = T)$p.value
+prop.test(44, 200, p=1/4, alternative = "g", correct = T)$p.value
 prop.test(44, 200, p=1/4, alternative = "g", correct = F)$p.value
 	@
 	Każda z powyższych p-wartości jest większa niż 0,05, zatem w żadnym z powyższych testów nie możemy odrzucić hipotezy, że prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest mniejsze bądź równe 1/4.
@@ -111,9 +111,9 @@ prop.test(44, 200, p=1/4, alternative = "g", correct = F)$p.value
 	\subsection*{b)}
 	Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest równe 1/2:
 	<<>>=
-	binom.test(44, 200,p = 0.5, alternative = "t")$p.value
+binom.test(44, 200,p = 0.5, alternative = "t")$p.value
 prop.test(44, 200, p = 0.5, alternative = "t", correct = T)$p.value
-	prop.test(44, 200, p = 0.5, alternative = "t", correct = F)$p.value
+prop.test(44, 200, p = 0.5, alternative = "t", correct = F)$p.value
 @
 Widzimy zatem, że p-wartości w każdym teście są mniejsze niż 0,05, zatem odrzucamy hipotezę, że prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest równe 1/2.
 
@@ -156,7 +156,7 @@ Czy na podstawie uzyskanego wyniku można (na zadanym poziomie istotności) odrz
 Użycie:
 \begin{center}
 fisher.test(x, alternative = "two.sided",
-            conf.int = TRUE, conf.level = 0.95,
+            conf.level = 0.95,
             simulate.p.value = FALSE)
 \end{center}
 \begin{flushleft}
@@ -203,7 +203,7 @@ knitr::include_graphics("jpegi/tab2.jpg")
 	chisq.test(data3[1:4,1:4],correct = F)$p.value
 @
 Jak możemy zobaczyć p-wartość jest większa niż 0.05, zatem nie mamy podstaw do odrzucenia hipotezy o niezależności rozkładów warunkowych.
-
+\newpage
 \subsection*{Zad 5}
 Napisać deklarację funkcji, która dla danych w tablicy dwudzielczej oblicza wartość poziomu krytycznego (p-value) w asymptotycznym teście niezależności opartym na ilorazie wiarogodności. Korzystając z napisanej funkcji, obliczyć tę wartość dla danych z zadania 4.
 
@@ -248,7 +248,7 @@ Wiek, wartości miar obliczyć przy “wyjściowych” kategoriach wiekowych, ja
 \begin{gather*}
 	\tau = \frac{\sum_{i=1}^R\sum_{j=1}^C p_{i,j}^2/p_{i+} -\sum_{j=1}^Cp_{+j}^2 }{1-\sum_{j=1}^Cp_{+j}^2}
 \end{gather*}
-Powyższa miara okleśla stopień redukcji zmienności zmiennej $W_{2}$, przy znajomości zmiennej $W_{1}$. Przyjmuje on wartości z zakresu $[0,1]$. Gdy $\tau = 0$, to wtedy i tylko wtedy zmienne $W_{1}$ i $W_{2}$ są niezależne. $\tau = 1$, wtedy i tylko wtedy, gdy dla każdego $i \in \{1, . . . , R\}$ istnieje $j \in \{1, . . . , C\}$ takie, że  $pj|i = 1$.
+Powyższa miara okleśla stopień redukcji zmienności zmiennej $W_{2}$, przy znajomości zmiennej $W_{1}$. Przyjmuje on wartości z zakresu $[0,1]$. Gdy $\tau = 0$, to wtedy i tylko wtedy zmienne $W_{1}$ i $W_{2}$ są niezależne. $\tau = 1$, wtedy i tylko wtedy, gdy dla każdego $i \in \{1, . . . , R\}$ istnieje $j \in \{1, . . . , C\}$ takie, że  $p_{j|i} = 1$.
 
 <<>>=
 tau <- function(data) {
@@ -317,7 +317,7 @@ analiza <- function(data) {
 df1 <-analiza(data4)
 @
 
-<<fig_1, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:1}Analiza korespondecji dla tabeli za Przykładu 1 Wykłąd 7.' ,fig.pos = 'H'>>=
+<<fig_1, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:1}Analiza korespondecji dla tabeli za Przykładu 1 Wykład 7.' ,fig.pos = 'H'>>=
 ggplot(df1, aes(x, y, label = name ,colour = col) ) +
 	geom_point() + geom_text(vjust = -1) +
 	scale_color_manual(values=c("#0000ff","#ff0000"))
