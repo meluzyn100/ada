@@ -1,4 +1,4 @@
-library(dsc)
+# library(dsc)
 
 
 m1a <- matrix(c(888,369,50,457,263,95,10,99,208,29,2,44,78,9,0,19,1,0,0,4),nrow=5,ncol = 4,byrow = T)
@@ -38,9 +38,30 @@ C
 d1 <- 0
 for (i in 1:R) {
   for (j in 1:C) {
-    d1 <- p[i, j]^2/pi.[i]
+    d1 <- p[i, j]^2/pi.[i] + d1
   }
 }
 d2 <- sum(p.i^2)
 d2
+d1
 
+tau <- ( d1 - d2 )/(1 - d2)
+tau
+
+tau <- function(data) {
+  p <- data/sum(data)
+  pi. <- rowSums(p)
+  p.i <- colSums(p)
+  R <- nrow(data)
+  C <- ncol(data)
+  
+  d1 <- 0
+  for (i in 1:R) {
+    for (j in 1:C) {
+      d1 <- p[i, j]^2/pi.[i] + d1
+    }
+  }
+  d2 <- sum(p.i^2)
+  return( ( d1 - d2 )/(1 - d2) )
+}
+tau(m1a)[[1]]

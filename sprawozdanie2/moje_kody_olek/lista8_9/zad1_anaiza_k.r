@@ -1,5 +1,7 @@
 library(ca)
 library(ggplot2)
+library(base)
+library(matlib)
 m1a <- matrix(c(888,369,50,457,263,95,10,99,208,29,2,44,78,9,0,19,1,0,0,4),nrow=5,ncol = 4,byrow = T)
 dimnames(m1a) <- list(c("18-25","26-35","36-45","46-59","60+"),c("A","B","C","D"))
 m1a
@@ -69,7 +71,7 @@ F_df
 
 plot(F[,1:2],col = "black" ,pch =19)
 par(new=TRUE)
-plot(G[,1:2],,col = "black" ,pch =19)
+plot(G[,1:2],col = "black" ,pch =19)
 par(new=TRUE)
 plot(ca(data))
 
