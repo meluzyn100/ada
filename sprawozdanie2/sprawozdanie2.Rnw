@@ -269,7 +269,6 @@ tau <- function(data) {
 }
 @
 \newpage
-Tabela z przykładu 1 wykład 7:
 <<echo = F>>=
 data4 <- matrix(c(
 888, 369, 50, 457,
@@ -282,9 +281,20 @@ dimnames(data4) <- list(
 c("18-25","26-35","36-45","46-59","60+"),
 c("    A",    "B",    "C",          "D"))
 @
+Tabela z przykładu 1 wykład 7, opis kategori:
+\begin{enumerate}
+ \item[A.] Segreguję śmieci, ponieważ jest to korzystne dla środowiska,
+ \item[B.] Segreguję śmieci, ponieważ taki jet wymóg ustawowy,
+ \item[C.] Segreguję śmieci, ponieważ wsszyscy tak robią,
+ \item[D.] Nie segreguję śmieci.
+\end{enumerate}
+
 
 <<fig.pos="h",echo=FALSE>>=
 data4
+@
+
+<<>>=
 cat('tau =', tau(data4)[[1]])
 @
 Jak możemy zobaczyć otrzymana wartość współczynnika \(\tau\) jest bliska zeru,świadczy to o bardzo małej współzmienności badanych zmiennych losowych.
@@ -320,7 +330,8 @@ df1 <-analiza(data4)
 <<fig_1, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:1}Analiza korespondecji dla tabeli za Przykładu 1 Wykład 7.' ,fig.pos = 'H'>>=
 ggplot(df1, aes(x, y, label = name ,colour = col) ) +
 	geom_point() + geom_text(vjust = -1) +
-	scale_color_manual(values=c("#0000ff","#ff0000"))
+	scale_color_manual(values=c("#0000ff","#ff0000"))+
+  	geom_hline(yintercept=0) + geom_vline(xintercept = 0)
 @
 
 
@@ -352,7 +363,8 @@ Jak możemy zobaczyć otrzymana wartość współczynnika \(\tau\) nie jest zbyt
 df2 <-analiza(data5)
 ggplot(df2, aes(x, y, label = name ,colour = col) ) +
 	geom_point() + geom_text(vjust = -1) +
-	scale_color_manual(values=c("#0000ff","#ff0000"))
+	scale_color_manual(values=c("#0000ff","#ff0000"))+
+  	geom_hline(yintercept=0) + geom_vline(xintercept = 0)
 @
 \newpage
 \subsection*{Zad 3}
@@ -384,7 +396,8 @@ Jak możemy zobaczyć otrzymana wartosc współcznnika \(\tau\) jest bliska zeru
 df3 <-analiza(data6)
 ggplot(df3, aes(x, y, label = name ,colour = col) ) +
 	geom_point() + geom_text(vjust = -1) +
-	scale_color_manual(values=c("#0000ff","#ff0000"))
+	scale_color_manual(values=c("#0000ff","#ff0000"))+
+  	geom_hline(yintercept=0) + geom_vline(xintercept = 0)
 @
 
 
