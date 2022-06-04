@@ -52,7 +52,7 @@ gdzie:
     \item[$\blacksquare$] p to prawdopodobieństwo sukcesu,
     \item[$\blacksquare$] alternative oznacza hipotezę alternatywną $H_{1}$,
     \item[$\blacksquare$] conf.level - poziom ufności.
-  \end{itemize}
+ \end{itemize}
 \end{flushleft} 
 
 \textbf{\emph{prop.test}} jest to funkcja sprawdzająca czy prawdopodobieństwa sukcesu w kilku próbkach są takie same, oraz czy są równe pewnym wartością. \newline \newline
@@ -96,21 +96,39 @@ Wiek_ankietowanych =
 c("Lbuprom", "Aap", "Paracetamol","Ibuprofen","Panadol","Suma"),
 Lek = c("do lat 35", "od 36 do 55","powyżej 55","suma"))
 @
-<<tab1,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
-knitr::include_graphics("jpegi/tab1.jpg")
+
+<<results= 'asis', echo = F>>=
+tab1 <- xtable(data,caption = 'Dane do zad 2. i 3.' ,label = "tab:1")
+# digits(tab1) <- xdigits(tab1)
+align(tab1) <- xalign(tab1)
+digits(tab1) <- xdigits(tab1)
+display(tab1) <- xdisplay(tab1)
+
+addtorow <- list()
+addtorow$pos <- list(0, 0)
+line <- c(-1,0,5,6)
+addtorow$command <- c("& \\multicolumn{4}{c}{Wiek ankietowanych} \\\\\n",
+	"Lek & do lat 35 & od 36 do 55 & powyżej 55 & Suma \\\\\n")
+print(tab1, scalebox = "1", add.to.row = addtorow, include.colnames = FALSE,table.placement="H", hline.after = line)
 @
+
+
+% <<tab1,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
+% knitr::include_graphics("jpegi/tab1.jpg")
+% @
+
 \subsection*{a)}
 Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest mniejsze bądź równe 1/4:
 <<>>=
 binom.test(44, 200, p=1/4, alternative = "g")$p.value
 prop.test(44, 200, p=1/4, alternative = "g", correct = T)$p.value
 prop.test(44, 200, p=1/4, alternative = "g", correct = F)$p.value
-	@
-	Każda z powyższych p-wartości jest większa niż 0,05, zatem w żadnym z powyższych testów nie możemy odrzucić hipotezy, że prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest mniejsze bądź równe 1/4.
+@
+Każda z powyższych p-wartości jest większa niż 0,05, zatem w żadnym z powyższych testów nie możemy odrzucić hipotezy, że prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest mniejsze bądź równe 1/4.
 
-	\subsection*{b)}
-	Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest równe 1/2:
-	<<>>=
+\subsection*{b)}
+Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Apap jest równe 1/2:
+<<>>=
 binom.test(44, 200,p = 0.5, alternative = "t")$p.value
 prop.test(44, 200, p = 0.5, alternative = "t", correct = T)$p.value
 prop.test(44, 200, p = 0.5, alternative = "t", correct = F)$p.value
@@ -123,28 +141,28 @@ Prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku b�
 binom.test(50, 200,p=1/5, alternative = "l")$p.value
 	prop.test(50, 200, p=1/5, alternative = "l", correct = T)$p.value
 prop.test(50, 200, p=1/5, alternative = "l", correct = F)$p.value
-	@
-	Każda z powyższych p-wartości jest większa niż 0,05, zatem w zadanym z powyższych testów nie możemy odrzucić hipotezy, że prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Ibuprom jest większe bądź równe 1/5.
-
-	\subsection*{d)}
-	Powtórzyć punkt (a), (b) i (c), ale dla osoby z badanej populacji do lat 35:
-	<<>>=
-	binom.test(22, 90, p=1/4, alternative = "g")$p.value
-prop.test(22, 90, p=1/4, alternative = "g", correct = T)$p.value
-	prop.test(22, 90, p=1/4, alternative = "g", correct = F)$p.value
 @
-Tak samo jak w podpunkcie \textbf{a)} nie odrzucamy badanej hipotezy.
+Każda z powyższych p-wartości jest większa niż 0,05, zatem w zadanym z powyższych testów nie możemy odrzucić hipotezy, że prawdopodobieństwo, że losowo wybrana osoba z badanej populacji w przypadku bólu zażywa Ibuprom jest większe bądź równe 1/5.
+
+\subsection*{d)}
+Powtórzyć punkt (a), (b) i (c), ale dla osoby z badanej populacji do lat 35:
+<<>>=
+binom.test(22, 90, p=1/4, alternative = "g")$p.value
+prop.test(22, 90, p=1/4, alternative = "g", correct = T)$p.value
+prop.test(22, 90, p=1/4, alternative = "g", correct = F)$p.value
+@
+	Tak samo jak w podpunkcie \textbf{a)} nie odrzucamy badanej hipotezy.
 <<>>=
 binom.test(22, 90,p = 0.5, alternative = "t")$p.value
-	prop.test(22, 90, p = 0.5, alternative = "t", correct = T)$p.value
+prop.test(22, 90, p = 0.5, alternative = "t", correct = T)$p.value
 prop.test(22, 90, p = 0.5, alternative = "t", correct = F)$p.value
-	@
+@
 	Tak samo jak w podpunkcie \textbf{b)} odrzucamy badaną hipotezę.
 
-	<<>>=
-	binom.test(0, 90,p=1/5, alternative = "l")$p.value
+<<>>=
+binom.test(0, 90,p=1/5, alternative = "l")$p.value
 prop.test(0, 90, p=1/5, alternative = "l", correct = T)$p.value
-	prop.test(0, 90, p=1/5, alternative = "l", correct = F)$p.value
+prop.test(0, 90, p=1/5, alternative = "l", correct = F)$p.value
 @
 W tym przypadku widzimy że p-wartości w każdym z wykonanych testów jest bliska 0, więc odrzucamy badaną hipotezę.
 \subsection*{Zad 3}
@@ -169,38 +187,71 @@ gdzie:
     \item[$\square$] funkcja posiada również inne argumenty, takie jak np. \emph{workspace,hybrid,percent} itp., jednakże nie używamy ich więc objaśnianie jest zbędne. 
   \end{itemize}
 \end{flushleft}
-<<>>=
+<<echo = F >>=
 data2 <- matrix(c(18,72,3,77),nrow = 2, ncol = 2)
 dimnames(data2) <- list(
 Wiek_ankietowanych = c("Panadol", "Inny"),
 Lek = c("do lat 35", "od 36 do 55"))
-print(data2)
+# print(data2)
+@
+
+<<results= 'asis', echo = F>>=
+tab2 <- xtable(data2,caption = 'Tabela do zadania 3.' ,label = "tab:1")
+align(tab2) <- xalign(tab2)
+digits(tab2) <- xdigits(tab2)
+display(tab2) <- xdisplay(tab2)
+
+addtorow <- list()
+addtorow$pos <- list(0, 0)
+addtorow$command <- c("& \\multicolumn{2}{c}{Wiek ankietowanych} \\\\\n",
+	"Lek & do lat 35 & od 36 do 55  \\\\\n")
+print(tab2, scalebox = "1" , add.to.row = addtorow, table.placement="H", include.colnames = FALSE)
+@
+
+<<>>=
 fisher.test(data2)$p.value
-	@
+@
 	Jak widzmy p-wartość jest mniejsza niż 0.05, zatem odrzucamy hipotezę o niezależności rozkładów.
 	Zatem badane rozkłady warunkowe nie są jednorodne.
 	\subsection*{Zad 4}
 	Korzystając z funkcji chisq.test w pakiecie R, na poziomie istotności 0.05, zweryfikować hipotezę o niezależności stopnia zadowolenia z pracy i wynagrodzenia na podstawie danych w tablicy 2. Zwrócić uwagę na stosowaną w tej funkcji poprawkę.
 
-	<<echo = F>>=
-	data3 <- matrix(c(
-	20,  24,  80,  82, 206,
-	22,  38, 104, 125, 289,
-	13,  28,  81, 113, 235,
-	7,  18,  54,  92, 171,
-	62, 108,   5,  26, 901
-	), 5, 5, byrow = T)
+<<echo = F>>=
+data3 <- matrix(c(
+20,  24,  80,  82, 206,
+22,  38, 104, 125, 289,
+13,  28,  81, 113, 235,
+7,  18,  54,  92, 171,
+62, 108,   5,  26, 901
+), 5, 5, byrow = T)
 
-	dimnames(data3)<- list(
-	Wynagrodzenie = c("do 6000", "6000-15000", "15000-25000","powyzej 25000","Suma"),
-	Zadowolenia = c("b. niezadow.", "niezadow.","zadow.","b. zadow.","Suma"))
-	@
-
-<<tab2,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
-knitr::include_graphics("jpegi/tab2.jpg")
+dimnames(data3)<- list(
+Wynagrodzenie = c("do 6000", "6000-15000", "15000-25000","powyzej 25000","Suma"),
+Zadowolenia = c("b. niezadow.", "niezadow.","zadow.","b. zadow.","Suma"))
 @
-	<<>>=
-	chisq.test(data3[1:4,1:4],correct = F)$p.value
+
+
+
+<<results= 'asis', echo = F>>=
+tab3 <- xtable(data3,caption = 'Dane do zadania 4.' ,label = "tab:3")
+align(tab3) <- xalign(tab3)
+digits(tab3) <- xdigits(tab3)
+display(tab3) <- xdisplay(tab3)
+
+addtorow <- list()
+addtorow$pos <- list(0, 0)
+line <- c(-1,0,4)
+addtorow$command <- c("& \\multicolumn{5}{c}{Zadowolenia} \\\\\n",
+	"Wynagrodzenie & b. niezadow. & niezadow. & zadow. & b. zadow. & Suma \\\\\n")
+print(tab3, scalebox = "1", add.to.row = addtorow, include.colnames = FALSE,table.placement="H", hline.after = line)
+@
+
+% <<tab2,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
+% knitr::include_graphics("jpegi/tab2.jpg")
+% @
+
+<<>>=
+chisq.test(data3[1:4,1:4],correct = F)$p.value
 @
 Jak możemy zobaczyć p-wartość jest większa niż 0.05, zatem nie mamy podstaw do odrzucenia hipotezy o niezależności rozkładów warunkowych.
 \newpage
@@ -290,11 +341,19 @@ Tabela z przykładu 1 wykład 7, opis kategori:
 \end{enumerate}
 
 
-<<fig.pos="h",echo=FALSE>>=
-data4
+<<results= 'asis', echo = F>>=
+tab4 <- xtable(data4, caption = 'Dane do listy 8 i 9, zadanie 1.' ,label = "tab:4")
+align(tab4) <- xalign(tab4)
+digits(tab4) <- xdigits(tab4)
+display(tab4) <- xdisplay(tab4)
+addtorow <- list()
+addtorow$pos <- list(0, 0)
+addtorow$command <- c("& \\multicolumn{4}{c}{Kategoria} \\\\\n",
+	"Wiek & A & B & C & D \\\\\n")
+print(tab4, scalebox = "1", add.to.row = addtorow, include.colnames = FALSE,table.placement="H")
 @
 
-<<>>=
+<<fig.pos="h",echo=FALSE>>=
 cat('tau =', tau(data4)[[1]])
 @
 Jak możemy zobaczyć otrzymana wartość współczynnika \(\tau\) jest bliska zeru,świadczy to o bardzo małej współzmienności badanych zmiennych losowych.
@@ -351,9 +410,25 @@ dimnames(data5) <- list(
 lek = c("Lbuprom", "Aap", "Paracetamol","Ibuprofen","Panadol"),
 Wiek = c("do lat 35", "od 36 do 55","powyżej 55"))
 @
-<<tab3,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
-knitr::include_graphics("jpegi/tab3.jpg")
+
+<<results= 'asis', echo = F>>=
+tab5 <- xtable(data5, caption = 'Dane do listy 8 i 9, zadanie 2.' ,label = "tab:5")
+align(tab5) <- xalign(tab5)
+# digits(ta5) <- xdigits(tab5)
+display(tab5) <- xdisplay(tab5)
+line = c(-1,0,4)
+addtorow <- list()
+addtorow$pos <- list(0, 0)
+addtorow$command <- c("& \\multicolumn{3}{c}{Wiek ankietowanych} \\\\\n",
+	"Lek & do lat 35 & od 36 do 55 & powyżej 55  \\\\\n")
+print(tab5, scalebox = "1", add.to.row = addtorow, include.colnames = FALSE,table.placement="H", hline.after = line)
 @
+
+
+
+% <<tab3,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
+% knitr::include_graphics("jpegi/tab3.jpg")
+% @
 <<fig.pos="h",echo=FALSE>>=
 cat('tau =',tau(data5)[[1]])
 @
@@ -383,9 +458,24 @@ Na podstawie danych zawartych w tablicy 1, obliczyć (odpowiednią) miarę wspó
 @
 
 
-<<tab4,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
-knitr::include_graphics("jpegi/tab4.jpg")
+<<results= 'asis', echo = F>>=
+tab6 <- xtable(data6, caption = 'Dane do listy 8 i 9, zadanie 3.' ,label = "tab:6")
+align(tab6) <- xalign(tab6)
+digits(tab6) <- xdigits(tab6)
+display(tab6) <- xdisplay(tab6)
+
+addtorow <- list()
+addtorow$pos <- list(0, 0)
+line <- c(-1,0,4)
+addtorow$command <- c("& \\multicolumn{4}{c}{Stopień zadowolenia z pracy} \\\\\n",
+	"Wynagrodzenie & b. niezadow. & niezadow. & zadow. & b. zadow.  \\\\\n")
+print(tab6, scalebox = "1",  add.to.row = addtorow,  include.colnames = FALSE,table.placement="H", hline.after = line)
 @
+
+
+% <<tab4,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
+% knitr::include_graphics("jpegi/tab4.jpg")
+% @
 <<fig.pos="h",echo=FALSE>>=
 cat('tau =' ,tau(data6)[[1]])
 @
