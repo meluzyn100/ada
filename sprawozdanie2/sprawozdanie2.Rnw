@@ -29,7 +29,7 @@ library(tidyverse)
 library(matrixStats)
 
 # pdf.options(encoding = 'ISOLatin2') # znaki polskie w wykresach
-
+library(DescTools)
 library(stats)
 library(base)
 library(matlib)
@@ -269,21 +269,21 @@ są odpowiednią liczbą wierszy i kolumn testowanej tabeli.
 
 <<>>=
 p <- function(dane) {
-y_xo <- rowSums(dane)
-y_ox <- colSums(dane)
+  y_xo <- rowSums(dane)
+  y_ox <- colSums(dane)
 
-n <- sum(dane)
-r <-nrow(dane)
-c <- ncol(dane)
-x <- 1
-for (i in 1:r) {
-for (j in 1:c) {
-y_ij <- dane[i,j]
-x <- ( ( y_xo[i]*y_ox[j] ) / (y_ij*n) )^y_ij * x
-}
-}
-g_2 <- -2 * log(x)
-return( 1-pchisq(g_2, (c-1)*(r-1)) )
+  n <- sum(dane)
+  r <-nrow(dane)
+  c <- ncol(dane)
+  x <- 1
+  for (i in 1:r) {
+    for (j in 1:c) {
+      y_ij <- dane[i,j]
+      x <- ( ( y_xo[i]*y_ox[j] ) / (y_ij*n) )^y_ij * x
+    } 
+  }
+  g_2 <- -2 * log(x)
+  return( 1-pchisq(g_2, (c-1)*(r-1)) )
 }
 p(data3[1:4,1:4])[[1]]
 @
@@ -311,9 +311,9 @@ tau <- function(data) {
 
 	d1 <- 0
 	for (i in 1:R) {
-	for (j in 1:C) {
-	d1 <- p[i, j]^2/pi.[i] + d1
-	}
+    for (j in 1:C) {
+      d1 <- p[i, j]^2/pi.[i] + d1
+    }
 	}
 	d2 <- sum(p.i^2)
 	return( ( d1 - d2 )/(1 - d2) )
@@ -433,6 +433,29 @@ print(tab5, scalebox = "1", add.to.row = addtorow, include.colnames = FALSE,tabl
 cat('tau =',tau(data5)[[1]])
 @
 Jak możemy zobaczyć otrzymana wartość współczynnika \(\tau\) nie jest zbyt duża, świadczy to o średniej współzmienności badanych zmiennych losowych.
+<<warning = F>>=
+wspolczynniki <- function(dane,metoda){
+  X <- chisq.test(dane)$statistic[[1]]
+  R <- nrow(dane)
+  C <- ncol(dane)
+  n <- sum(dane)
+  if (metoda =="Cramer"){
+    sqrt(X/(n*min(R-1,C-1)))
+  }else if (metoda == 't-czuprow'){
+    (X/(n*((R-1)*(C-1))**0.5))**0.5
+  }else if (metoda=='phi'){
+    (X/n)**0.5
+  }else if (metoda=='pearson'){
+   (X/(X+n))**0.5
+  }
+}
+cat(wspolczynniki(data5,'Cramer'))
+cat(wspolczynniki(data5,'t-czuprow'))
+cat(wspolczynniki(data5,'phi'))
+cat(wspolczynniki(data5,'pearson'))
+@
+
+Tabela w tym zadaniu jest rozmiaru 2x2, więc powinniśmy rozpatrzyć tylko współczynnik $\tau$.Jak możemy zobaczyć otrzymana wartość tego współczynnika wskazuję na to, że zmienna \emph{Lek} ma wpływ na redukcję zmienności zmiennej \emph{Wiek}.
 
 <<fig_2, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:2}Analiza korespondecji dla Tabeli 1.' ,fig.pos = 'H'>>=
 df2 <-analiza(data5)
