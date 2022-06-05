@@ -29,7 +29,7 @@ library(tidyverse)
 library(matrixStats)
 
 # pdf.options(encoding = 'ISOLatin2') # znaki polskie w wykresach
-library('DescTools')
+library(DescTools)
 library(stats)
 library(base)
 library(matlib)
@@ -400,7 +400,7 @@ Załóżmy, że 200 klientów (w różnym wieku) kilku aptek zapytano, jaki lek 
 oraz utworzyć odpowiednie wykresy.\newline 
 <<echo = F>>=
 data5 <- matrix(c(
-25,  0,  0,
+35,  0,  0,
 22, 22,  0,  
 15, 15, 15,  
  0, 40, 10,  
@@ -432,12 +432,13 @@ print(tab5, scalebox = "1", add.to.row = addtorow, include.colnames = FALSE,tabl
 <<fig.pos="h",echo=FALSE>>=
 cat('tau =',tau(data5)[[1]])
 @
-<<>>=
+<<warning = F>>=
 wspolczynniki <- function(dane,metoda){
   X <- chisq.test(dane)$statistic[[1]]
   R <- nrow(dane)
   C <- ncol(dane)
   n <- R*C
+  n <- sum(dane)
   if (metoda =="Cramer"){
     sqrt(X/(n*min(R-1,C-1)))
   }else if (metoda == 't-czuprow'){
