@@ -29,7 +29,7 @@ library(tidyverse)
 library(matrixStats)
 
 # pdf.options(encoding = 'ISOLatin2') # znaki polskie w wykresach
-
+library('DescTools')
 library(stats)
 library(base)
 library(matlib)
@@ -432,7 +432,29 @@ print(tab5, scalebox = "1", add.to.row = addtorow, include.colnames = FALSE,tabl
 <<fig.pos="h",echo=FALSE>>=
 cat('tau =',tau(data5)[[1]])
 @
-Jak możemy zobaczyć otrzymana wartość współczynnika \(\tau\) nie jest zbyt duża, świadczy to o średniej współzmienności badanych zmiennych losowych.
+<<>>=
+wspolczynniki <- function(dane,metoda){
+  X <- chisq.test(dane)$statistic[[1]]
+  R <- nrow(dane)
+  C <- ncol(dane)
+  n <- R*C
+  if (metoda =="Cramer"){
+    sqrt(X/(n*min(R-1,C-1)))
+  }else if (metoda == 't-czuprow'){
+    (X/(n*((R-1)*(C-1))**0.5))**0.5
+  }else if (metoda=='phi'){
+    (X/n)**0.5
+  }else if (metoda=='pearson'){
+   (X/(X+n))**0.5
+  }
+}
+cat(CramerV(data5),wspolczynniki(data5,'Cramer'))
+cat(TschuprowT(data5),wspolczynniki(data5,'t-czuprow'))
+cat(Phi(data5),wspolczynniki(data5,'phi'))
+cat(ContCoef(data5),wspolczynniki(data5,'pearson'))
+@
+
+Tabela w tym zadaniu jest rozmiaru 2x2, więc powinniśmy rozpatrzyć tylko współczynnik $\tau$.Jak możemy zobaczyć otrzymana wartość tego współczynnika wskazuję na to, że zmienna \emph{Lek} ma wpływ na redukcję zmienności zmiennej \emph{Wiek}.
 
 <<fig_2, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:2}Analiza korespondecji dla Tabeli 1.' ,fig.pos = 'H'>>=
 df2 <-analiza(data5)
@@ -441,6 +463,7 @@ ggplot(df2, aes(x, y, label = name ,colour = col) ) +
 	scale_color_manual(values=c("#0000ff","#ff0000"))+
   	geom_hline(yintercept=0) + geom_vline(xintercept = 0)
 @
+Na wykresie widzimy, że silne powiązanie występuje między zmiennymi "Ibuprom" oraz "do lat 35", zmienna "Paracetamol" także jest silnie powiązana, ale ze zmienną "powyżej 55lat". Natomiast lek "Ibuprofen" wykazuje najsilniejszą korespodencję z grupą wiekową "36-55lat".
 \newpage
 \subsection*{Zad 3}
 Na podstawie danych zawartych w tablicy 1, obliczyć (odpowiednią) miarę współzmienności zmiennych Wynagrodzenie i Stopień zadowolenia z pracy (dane te są trochę inne niż te rozpatrywane na poprzednij liście). Następnie, przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów oraz utworzyć odpowiednie wykresy.\newline
@@ -480,7 +503,7 @@ print(tab6, scalebox = "1",  add.to.row = addtorow,  include.colnames = FALSE,ta
 cat('tau =' ,tau(data6)[[1]])
 @
 
-Jak możemy zobaczyć otrzymana wartosc współcznnika \(\tau\) jest bliska zeru, świadczy to o bardzo małej współzmienności badanych zmiennych losowych.
+Ze względu na to jak wygląda tabela, najlepszym współczynnikiem do zbadania jej współzmienności bedzie współczynnik $\hat{\gamma}$.
 
 <<fig_3, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:3}Analiza korespondecji dla Tabeli 2.' ,fig.pos = 'H'>>=
 df3 <-analiza(data6)
@@ -489,6 +512,6 @@ ggplot(df3, aes(x, y, label = name ,colour = col) ) +
 	scale_color_manual(values=c("#0000ff","#ff0000"))+
   	geom_hline(yintercept=0) + geom_vline(xintercept = 0)
 @
-
+Wartość $\hat{\gamma}$ wskazuję, że między zmiennymi "Wynagrodzenie" oraz "Stopień zadowolenia z pracy" istnieje współzmienność. Z powyższego wykresu korespodencji możemy wywnioskować, że najsłabiej rozróżnialnymi zmiennymi są kategorie "b.zadow" oraz "zadow" i "6000-15000", wskazuję na to mała odległość od punktu $\emph{(0,0)}$ na wykresie. Najdalej, od wcześniej wspomnianego puntku, leży natomiast odpowiedź "b.niezadow", co wskazuje, że to ta kategoria jest najbardziej rozróżnialna. Silne powiązanie występuje między odpowiedziami "b.niezadow" i "<6000".
 
 \end{document}
