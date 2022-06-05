@@ -400,7 +400,7 @@ Załóżmy, że 200 klientów (w różnym wieku) kilku aptek zapytano, jaki lek 
 oraz utworzyć odpowiednie wykresy.\newline 
 <<echo = F>>=
 data5 <- matrix(c(
-25,  0,  0,
+35,  0,  0,
 22, 22,  0,  
 15, 15, 15,  
  0, 40, 10,  
@@ -416,7 +416,7 @@ tab5 <- xtable(data5, caption = 'Dane do listy 8 i 9, zadanie 2.' ,label = "tab:
 align(tab5) <- xalign(tab5)
 # digits(ta5) <- xdigits(tab5)
 display(tab5) <- xdisplay(tab5)
-line = c(-1,0,4)
+line = c(-1,0,5)
 addtorow <- list()
 addtorow$pos <- list(0, 0)
 addtorow$command <- c("& \\multicolumn{3}{c}{Wiek ankietowanych} \\\\\n",
