@@ -338,13 +338,13 @@ wspolczynniki <- function(dane,metoda){
   R <- nrow(dane)
   C <- ncol(dane)
   n <- sum(dane)
-  if (metoda =="Cramer"){
+  if (metoda =="v-cramer"){
     sqrt(X/(n*min(R-1,C-1)))
   }else if (metoda == 't-czuprow'){
-    (X/(n*((R-1)*(C-1))**0.5))**0.5
+    sqrt(X/(n*sqrt((R-1)*(C-1))))
   }else if (metoda=='phi'){
     (X/n)**0.5
-  }else if (metoda=='pearson'){
+  }else if (metoda=='c-pearson'){
    (X/(X+n))**0.5
   }else if (metoda=='tau'){
     tau(dane)
@@ -364,30 +364,38 @@ dimnames(data4) <- list(
 c("18-25","26-35","36-45","46-59","60+"),
 c("    A",    "B",    "C",          "D"))
 @
-Tabela z przykładu 1 wykład 7, opis kategori:
-\begin{enumerate}
- \item[A.] Segreguję śmieci, ponieważ jest to korzystne dla środowiska,
- \item[B.] Segreguję śmieci, ponieważ taki jet wymóg ustawowy,
- \item[C.] Segreguję śmieci, ponieważ wsszyscy tak robią,
- \item[D.] Nie segreguję śmieci.
-\end{enumerate}
-
-
-<<results= 'asis', echo = F>>=
-tab4 <- xtable(data4, caption = 'Dane do listy 8 i 9, zadanie 1.' ,label = "tab:4")
-align(tab4) <- xalign(tab4)
-digits(tab4) <- xdigits(tab4)
-display(tab4) <- xdisplay(tab4)
-addtorow <- list()
-addtorow$pos <- list(0, 0)
-addtorow$command <- c("& \\multicolumn{4}{c}{Kategoria} \\\\\n",
-	"Wiek & A & B & C & D \\\\\n")
-print(tab4, scalebox = "1", add.to.row = addtorow, include.colnames = FALSE,table.placement="H")
+Tabela z przykładu 1 wykład 7:
+<<>>=
+m1a=matrix(c(888, 369, 50, 457,
+             263,  95, 10,  99,
+             208,  29,  2,  44,
+              78,   9,  0,  19,
+              1,    0,  0,   4), nrow=5, byrow=TRUE)
+m2a=matrix(c(505, 202, 19, 136,
+             240,  77, 14,  88,
+             181,  63,  8, 105,
+             512, 159, 21, 294),nrow=4,byrow=TRUE)
+m1b=matrix(c(888, 369, 50, 457,
+             263,  95, 10,  99,
+             208,  29,  2,  44,
+              79,   9,  0,  23),nrow=4,byrow=TRUE)
+m1c=matrix(c(888, 369, 50, 457,
+             263,  95, 10,  99,
+             287,  38,  2,  67),nrow=3,byrow=TRUE)
+@
+<<warning = F, results= 'asis', echo = F>>=
+zad2_df <- matrix(c(
+  wspolczynniki(m1a,'tau'), wspolczynniki(m1a,'v-cramer'), wspolczynniki(m1a,'t-czuprow'), wspolczynniki(m1a,'phi'), wspolczynniki(m1a,'c-pearson'),
+  wspolczynniki(m1b,'tau'), wspolczynniki(m1b,'v-cramer'), wspolczynniki(m1b,'t-czuprow'), wspolczynniki(m1b,'phi'), wspolczynniki(m1b,'c-pearson'),
+  wspolczynniki(m1c,'tau'), wspolczynniki(m1c,'v-cramer'), wspolczynniki(m1c,'t-czuprow'), wspolczynniki(m1c,'phi'), wspolczynniki(m1c,'c-pearson'),
+  wspolczynniki(m2a,'tau'), wspolczynniki(m2a,'v-cramer'), wspolczynniki(m2a,'t-czuprow'), wspolczynniki(m2a,'phi'), wspolczynniki(m2a,'c-pearson')
+  ), c(4,4),byrow = T)
+rownames(zad2_df) <- c("m1a", "m1b", "m1c", "m2a")
+colnames(zad2_df) <- c("$\\tau$", "V", "T", "$\\varphi $", "C") 
+tab <- xtable(zad2_df, digits=c(0,5,5,5,5,5),,caption = 'Tablicza wartości współczynników dla poszczegulnych macieży dla adania 1.' ,label = "tab:4" )
+print(tab, sanitize.text.function = function(x) {x})
 @
 
-<<fig.pos="h",echo=FALSE>>=
-cat('tau =', tau(data4)[[1]])
-@
 Jak możemy zobaczyć otrzymana wartość współczynnika \(\tau\) jest bliska zeru, świadczy to o bardzo małej współzmienności badanych zmiennych losowych.
 
 <<>>=
@@ -466,11 +474,18 @@ cat('tau =',tau(data5)[[1]])
 @
 Jak możemy zobaczyć otrzymana wartość współczynnika \(\tau\) nie jest zbyt duża, świadczy to o średniej współzmienności badanych zmiennych losowych.
 
-<<warning = F>>=
-cat(wspolczynniki(data5,'Cramer'))
-cat(wspolczynniki(data5,'t-czuprow'))
-cat(wspolczynniki(data5,'phi'))
-cat(wspolczynniki(data5,'pearson'))
+
+<<warning = F, results= 'asis', echo = F>>=
+zad2_df <- matrix(c(
+  TschuprowT(data5), wspolczynniki(data5,'t-czuprow'),
+     CramerV(data5), wspolczynniki(data5,'Cramer'),
+         Phi(data5), wspolczynniki(data5,'phi'),
+    ContCoef(data5), wspolczynniki(data5,'pearson')),c(2,4))
+# rownames(zad2_df) <- c("f. wbudowana", "wartość miary")
+
+# colnames(zad2_df) <- c("$\\tau$","V","$\\varphi $","C") 
+tab <- xtable(zad2_df)
+print(tab, sanitize.text.function = function(x) {x})
 @
 
 Tabela w tym zadaniu jest rozmiaru 2x2, więc powinniśmy rozpatrzyć tylko współczynnik $\tau$.Jak możemy zobaczyć otrzymana wartość tego współczynnika wskazuję na to, że zmienna \emph{Lek} ma wpływ na redukcję zmienności zmiennej \emph{Wiek}.
