@@ -320,7 +320,7 @@ C=\sqrt{\frac{X^{2}}{X^{2}+n}}
   \end{equation}
     \item współczynnik $\hat{\gamma}$:
   \begin{equation}
-\hat{\gamma}=\frac{N_{c}-N{d}}{N_{c}+N_{d}}
+\hat{\gamma}=\frac{N_{c}-N_{d}}{N_{c}+N_{d}}
 \end{equation}
   \item współczynnik $\hat{\tau}$ Goodmana
   \begin{equation}
@@ -366,6 +366,22 @@ wspolczynniki <- function(dane,metoda){
    (X/(X+n))**0.5
   }else if (metoda=='tau'){
     tau(dane)
+  }else if (metoda=='gamma'){
+    a <- 0
+    for (i in 1:nrow(dane)-1){
+      for (j in 1:ncol(dane)-1){
+        a <- a + sum(dane[i,j]) * sum(dane[min(i+1,nrow(dane)):nrow(dane),
+                                           min(j+1,ncol(dane)):ncol(dane)])
+      }
+    }
+    b <-0
+    for (i in 1:nrow(dane)-1){
+      for (j in ncol(dane):2){
+        b <- b + sum(dane[i,j]) * sum(dane[min(i+1,nrow(dane)):nrow(dane),
+                                           max(j-1,1):1])
+      }
+    }
+    (a-b)/(a+b)
   }
 }
 @
