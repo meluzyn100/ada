@@ -327,6 +327,7 @@ C=\sqrt{\frac{X^{2}}{X^{2}+n}}
 \tilde{\tau}=\frac{\sum_{i=1}^{R} \sum_{j=1}^{C} \frac{n_{i j}^{2}}{n n_{i+}}-\sum_{j=1}^{C}\left(\frac{n_{+j}}{n}\right)^{2}}{1-\sum_{j=1}^{C}\left(\frac{n_{+j}}{n}\right)^{2}}
   \end{equation}
 \end{itemize}
+
 Powyższa miara okleśla stopień redukcji zmienności zmiennej $W_{2}$, przy znajomości zmiennej $W_{1}$. Przyjmuje on wartości z zakresu $[0,1]$. Gdy $\tau = 0$, to wtedy i tylko wtedy zmienne $W_{1}$ i $W_{2}$ są niezależne. $\tau = 1$, wtedy i tylko wtedy, gdy dla każdego $i \in \{1, . . . , R\}$ istnieje $j \in \{1, . . . , C\}$ takie, że  $p_{j|i} = 1$. \newline \newline
 Powyższe miary zdefiniowaliśmy w R:
 
@@ -385,6 +386,16 @@ wspolczynniki <- function(dane,metoda){
   }
 }
 @
+\subsubsection*{Inercja}
+
+\begin{equation}
+  \lambda=\sum_{i=1}^{K} \gamma_{i}^{2}
+  \end{equation}
+
+\begin{equation}
+  \lambda_{c}=\frac{\sum_{i=1}^{2} \gamma_{i}^{2}}{\lambda}
+\end{equation}
+
 
 \newpage
 <<echo = F>>=
@@ -399,7 +410,8 @@ dimnames(data4) <- list(
 c("18-25","26-35","36-45","46-59","60+"),
 c("    A",    "B",    "C",          "D"))
 @
-Tabela z przykładu 1 wykład 7:
+Tabele z przykładu 1 wykład 7:
+
 <<>>=
 m1a=matrix(c(888, 369, 50, 457,
              263,  95, 10,  99,
@@ -418,6 +430,22 @@ m1c=matrix(c(888, 369, 50, 457,
              263,  95, 10,  99,
              287,  38,  2,  67),nrow=3,byrow=TRUE)
 @
+
+<<echo = F>>=
+dimnames(m1a) <- list(
+c("18-25","26-35","36-45","46-59","60+"),
+c("    A",    "B",    "C",          "D"))
+dimnames(m2a) <- list(
+c("Wieś","Miasto do 20 tys.","Miasto 20-50 tys.","Miasto pow. 50 tys."),
+c("    A",    "B",    "C",          "D"))
+dimnames(m1b) <- list(
+c("18-25","26-35","36-45","46+"),
+c("    A",    "B",    "C",          "D"))
+dimnames(m1c) <- list(
+c("18-25","26-35","36+"),
+c("    A",    "B",    "C",          "D"))
+
+@
 <<warning = F, results= 'asis', echo = F>>=
 zad2_df <- matrix(c(
   wspolczynniki(m1a,'tau'), wspolczynniki(m1a,'v-cramer'), wspolczynniki(m1a,'t-czuprow'), wspolczynniki(m1a,'phi'), wspolczynniki(m1a,'c-pearson'),
@@ -427,28 +455,15 @@ zad2_df <- matrix(c(
   ), c(4,4),byrow = T)
 rownames(zad2_df) <- c("m1a", "m1b", "m1c", "m2a")
 colnames(zad2_df) <- c("$\\tau$", "V", "T", "$\\varphi $", "C") 
-tab <- xtable(zad2_df, digits=c(0,5,5,5,5,5),caption = 'Tablicza wartości współczynników dla poszczegulnych macieży dla adania 1.' ,label = "tab:4" )
+tab <- xtable(zad2_df, digits=c(0,5,5,5,5,5),caption = 'Tablica wartości współczynników dla poszczegulnych macieży dla adania 1.' ,label = "tab:4" )
 print(tab, sanitize.text.function = function(x) {x},table.placement="H")
 @
 
 Jak możemy zobaczyć otrzymana wartość współczynnika \(\tau\) jest bliska zeru, świadczy to o bardzo małej współzmienności badanych zmiennych losowych.
 
+
 <<>>=
-inercja_calkowita <- function(data) {
-  p <- data/sum(data)
-  r <- rowSums(p)
-  c <- colSums(p)
-  R <- nrow(data)
-  C <- ncol(data)
-  P<- matrix(p,R,C)
-  D_r <- diag(r)
-  D_c <- diag(c)
-  A <- sqrt( inv(D_r) ) %*% ( P - r %*% t(c) ) %*% sqrt( inv(D_c) )
-  return( sum( diag( A %*% t(A) ) ) )
-}
-@
-<<>>=
-inercja_calkowita <- function(data) {
+inercja <- function(data) {
   p <- data/sum(data)
   r <- rowSums(p)
   c <- colSums(p)
@@ -464,26 +479,19 @@ inercja_calkowita <- function(data) {
 }
 @
 
-% <<>>=
-% (inercja_calkowita(m1b)[1]+inercja_calkowita(m1b)[2]
-% )/sum(inercja_calkowita(m1b))
-% inercja_calkowita(m1b)
-% inercja_calkowita(m1b)[1]
-% inercja_calkowita(m1b)[2]
-% inercja_calkowita(m1b)[1]+inercja_calkowita(m1b)[2]
-% sum(inercja_calkowita(m1b))
 
-% @
+
+
 
 <<warning = F, results= 'asis', echo = F>>=
-zad2_df <- matrix(c(inercja_calkowita(m1a)[1],inercja_calkowita(m1a)[2],
-inercja_calkowita(m1b)[1],inercja_calkowita(m1b)[2],
-inercja_calkowita(m1c)[1],inercja_calkowita(m1c)[2],
-inercja_calkowita(m2a)[1],inercja_calkowita(m2a)[2]),
+zad2_df <- matrix(c(inercja(m1a)[1],inercja(m1a)[2],
+                    inercja(m1b)[1],inercja(m1b)[2],
+                    inercja(m1c)[1],inercja(m1c)[2],
+                    inercja(m2a)[1],inercja(m2a)[2]),
            c(4,2),byrow = T)
 rownames(zad2_df) <- c("m1a", "m1b", "m1c", "m2a")
 colnames(zad2_df) <- c("$\\lambda$","inercja cz.") 
-tab <- xtable(zad2_df, digits=c(0,5,5),caption = 'Tablicza wartości współczynników dla poszczegulnych macieży dla adania 1.' ,label = "tab:5" )
+tab <- xtable(zad2_df, digits=c(0,5,5),caption = 'Tablicza wartości współczynników inercji macierzy dla zadania 1.' ,label = "tab:5" )
 print(tab, sanitize.text.function = function(x) {x},table.placement="H")
 @
 
@@ -516,18 +524,44 @@ analiza <- function(data) {
 }
 @
 
-
-<<>>=
-df1 <-analiza(data4)
+<<echo = F>>=
+df1 <-analiza(m1a)
+df2 <-analiza(m1b)
+df3 <-analiza(m1c)
+df4 <-analiza(m2a)
 @
 
-<<fig_1, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:1}Analiza korespondecji dla tabeli za Przykładu 1 Wykład 7.' ,fig.pos = 'H'>>=
+<<fig.width = 10, echo = F, fig.height = 6, fig.cap ='\\label{fig:1}Analiza korespondecji dla tabeli  m1a.' ,fig.pos = 'H'>>=
 ggplot(df1, aes(x, y, label = name ,colour = col) ) +
 	geom_point() + geom_text(vjust = -1) +
 	scale_color_manual(values=c("#0000ff","#ff0000"))+
-  	geom_hline(yintercept=0) + geom_vline(xintercept = 0)
+  	geom_hline(yintercept=0) + geom_vline(xintercept = 0)+
+    xlab("Dim 1") + ylab("Dim 2")
 @
 Na wykresie zauważamy, że nie istnieją silne powiązania między zmiennymi, wszystkie skupione są blisko początku układu współrzędnych (punktu (0,0)). Kategoria "60+" cechuje się zdecydowanie największa rozróżnialnościa, na co wskazuję duża odległość od wcześniej wspomnianego punktu.
+
+<<fig.width = 10, echo = F, fig.height = 6, fig.cap ='\\label{fig:2}Analiza korespondecji dla tabeli za m1b.' ,fig.pos = 'H'>>=
+ggplot(df2, aes(x, y, label = name ,colour = col) ) +
+	geom_point() + geom_text(vjust = -1) +
+	scale_color_manual(values=c("#0000ff","#ff0000"))+
+  	geom_hline(yintercept=0) + geom_vline(xintercept = 0)+
+    xlab("Dim 1") + ylab("Dim 2")
+@
+<<fig.width = 10, echo = F, fig.height = 6, fig.cap ='\\label{fig:3}Analiza korespondecji dla tabeli za m1c.' ,fig.pos = 'H'>>=
+ggplot(df2, aes(x, y, label = name ,colour = col) ) +
+	geom_point() + geom_text(vjust = -1) +
+	scale_color_manual(values=c("#0000ff","#ff0000"))+
+  	geom_hline(yintercept=0) + geom_vline(xintercept = 0)+
+    xlab("Dim 1") + ylab("Dim 2")
+@
+<<fig.width = 10, echo = F, fig.height = 6, fig.cap ='\\label{fig:4}Analiza korespondecji dla tabeli za m2a.' ,fig.pos = 'H'>>=
+ggplot(df2, aes(x, y, label = name ,colour = col) ) +
+	geom_point() + geom_text(vjust = -1) +
+	scale_color_manual(values=c("#0000ff","#ff0000"))+
+  	geom_hline(yintercept=0) + geom_vline(xintercept = 0)+
+    xlab("Dim 1") + ylab("Dim 2")
+@
+
 \newpage
 \subsection*{Zad 2}
 Załóżmy, że 200 klientów (w różnym wieku) kilku aptek zapytano, jaki lek przeciwbólowy zwykle stosują. Zebrane dane zawarte są w tablicy 2. Na podstawie tych danych, obliczyć odpowiednie miary współzmienności oraz przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów
@@ -546,7 +580,7 @@ Wiek = c("do lat 35", "od 36 do 55","powyżej 55"))
 @
 
 <<results= 'asis', echo = F>>=
-tab5 <- xtable(data5, caption = 'Dane do listy 8 i 9, zadanie 2.' ,label = "tab:5")
+tab5 <- xtable(data5, caption = 'Dane do listy 8 i 9, zadanie 2.' ,label = "tab:6")
 align(tab5) <- xalign(tab5)
 # digits(ta5) <- xdigits(tab5)
 display(tab5) <- xdisplay(tab5)
@@ -564,7 +598,7 @@ l2zad2_df <- matrix(c(
   ), c(1,4),byrow = T)
 # rownames(zad2_df) <- c("m1a", "m1b", "m1c", "m2a")
 colnames(l2zad2_df) <- c("$\\tau$", "V", "T", "$\\varphi $", "C") 
-tab_l2zad2_df <- xtable(l2zad2_df, digits=c(0,5,5,5,5,5),caption = 'Tablica wartości współczynników dla zadania 2.' ,label = "tab:6" )
+tab_l2zad2_df <- xtable(l2zad2_df, digits=c(0,5,5,5,5,5),caption = 'Tablica wartości współczynników dla zadania 2.' ,label = "tab:7" )
 print(tab_l2zad2_df, sanitize.text.function = function(x) {x},table.placement="H", scalebox = "1")
 @
 
