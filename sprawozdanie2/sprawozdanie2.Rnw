@@ -602,7 +602,7 @@ tab_l2zad2_df <- xtable(l2zad2_df, digits=c(0,5,5,5,5,5),caption = 'Tablica wart
 print(tab_l2zad2_df, sanitize.text.function = function(x) {x},table.placement="H", scalebox = "1")
 @
 
-Tabela w tym zadaniu nie jest rozmiaru 2x2, więc powinniśmy rozpatrzyć tylko współczynnik $\tau$.Jak możemy zobaczyć otrzymana wartość tego współczynnika wskazuję na to, że zmienna \emph{Lek} ma wpływ na redukcję zmienności zmiennej \emph{Wiek}.
+Tabela w tym zadaniu nie jest rozmiaru 2x2, więc powinniśmy rozpatrzyć tylko współczynnik $\tau$. Jak możemy zobaczyć otrzymana wartość tego współczynnika wskazuję na to, że zmienna \emph{Lek} ma wpływ na redukcję zmienności zmiennej \emph{Wiek}.
 
 <<warning = F, results= 'asis', echo = F>>=
 zad2_df <- matrix(c(inercja(data5)[1], inercja(data5)[2]),
@@ -612,7 +612,7 @@ colnames(zad2_df) <- c("$\\lambda$","inercja cz.")
 tab <- xtable(zad2_df, digits=c(0,5,5),caption = 'tablica wartości współczynników inercji macierzy dla zadania 2.' ,label = "tab:8" )
 print(tab, sanitize.text.function = function(x) {x},table.placement="H")
 @
-
+Z przeprowadzonej analizy korespodencji wynika, że incercja całkowita wynosi 0.57484, a w dwóch wymiarach objaśnione jest aż 100\% zmienności.
 
 
 % <<tab3,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
@@ -626,7 +626,7 @@ ggplot(df2, aes(x, y, label = name ,colour = col) ) +
 	scale_color_manual(values=c("#0000ff","#ff0000"))+
   	geom_hline(yintercept=0) + geom_vline(xintercept = 0)
 @
-
+Na wykresie widzimy, że silne powiązanie występuje między zmiennymi "Ibuprom" oraz "do lat 35", zmienna "Paracetamol" także jest silnie powiązana, ale ze zmienną "powyżej 55". Natomiast lek "Ibuprofen" wykazuje najsilniejszą korespodencję z grupą wiekową "od 36 do 55".
 \subsection*{Zad 3}
 Na podstawie danych zawartych w tablicy 1, obliczyć (odpowiednią) miarę współzmienności zmiennych Wynagrodzenie i Stopień zadowolenia z pracy (dane te są trochę inne niż te rozpatrywane na poprzednij liście). Następnie, przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów oraz utworzyć odpowiednie wykresy.\newline
 <<echo = F>>=
@@ -672,7 +672,7 @@ print(tab_l2zad3_df, sanitize.text.function = function(x) {x},table.placement="H
 @
 
 % Ze względu na to jak wygląda tabela, najlepszym współczynnikiem do zbadania jej współzmienności bedzie współczynnik $\hat{\gamma}$.
-Ze względu na to ze badana tabela zawiera dwie zmienne kategoryczne i uporządkowane, możemy w tym przypadku posłużyć się dodatkowym spółczynnikiem \( \hat\gamma \)
+Ze względu na to ze badana tabela zawiera dwie zmienne kategoryczne i uporządkowane, możemy w tym przypadku posłużyć się dodatkowym współczynnikiem \( \hat\gamma \).
 
 <<warning = F, results= 'asis', echo = F>>=
 zad3_df <- matrix(c(inercja(data6)[1], inercja(data6)[2]),
@@ -682,7 +682,7 @@ colnames(zad3_df) <- c("$\\lambda$","inercja cz.")
 tab <- xtable(zad3_df, digits=c(0,5,5),caption = 'Tablica wartości współczynników inercji macierzy dla zadania 3.' ,label = "tab:11" )
 print(tab, sanitize.text.function = function(x) {x},table.placement="H")
 @
-
+Inercja całkowita wynosi 0.05752, a częściowa aż 0.98946, co oznacza, że aż 98.95\% zmienności jest objaśnione w dwóch wymiarach.
 
 <<fig_3, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:3}Analiza korespondencji dla Tabeli 3.' ,fig.pos = 'H'>>=
 df3 <-analiza(data6)
