@@ -211,7 +211,7 @@ print(tab2, scalebox = "1" , add.to.row = addtorow, table.placement="H", include
 <<>>=
 fisher.test(data2)$p.value
 @
-	Jak widzmy p-wartość jest mniejsza niż 0.05, zatem odrzucamy hipotezę o niezależności rozkładów.
+	Jak widzmy p-wartość jest mniejsza od przyjętego poziomu istotności \( \alpha = 0.05\), zatem odrzucamy hipotezę o niezależności rozkładów.
 	Zatem badane rozkłady warunkowe nie są jednorodne.
 	\subsection*{Zad 4}
 	Korzystając z funkcji chisq.test w pakiecie R, na poziomie istotności 0.05, zweryfikować hipotezę o niezależności stopnia zadowolenia z pracy i wynagrodzenia na podstawie danych w tablicy 2. Zwrócić uwagę na stosowaną w tej funkcji poprawkę.
@@ -253,20 +253,27 @@ print(tab3, scalebox = "1", add.to.row = addtorow, include.colnames = FALSE,tabl
 <<>>=
 chisq.test(data3[1:4,1:4],correct = F)$p.value
 @
-Jak możemy zobaczyć p-wartość jest większa niż 0.05, zatem nie mamy podstaw do odrzucenia hipotezy o niezależności rozkładów warunkowych.
+Jak możemy zobaczyć p-wartość jest większa  od przyjętego poziomu istotności \( \alpha = 0.05\), zatem nie mamy podstaw do odrzucenia hipotezy o niezależności rozkładów warunkowych.
 \newpage
 \subsection*{Zad 5}
 Napisać deklarację funkcji, która dla danych w tablicy dwudzielczej oblicza wartość poziomu krytycznego (p-value) w asymptotycznym teście niezależności opartym na ilorazie wiarogodności. Korzystając z napisanej funkcji, obliczyć tę wartość dla danych z zadania 4.
 
 Wyliczenie p-wartości dla testu opartego na ilorazie wiarogodności oparte jest na statyscyce:
 \begin{gather*}
-	G^2 = -2 \log(\lambda) , \quad \lambda = \prod_{i,j} \left( \frac{n_{i+}n_{+j}}{n n_{ij}}\right)^{n_{ij}}
+	G^2 = -2 \log(\lambda) , \quad \lambda = \prod_{i,j} \left( \frac{n_{i+}n_{+j}}{n n_{ij}}\right)^{n_{ij}},\\
+  \text{p-value} = 1 - F_{\chi ^2(R-1)(C-1)}(G^2),
 \end{gather*}
-
+gdzie:
+\begin{itemize}
+  \item[] \( n_{i+} \) - suma liczności w i-tym wierszu,
+  \item[] \( n_{+j} \) - suma liczności w j-tej kolumnie,
+  \item[] \( n_{ij} \) - liczność w i-tym wierszu i j-tej kolumnie,
+  \item[] \( n \) - liczba wszystkich ankietowanych,
+  \item[] \( R \) - liczba wierszu testowanej tabeli,
+  \item[] \( C \) - liczba kolumn testowanej tabeli.
+\end{itemize}
 Powyższa statystyka przy założeniu hipotezy o niezależności, dąży przy \(n \rightarrow \infty\)
-do rozkładu \( \chi^2 \) z \( (R-1)(C-1) \) stopniami swobody, gdzie \(R\) i \(C\)
-są odpowiednią liczbą wierszy i kolumn testowanej tabeli.
-
+do rozkładu \( \chi^2 \) z \( (R-1)(C-1) \) stopniami swobody.
 <<>>=
 p <- function(dane) {
   y_xo <- rowSums(dane)
@@ -287,8 +294,9 @@ p <- function(dane) {
 }
 p(data3[1:4,1:4])[[1]]
 @
-Jak możemy zobaczyć p-wartość jest większa niż 0.05, zatem nie mamy podstaw do odrzucenia hipotezy o niezależności rozkładów warunkowych.
 
+Jak możemy zobaczyć p-wartość jest większa od przyjętego poziomu istotności \( \alpha = 0.05\), zatem nie mamy podstaw do odrzucenia hipotezy o niezależności rozkładów warunkowych.
+Porównująć p-wartości w zadaniu czwarym i piatym których warotści wynosiły odpowiednio 0.2139542 i 0.2112391, widzimy że obie metody w tym przypadku daja wyniki bardzo do siebie zbliżone. 
 \newpage
 \section*{Lista 8 i 9}
 \subsection*{Zad 1}
@@ -300,23 +308,47 @@ Wiek, wartości miar obliczyć przy “wyjściowych” kategoriach wiekowych, ja
 	\tau = \frac{\sum_{i=1}^R\sum_{j=1}^C p_{i,j}^2/p_{i+} -\sum_{j=1}^Cp_{+j}^2 }{1-\sum_{j=1}^Cp_{+j}^2}
 \end{gather*}
 Powyższa miara okleśla stopień redukcji zmienności zmiennej $W_{2}$, przy znajomości zmiennej $W_{1}$. Przyjmuje on wartości z zakresu $[0,1]$. Gdy $\tau = 0$, to wtedy i tylko wtedy zmienne $W_{1}$ i $W_{2}$ są niezależne. $\tau = 1$, wtedy i tylko wtedy, gdy dla każdego $i \in \{1, . . . , R\}$ istnieje $j \in \{1, . . . , C\}$ takie, że  $p_{j|i} = 1$.
-
+Bedziemy również wykożystywać trzy inne współczynniki oparte na statystyce \(\chi^2\) są to: współczynnik V-Cramera, \( \varphi \), oraz C-Pearsona opisane poniższymi wzorami.
+\begin{gather*}
+  V = \sqrt{ \frac{\chi^2}{n \min(R-1,C-1)} },\quad
+  \varphi = \sqrt{\frac{\chi^2}{n}},\quad
+  C = \sqrt{\frac{\chi^2}{\chi^2 + n}}.
+\end{gather*}
 <<>>=
 tau <- function(data) {
-	p <- data/sum(data)
-	pi. <- rowSums(p)
-	p.i <- colSums(p)
-	R <- nrow(data)
-	C <- ncol(data)
+  p <- data/sum(data)
+  pi. <- rowSums(p)
+  p.i <- colSums(p)
+  R <- nrow(data)
+  C <- ncol(data)
 
-	d1 <- 0
-	for (i in 1:R) {
+  d1 <- 0
+  for (i in 1:R) {
     for (j in 1:C) {
       d1 <- p[i, j]^2/pi.[i] + d1
     }
-	}
-	d2 <- sum(p.i^2)
-	return( ( d1 - d2 )/(1 - d2) )
+  }
+  d2 <- sum(p.i^2)
+  return( ( d1 - d2 )/(1 - d2) )
+}
+@
+<<>>=
+wspolczynniki <- function(dane,metoda){
+  X <- chisq.test(dane)$statistic[[1]]
+  R <- nrow(dane)
+  C <- ncol(dane)
+  n <- sum(dane)
+  if (metoda =="Cramer"){
+    sqrt(X/(n*min(R-1,C-1)))
+  }else if (metoda == 't-czuprow'){
+    (X/(n*((R-1)*(C-1))**0.5))**0.5
+  }else if (metoda=='phi'){
+    (X/n)**0.5
+  }else if (metoda=='pearson'){
+   (X/(X+n))**0.5
+  }else if (metoda=='tau'){
+    tau(dane)
+  }
 }
 @
 \newpage
@@ -356,7 +388,7 @@ print(tab4, scalebox = "1", add.to.row = addtorow, include.colnames = FALSE,tabl
 <<fig.pos="h",echo=FALSE>>=
 cat('tau =', tau(data4)[[1]])
 @
-Jak możemy zobaczyć otrzymana wartość współczynnika \(\tau\) jest bliska zeru,świadczy to o bardzo małej współzmienności badanych zmiennych losowych.
+Jak możemy zobaczyć otrzymana wartość współczynnika \(\tau\) jest bliska zeru, świadczy to o bardzo małej współzmienności badanych zmiennych losowych.
 
 <<>>=
 analiza <- function(data) {
@@ -433,22 +465,8 @@ print(tab5, scalebox = "1", add.to.row = addtorow, include.colnames = FALSE,tabl
 cat('tau =',tau(data5)[[1]])
 @
 Jak możemy zobaczyć otrzymana wartość współczynnika \(\tau\) nie jest zbyt duża, świadczy to o średniej współzmienności badanych zmiennych losowych.
+
 <<warning = F>>=
-wspolczynniki <- function(dane,metoda){
-  X <- chisq.test(dane)$statistic[[1]]
-  R <- nrow(dane)
-  C <- ncol(dane)
-  n <- sum(dane)
-  if (metoda =="Cramer"){
-    sqrt(X/(n*min(R-1,C-1)))
-  }else if (metoda == 't-czuprow'){
-    (X/(n*((R-1)*(C-1))**0.5))**0.5
-  }else if (metoda=='phi'){
-    (X/n)**0.5
-  }else if (metoda=='pearson'){
-   (X/(X+n))**0.5
-  }
-}
 cat(wspolczynniki(data5,'Cramer'))
 cat(wspolczynniki(data5,'t-czuprow'))
 cat(wspolczynniki(data5,'phi'))
