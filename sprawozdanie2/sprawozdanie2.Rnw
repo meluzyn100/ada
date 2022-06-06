@@ -386,18 +386,18 @@ wspolczynniki <- function(dane,metoda){
   }
 }
 @
+\newpage
 \subsubsection*{Inercja}
-
+Inercję całkowitą możma zinterpretować jako miarę rozporoszenia profili w przestrzeni wielowymiarowej. Im większa jest inercja całkowita układu, tym punkty w tej przestrzeni są bardziej rozproszone.
 \begin{equation}
   \lambda=\sum_{i=1}^{K} \gamma_{i}^{2}
   \end{equation}
-
+gdzie: $\lambda_{i}$ to wartości osobliwe macierzy A, które jednocześnie znajdują się w diagonalnej macierzy $\Gamma$, możemy również wyznaczyć współczynik inercji cześciowej:
 \begin{equation}
   \lambda_{c}=\frac{\sum_{i=1}^{2} \gamma_{i}^{2}}{\lambda}
 \end{equation}
+\newline
 
-
-\newpage
 <<echo = F>>=
 data4 <- matrix(c(
 888, 369, 50, 457,
@@ -491,7 +491,7 @@ zad2_df <- matrix(c(inercja(m1a)[1],inercja(m1a)[2],
            c(4,2),byrow = T)
 rownames(zad2_df) <- c("m1a", "m1b", "m1c", "m2a")
 colnames(zad2_df) <- c("$\\lambda$","inercja cz.") 
-tab <- xtable(zad2_df, digits=c(0,5,5),caption = 'Tablicza wartości współczynników inercji macierzy dla zadania 1.' ,label = "tab:5" )
+tab <- xtable(zad2_df, digits=c(0,5,5),caption = 'tablica wartości współczynników inercji macierzy dla zadania 1.' ,label = "tab:5" )
 print(tab, sanitize.text.function = function(x) {x},table.placement="H")
 @
 
@@ -531,7 +531,7 @@ df3 <-analiza(m1c)
 df4 <-analiza(m2a)
 @
 
-<<fig.width = 10, echo = F, fig.height = 6, fig.cap ='\\label{fig:1}Analiza korespondecji dla tabeli  m1a.' ,fig.pos = 'H'>>=
+<<fig.width = 10, echo = F, fig.height = 6, fig.cap ='\\label{fig:1}Analiza korespondencji dla tabeli  m1a.' ,fig.pos = 'H'>>=
 ggplot(df1, aes(x, y, label = name ,colour = col) ) +
 	geom_point() + geom_text(vjust = -1) +
 	scale_color_manual(values=c("#0000ff","#ff0000"))+
@@ -540,21 +540,21 @@ ggplot(df1, aes(x, y, label = name ,colour = col) ) +
 @
 Na wykresie zauważamy, że nie istnieją silne powiązania między zmiennymi, wszystkie skupione są blisko początku układu współrzędnych (punktu (0,0)). Kategoria "60+" cechuje się zdecydowanie największa rozróżnialnościa, na co wskazuję duża odległość od wcześniej wspomnianego punktu.
 
-<<fig.width = 10, echo = F, fig.height = 6, fig.cap ='\\label{fig:2}Analiza korespondecji dla tabeli za m1b.' ,fig.pos = 'H'>>=
+<<fig.width = 10, echo = F, fig.height = 6, fig.cap ='\\label{fig:2}Analiza korespondencji dla tabeli za m1b.' ,fig.pos = 'H'>>=
 ggplot(df2, aes(x, y, label = name ,colour = col) ) +
 	geom_point() + geom_text(vjust = -1) +
 	scale_color_manual(values=c("#0000ff","#ff0000"))+
   	geom_hline(yintercept=0) + geom_vline(xintercept = 0)+
     xlab("Dim 1") + ylab("Dim 2")
 @
-<<fig.width = 10, echo = F, fig.height = 6, fig.cap ='\\label{fig:3}Analiza korespondecji dla tabeli za m1c.' ,fig.pos = 'H'>>=
+<<fig.width = 10, echo = F, fig.height = 6, fig.cap ='\\label{fig:3}Analiza korespondencji dla tabeli za m1c.' ,fig.pos = 'H'>>=
 ggplot(df2, aes(x, y, label = name ,colour = col) ) +
 	geom_point() + geom_text(vjust = -1) +
 	scale_color_manual(values=c("#0000ff","#ff0000"))+
   	geom_hline(yintercept=0) + geom_vline(xintercept = 0)+
     xlab("Dim 1") + ylab("Dim 2")
 @
-<<fig.width = 10, echo = F, fig.height = 6, fig.cap ='\\label{fig:4}Analiza korespondecji dla tabeli za m2a.' ,fig.pos = 'H'>>=
+<<fig.width = 10, echo = F, fig.height = 6, fig.cap ='\\label{fig:4}Analiza korespondencji dla tabeli za m2a.' ,fig.pos = 'H'>>=
 ggplot(df2, aes(x, y, label = name ,colour = col) ) +
 	geom_point() + geom_text(vjust = -1) +
 	scale_color_manual(values=c("#0000ff","#ff0000"))+
@@ -604,11 +604,22 @@ print(tab_l2zad2_df, sanitize.text.function = function(x) {x},table.placement="H
 
 Tabela w tym zadaniu nie jest rozmiaru 2x2, więc powinniśmy rozpatrzyć tylko współczynnik $\tau$.Jak możemy zobaczyć otrzymana wartość tego współczynnika wskazuję na to, że zmienna \emph{Lek} ma wpływ na redukcję zmienności zmiennej \emph{Wiek}.
 
+<<warning = F, results= 'asis', echo = F>>=
+zad2_df <- matrix(c(inercja(data5)[1], inercja(data5)[2]),
+           c(1,2),byrow = T)
+rownames(zad2_df) <- c("Zad 2")
+colnames(zad2_df) <- c("$\\lambda$","inercja cz.") 
+tab <- xtable(zad2_df, digits=c(0,5,5),caption = 'tablica wartości współczynników inercji macierzy dla zadania 2.' ,label = "tab:8" )
+print(tab, sanitize.text.function = function(x) {x},table.placement="H")
+@
+
+
+
 % <<tab3,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
 % knitr::include_graphics("jpegi/tab3.jpg")
 % @
 
-<<fig_2, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:2}Analiza korespondecji dla Tabeli 1.' ,fig.pos = 'H'>>=
+<<fig_2, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:2}Analiza korespondencji dla Tabeli 1.' ,fig.pos = 'H'>>=
 df2 <-analiza(data5)
 ggplot(df2, aes(x, y, label = name ,colour = col) ) +
 	geom_point() + geom_text(vjust = -1) +
@@ -633,7 +644,7 @@ Na podstawie danych zawartych w tablicy 1, obliczyć (odpowiednią) miarę wspó
 
 
 <<results= 'asis', echo = F>>=
-tab6 <- xtable(data6, caption = 'Dane do listy 8 i 9, zadanie 3.' ,label = "tab:7")
+tab6 <- xtable(data6, caption = 'Dane do listy 8 i 9, zadanie 3.' ,label = "tab:9")
 align(tab6) <- xalign(tab6)
 digits(tab6) <- xdigits(tab6)
 display(tab6) <- xdisplay(tab6)
@@ -656,14 +667,24 @@ l2zad3_df <- matrix(c(
   ,wspolczynniki(data6,"gamma")), c(1,5),byrow = T)
 # rownames(zad2_df) <- c("m1a", "m1b", "m1c", "m2a")
 colnames(l2zad3_df) <- c("$\\tau$", "V", "T", "$\\varphi $", "C","$\\hat\\gamma $") 
-tab_l2zad3_df <- xtable(l2zad3_df, digits=c(0,5,5,5,5,5,5),caption = 'Tablica wartości współczynników dla zadania 3.' ,label = "tab:8" )
+tab_l2zad3_df <- xtable(l2zad3_df, digits=c(0,5,5,5,5,5,5),caption = 'Tablica wartości współczynników dla zadania 3.' ,label = "tab:10" )
 print(tab_l2zad3_df, sanitize.text.function = function(x) {x},table.placement="H", scalebox = "1")
 @
 
 % Ze względu na to jak wygląda tabela, najlepszym współczynnikiem do zbadania jej współzmienności bedzie współczynnik $\hat{\gamma}$.
 Ze względu na to ze badana tabela zawiera dwie zmienne kategoryczne i uporządkowane, możemy w tym przypadku posłużyć się dodatkowym spółczynnikiem \( \hat\gamma \)
 
-<<fig_3, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:3}Analiza korespondecji dla Tabeli 3.' ,fig.pos = 'H'>>=
+<<warning = F, results= 'asis', echo = F>>=
+zad3_df <- matrix(c(inercja(data6)[1], inercja(data6)[2]),
+           c(1,2),byrow = T)
+rownames(zad3_df) <- c("Zad 3")
+colnames(zad3_df) <- c("$\\lambda$","inercja cz.") 
+tab <- xtable(zad3_df, digits=c(0,5,5),caption = 'Tablica wartości współczynników inercji macierzy dla zadania 3.' ,label = "tab:11" )
+print(tab, sanitize.text.function = function(x) {x},table.placement="H")
+@
+
+
+<<fig_3, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:3}Analiza korespondencji dla Tabeli 3.' ,fig.pos = 'H'>>=
 df3 <-analiza(data6)
 ggplot(df3, aes(x, y, label = name ,colour = col) ) +
 	geom_point() + geom_text(vjust = -1) +
