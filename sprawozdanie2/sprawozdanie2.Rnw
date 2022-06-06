@@ -35,7 +35,7 @@ library(base)
 library(matlib)
 @
 
-\section*{Lista 5,6 i 7}
+\section*{Lista 5, 6 i 7}
 \subsection*{Zad 1}
 \textbf{\emph{binom.test}} jest to funkcja przeprowadzająca test dokładności dla prostej hipotezy zerowej $H_{0}$ o prawdopodobieństwu sukcesu w próbie Bernoulliego. \newline \newline
 Użycie:
@@ -299,21 +299,39 @@ Jak możemy zobaczyć p-wartość jest większa od przyjętego poziomu istotnoś
 Porównująć p-wartości w zadaniu czwarym i piatym których warotści wynosiły odpowiednio 0.2139542 i 0.2112391, widzimy że obie metody w tym przypadku daja wyniki bardzo do siebie zbliżone. 
 \newpage
 \section*{Lista 8 i 9}
-\subsection*{Zad 1}
-Na podstawie danych z przykładu 1 na wykładzie 7, obliczyć wartości odpowiednich
-miar współzmienności zmiennych Segregacja (odpowiedź na pytanie dotyczace segregacji śmieci) i Wiek oraz Segregacja i Miejsce zamieszkania. W przypadku zmiennej
-Wiek, wartości miar obliczyć przy “wyjściowych” kategoriach wiekowych, jak również przy połączonych kategoriach wiekowych (jak w przykładzie). Podać interpretację tych wartości. Następnie przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów oraz utworzyć odpowiednie wykresy.
-\subsubsection*{Współczynnik \(\tau\) Goodmana}
-\begin{gather*}
-	\tau = \frac{\sum_{i=1}^R\sum_{j=1}^C p_{i,j}^2/p_{i+} -\sum_{j=1}^Cp_{+j}^2 }{1-\sum_{j=1}^Cp_{+j}^2}
-\end{gather*}
-Powyższa miara okleśla stopień redukcji zmienności zmiennej $W_{2}$, przy znajomości zmiennej $W_{1}$. Przyjmuje on wartości z zakresu $[0,1]$. Gdy $\tau = 0$, to wtedy i tylko wtedy zmienne $W_{1}$ i $W_{2}$ są niezależne. $\tau = 1$, wtedy i tylko wtedy, gdy dla każdego $i \in \{1, . . . , R\}$ istnieje $j \in \{1, . . . , C\}$ takie, że  $p_{j|i} = 1$.
-Bedziemy również wykożystywać trzy inne współczynniki oparte na statystyce \(\chi^2\) są to: współczynnik V-Cramera, \( \varphi \), oraz C-Pearsona opisane poniższymi wzorami.
-\begin{gather*}
-  V = \sqrt{ \frac{\chi^2}{n \min(R-1,C-1)} },\quad
-  \varphi = \sqrt{\frac{\chi^2}{n}},\quad
-  C = \sqrt{\frac{\chi^2}{\chi^2 + n}}.
-\end{gather*}
+\subsection*{ }
+W kolejnych zadaniach będziemy zajmować się zmiennością danych. Będziemy ją mierzyć za pomocą kilku współczynników, które zdefiniujemy poniżej:
+\begin{itemize}
+  \item współczynnik V Cramera:
+  \begin{equation}
+V=\sqrt{\frac{X^{2}}{n \min \{R-1, C-1\}}},
+  \end{equation}
+  \item współczynnik T-Czuprowa:
+  \begin{equation}
+T=\sqrt{\frac{X^{2}}{n \sqrt{(R-1)(C-1)}}},
+  \end{equation}
+  \item współczynik $\varphi$:
+  \begin{equation}
+\varphi=\sqrt{\frac{X^{2}}{n}}
+  \end{equation}
+  \item współczynnik C Pearsona (coefficient of contingency):
+  \begin{equation}
+C=\sqrt{\frac{X^{2}}{X^{2}+n}}
+  \end{equation}
+    \item współczynnik $\hat{\gamma}$:
+  \begin{equation}
+\hat{\gamma}=\frac{n_{11} n_{22}-n_{12} n_{21}}{n_{11} n_{22}+n_{12} n_{21}}
+\end{equation}
+  \item współczynnik $\hat{\tau}$ Goodmana
+  \begin{equation}
+\tilde{\tau}=\frac{\sum_{i=1}^{R} \sum_{j=1}^{C} \frac{n_{i j}^{2}}{n n_{i+}}-\sum_{j=1}^{C}\left(\frac{n_{+j}}{n}\right)^{2}}{1-\sum_{j=1}^{C}\left(\frac{n_{+j}}{n}\right)^{2}}
+  \end{equation}
+\end{itemize}
+Powyższa miara okleśla stopień redukcji zmienności zmiennej $W_{2}$, przy znajomości zmiennej $W_{1}$. Przyjmuje on wartości z zakresu $[0,1]$. Gdy $\tau = 0$, to wtedy i tylko wtedy zmienne $W_{1}$ i $W_{2}$ są niezależne. $\tau = 1$, wtedy i tylko wtedy, gdy dla każdego $i \in \{1, . . . , R\}$ istnieje $j \in \{1, . . . , C\}$ takie, że  $p_{j|i} = 1$. \newline \newline
+Powyższe miary zdefiniowaliśmy w R:
+
+
+
 <<>>=
 tau <- function(data) {
   p <- data/sum(data)
@@ -393,7 +411,7 @@ zad2_df <- matrix(c(
 rownames(zad2_df) <- c("m1a", "m1b", "m1c", "m2a")
 colnames(zad2_df) <- c("$\\tau$", "V", "T", "$\\varphi $", "C") 
 tab <- xtable(zad2_df, digits=c(0,5,5,5,5,5),,caption = 'Tablicza wartości współczynników dla poszczegulnych macieży dla adania 1.' ,label = "tab:4" )
-print(tab, sanitize.text.function = function(x) {x})
+print(tab, sanitize.text.function = function(x) {x},table.placement="H")
 @
 
 Jak możemy zobaczyć otrzymana wartość współczynnika \(\tau\) jest bliska zeru, świadczy to o bardzo małej współzmienności badanych zmiennych losowych.
@@ -425,15 +443,13 @@ analiza <- function(data) {
 }
 df1 <-analiza(data4)
 @
-
 <<fig_1, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:1}Analiza korespondecji dla tabeli za Przykładu 1 Wykład 7.' ,fig.pos = 'H'>>=
 ggplot(df1, aes(x, y, label = name ,colour = col) ) +
 	geom_point() + geom_text(vjust = -1) +
 	scale_color_manual(values=c("#0000ff","#ff0000"))+
   	geom_hline(yintercept=0) + geom_vline(xintercept = 0)
 @
-
-
+Na wykresie zauważamy, że nie istnieją silne powiązania między zmiennymi, wszystkie skupione są blisko początku układu współrzędnych (punktu (0,0)). Kategoria "60+" cechuje się zdecydowanie największa rozróżnialnościa, na co wskazuję duża odległość od wcześniej wspomnianego punktu.
 
 \subsection*{Zad 2}
 Załóżmy, że 200 klientów (w różnym wieku) kilku aptek zapytano, jaki lek przeciwbólowy zwykle stosują. Zebrane dane zawarte są w tablicy 2. Na podstawie tych danych, obliczyć odpowiednie miary współzmienności oraz przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów
@@ -464,31 +480,21 @@ addtorow$command <- c("& \\multicolumn{3}{c}{Wiek ankietowanych} \\\\\n",
 print(tab5, scalebox = "1", add.to.row = addtorow, include.colnames = FALSE,table.placement="H", hline.after = line)
 @
 
+<<warning = F, results= 'asis', echo = F>>=
+l2zad2_df <- matrix(c(
+  wspolczynniki(data5,'tau'), wspolczynniki(data5,'v-cramer'), wspolczynniki(data5,'t-czuprow'), wspolczynniki(data5,'phi'), wspolczynniki(data5,'c-pearson')
+  ), c(1,4),byrow = T)
+# rownames(zad2_df) <- c("m1a", "m1b", "m1c", "m2a")
+colnames(l2zad2_df) <- c("$\\tau$", "V", "T", "$\\varphi $", "C") 
+tab_l2zad2_df <- xtable(l2zad2_df, digits=c(0,5,5,5,5,5),caption = 'Tablicza wartości współczynników dla adania 2.' ,label = "tab:6" )
+print(tab_l2zad2_df, sanitize.text.function = function(x) {x},table.placement="H", scalebox = "1")
+@
 
+Tabela w tym zadaniu nie jest rozmiaru 2x2, więc powinniśmy rozpatrzyć tylko współczynnik $\tau$.Jak możemy zobaczyć otrzymana wartość tego współczynnika wskazuję na to, że zmienna \emph{Lek} ma wpływ na redukcję zmienności zmiennej \emph{Wiek}.
 
 % <<tab3,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
 % knitr::include_graphics("jpegi/tab3.jpg")
 % @
-<<fig.pos="h",echo=FALSE>>=
-cat('tau =',tau(data5)[[1]])
-@
-Jak możemy zobaczyć otrzymana wartość współczynnika \(\tau\) nie jest zbyt duża, świadczy to o średniej współzmienności badanych zmiennych losowych.
-
-
-<<warning = F, results= 'asis', echo = F>>=
-zad2_df <- matrix(c(
-  TschuprowT(data5), wspolczynniki(data5,'t-czuprow'),
-     CramerV(data5), wspolczynniki(data5,'Cramer'),
-         Phi(data5), wspolczynniki(data5,'phi'),
-    ContCoef(data5), wspolczynniki(data5,'pearson')),c(2,4))
-# rownames(zad2_df) <- c("f. wbudowana", "wartość miary")
-
-# colnames(zad2_df) <- c("$\\tau$","V","$\\varphi $","C") 
-tab <- xtable(zad2_df)
-print(tab, sanitize.text.function = function(x) {x})
-@
-
-Tabela w tym zadaniu jest rozmiaru 2x2, więc powinniśmy rozpatrzyć tylko współczynnik $\tau$.Jak możemy zobaczyć otrzymana wartość tego współczynnika wskazuję na to, że zmienna \emph{Lek} ma wpływ na redukcję zmienności zmiennej \emph{Wiek}.
 
 <<fig_2, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:2}Analiza korespondecji dla Tabeli 1.' ,fig.pos = 'H'>>=
 df2 <-analiza(data5)
@@ -497,7 +503,7 @@ ggplot(df2, aes(x, y, label = name ,colour = col) ) +
 	scale_color_manual(values=c("#0000ff","#ff0000"))+
   	geom_hline(yintercept=0) + geom_vline(xintercept = 0)
 @
-\newpage
+
 \subsection*{Zad 3}
 Na podstawie danych zawartych w tablicy 1, obliczyć (odpowiednią) miarę współzmienności zmiennych Wynagrodzenie i Stopień zadowolenia z pracy (dane te są trochę inne niż te rozpatrywane na poprzednij liście). Następnie, przeprowadzić analizę korespondencji, tzn. obliczyć wartości odpowiednich macierzy, współrzędnych punktów oraz utworzyć odpowiednie wykresy.\newline
 <<echo = F>>=
@@ -532,10 +538,15 @@ print(tab6, scalebox = "1",  add.to.row = addtorow,  include.colnames = FALSE,ta
 % <<tab4,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
 % knitr::include_graphics("jpegi/tab4.jpg")
 % @
-<<fig.pos="h",echo=FALSE>>=
-cat('tau =' ,tau(data6)[[1]])
+<<warning = F, results= 'asis', echo = F>>=
+l2zad3_df <- matrix(c(
+  wspolczynniki(data5,'tau'), wspolczynniki(data5,'v-cramer'), wspolczynniki(data5,'t-czuprow'), wspolczynniki(data5,'phi'), wspolczynniki(data5,'c-pearson')
+  ), c(1,4),byrow = T)
+# rownames(zad2_df) <- c("m1a", "m1b", "m1c", "m2a")
+colnames(l2zad3_df) <- c("$\\tau$", "V", "T", "$\\varphi $", "C") 
+tab_l2zad3_df <- xtable(l2zad3_df, digits=c(0,5,5,5,5,5),caption = 'Tablicza wartości współczynników dla adania 2.' ,label = "tab:6" )
+print(tab_l2zad3_df, sanitize.text.function = function(x) {x},table.placement="H", scalebox = "1")
 @
-
 Jak możemy zobaczyć otrzymana wartosc współcznnika \(\tau\) jest bliska zeru, świadczy to o bardzo małej współzmienności badanych zmiennych losowych.
 
 <<fig_3, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:3}Analiza korespondecji dla Tabeli 2.' ,fig.pos = 'H'>>=
