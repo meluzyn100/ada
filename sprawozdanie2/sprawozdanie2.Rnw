@@ -196,7 +196,7 @@ Lek = c("do lat 35", "od 36 do 55"))
 @
 
 <<results= 'asis', echo = F>>=
-tab2 <- xtable(data2,caption = 'Tabela do zadania 3.' ,label = "tab:1")
+tab2 <- xtable(data2,caption = 'Tabela do zadania 3.' ,label = "tab:2")
 align(tab2) <- xalign(tab2)
 digits(tab2) <- xdigits(tab2)
 display(tab2) <- xdisplay(tab2)
@@ -385,6 +385,7 @@ wspolczynniki <- function(dane,metoda){
   }
 }
 @
+
 \newpage
 <<echo = F>>=
 data4 <- matrix(c(
@@ -426,11 +427,67 @@ zad2_df <- matrix(c(
   ), c(4,4),byrow = T)
 rownames(zad2_df) <- c("m1a", "m1b", "m1c", "m2a")
 colnames(zad2_df) <- c("$\\tau$", "V", "T", "$\\varphi $", "C") 
-tab <- xtable(zad2_df, digits=c(0,5,5,5,5,5),,caption = 'Tablicza wartości współczynników dla poszczegulnych macieży dla adania 1.' ,label = "tab:4" )
+tab <- xtable(zad2_df, digits=c(0,5,5,5,5,5),caption = 'Tablicza wartości współczynników dla poszczegulnych macieży dla adania 1.' ,label = "tab:4" )
 print(tab, sanitize.text.function = function(x) {x},table.placement="H")
 @
 
 Jak możemy zobaczyć otrzymana wartość współczynnika \(\tau\) jest bliska zeru, świadczy to o bardzo małej współzmienności badanych zmiennych losowych.
+
+<<>>=
+inercja_calkowita <- function(data) {
+  p <- data/sum(data)
+  r <- rowSums(p)
+  c <- colSums(p)
+  R <- nrow(data)
+  C <- ncol(data)
+  P<- matrix(p,R,C)
+  D_r <- diag(r)
+  D_c <- diag(c)
+  A <- sqrt( inv(D_r) ) %*% ( P - r %*% t(c) ) %*% sqrt( inv(D_c) )
+  return( sum( diag( A %*% t(A) ) ) )
+}
+@
+<<>>=
+inercja_calkowita <- function(data) {
+  p <- data/sum(data)
+  r <- rowSums(p)
+  c <- colSums(p)
+  R <- nrow(data)
+  C <- ncol(data)
+  P<- matrix(p,R,C)
+  D_r <- diag(r)
+  D_c <- diag(c)
+  A <- sqrt( inv(D_r) ) %*% ( P - r %*% t(c) ) %*% sqrt( inv(D_c) )
+  B <- diag(A %*% t(A))
+  g <- diag(svd(A)$d)
+  return(c( sum( B ), (g[1,1]^2+g[2,2]^2)/sum(g^2) ) )
+}
+@
+
+% <<>>=
+% (inercja_calkowita(m1b)[1]+inercja_calkowita(m1b)[2]
+% )/sum(inercja_calkowita(m1b))
+% inercja_calkowita(m1b)
+% inercja_calkowita(m1b)[1]
+% inercja_calkowita(m1b)[2]
+% inercja_calkowita(m1b)[1]+inercja_calkowita(m1b)[2]
+% sum(inercja_calkowita(m1b))
+
+% @
+
+<<warning = F, results= 'asis', echo = F>>=
+zad2_df <- matrix(c(inercja_calkowita(m1a)[1],inercja_calkowita(m1a)[2],
+inercja_calkowita(m1b)[1],inercja_calkowita(m1b)[2],
+inercja_calkowita(m1c)[1],inercja_calkowita(m1c)[2],
+inercja_calkowita(m2a)[1],inercja_calkowita(m2a)[2]),
+           c(4,2),byrow = T)
+rownames(zad2_df) <- c("m1a", "m1b", "m1c", "m2a")
+colnames(zad2_df) <- c("$\\lambda$","inercja cz.") 
+tab <- xtable(zad2_df, digits=c(0,5,5),caption = 'Tablicza wartości współczynników dla poszczegulnych macieży dla adania 1.' ,label = "tab:5" )
+print(tab, sanitize.text.function = function(x) {x},table.placement="H")
+@
+
+
 
 <<>>=
 analiza <- function(data) {
@@ -457,8 +514,13 @@ analiza <- function(data) {
   )
   return(F_df)
 }
+@
+
+
+<<>>=
 df1 <-analiza(data4)
 @
+
 <<fig_1, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:1}Analiza korespondecji dla tabeli za Przykładu 1 Wykład 7.' ,fig.pos = 'H'>>=
 ggplot(df1, aes(x, y, label = name ,colour = col) ) +
 	geom_point() + geom_text(vjust = -1) +
@@ -537,7 +599,7 @@ Na podstawie danych zawartych w tablicy 1, obliczyć (odpowiednią) miarę wspó
 
 
 <<results= 'asis', echo = F>>=
-tab6 <- xtable(data6, caption = 'Dane do listy 8 i 9, zadanie 3.' ,label = "tab:6")
+tab6 <- xtable(data6, caption = 'Dane do listy 8 i 9, zadanie 3.' ,label = "tab:7")
 align(tab6) <- xalign(tab6)
 digits(tab6) <- xdigits(tab6)
 display(tab6) <- xdisplay(tab6)
@@ -556,16 +618,18 @@ print(tab6, scalebox = "1",  add.to.row = addtorow,  include.colnames = FALSE,ta
 % @
 <<warning = F, results= 'asis', echo = F>>=
 l2zad3_df <- matrix(c(
-  wspolczynniki(data5,'tau'), wspolczynniki(data5,'v-cramer'), wspolczynniki(data5,'t-czuprow'), wspolczynniki(data5,'phi'), wspolczynniki(data5,'c-pearson')
-  ), c(1,4),byrow = T)
+  wspolczynniki(data6,'tau'), wspolczynniki(data6,'v-cramer'), wspolczynniki(data6,'t-czuprow'), wspolczynniki(data6,'phi'), wspolczynniki(data5,'c-pearson')
+  ,wspolczynniki(data6,"gamma")), c(1,5),byrow = T)
 # rownames(zad2_df) <- c("m1a", "m1b", "m1c", "m2a")
-colnames(l2zad3_df) <- c("$\\tau$", "V", "T", "$\\varphi $", "C") 
-tab_l2zad3_df <- xtable(l2zad3_df, digits=c(0,5,5,5,5,5),caption = 'Tablica wartości współczynników dla zadania 2.' ,label = "tab:6" )
+colnames(l2zad3_df) <- c("$\\tau$", "V", "T", "$\\varphi $", "C","$\\hat\\gamma $") 
+tab_l2zad3_df <- xtable(l2zad3_df, digits=c(0,5,5,5,5,5,5),caption = 'Tablica wartości współczynników dla zadania 3.' ,label = "tab:8" )
 print(tab_l2zad3_df, sanitize.text.function = function(x) {x},table.placement="H", scalebox = "1")
 @
-Ze względu na to jak wygląda tabela, najlepszym współczynnikiem do zbadania jej współzmienności bedzie współczynnik $\hat{\gamma}$.
 
-<<fig_3, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:3}Analiza korespondecji dla Tabeli 2.' ,fig.pos = 'H'>>=
+% Ze względu na to jak wygląda tabela, najlepszym współczynnikiem do zbadania jej współzmienności bedzie współczynnik $\hat{\gamma}$.
+Ze względu na to ze badana tabela zawiera dwie zmienne kategoryczne i uporządkowane, możemy w tym przypadku posłużyć się dodatkowym spółczynnikiem \( \hat\gamma \)
+
+<<fig_3, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:3}Analiza korespondecji dla Tabeli 3.' ,fig.pos = 'H'>>=
 df3 <-analiza(data6)
 ggplot(df3, aes(x, y, label = name ,colour = col) ) +
 	geom_point() + geom_text(vjust = -1) +
