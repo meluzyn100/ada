@@ -37,16 +37,18 @@ library(matlib)
 W tabeli 1 zawarte są wyniki (w skali pozytywny, negatywny) z pierwszego i drugiego
 kolokwium w pewnej grupie studentów. Przyjmując, że poziom trudności zadań na
 pierwszym i drugim kolokwium był taki sam, na podstawie tych danych, zweryfikować hipotezę, na poziomie istotności 0.05, że studenci byli tak samo przygotowani
-do obu kolokwiów.
-<<>>=
+do obu kolokwiów.\newline
+<<results = F, echo = F>>=
 data <- matrix(c(
   32,44,76,22,38,60,54,82,136), 3, 3, byrow = T)
 dimnames(data) <- list(
   `Wynik z kolokwium 2` =
     c("Negatywny", "Pozytywny","Suma"),
-  Lek = c("Negatywny","Pozytywny","suma"))
+  `Wynik z kolokwium 1` = c("Negatywny","Pozytywny","suma"))
 @
-
+<<tab1,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
+knitr::include_graphics("nowyfolder/1.png")
+@
 
 \subsection*{Zadanie 2}
 W tabeli 2 zawarte są dane dotyczące reakcji po godzinie od przyjęcia dwóch różnych
@@ -59,8 +61,10 @@ zweryfikować hipotezę, że leki te są jednakowo skuteczne korzystając z test
 \end{enumerate}
 
 W drugim przypadku, najpierw napisać deklarację funkcji, której wartością będzie
-wartość poziomu krytycznego (p wartość) w tym warunkowym teście dokładnym.
-
+wartość poziomu krytycznego (p wartość) w tym warunkowym teście dokładnym.\newline
+<<tab2,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
+knitr::include_graphics("nowyfolder/2.png")
+@
 \subsection*{Zadanie 3}
 Przeprowadzić symulacje, w celu porównania mocy testu Z (opisanego w sekcji
 2.1.1) i testu $Z_{0}$ (opisanego w sekcji 2.1.2). Wyniki przedstawić w tabeli lub/i na
@@ -80,7 +84,10 @@ Zwrócić uwagę na problem z zastosowaniem do analizowanych danych testu Bowker
 W tabeli 1 zawarte są wyniki (w skali 2, 3, +3, 4, +4, 5) z pierwszego i drugiego
 kolokwium w pewnej grupie studentów. Przyjmując, że poziom trudności zadań na
 pierwszym i drugim kolokwium był taki sam, na podstawie tych danych, zweryfikować hipotezę, na poziomie istotności 0.05, że studenci byli tak samo przygotowani
-do obu kolokwiów.
+do obu kolokwiów.\newline
+<<tab3,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
+knitr::include_graphics("nowyfolder/3.png")
+@
 \section*{Lista 12,13 i 14}
 Wszystkie poniższe zadania należy wykonać w oparciu o dane w pliku Ankieta.csv,
 które zawieraj ,
