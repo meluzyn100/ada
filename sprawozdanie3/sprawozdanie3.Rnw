@@ -80,6 +80,57 @@ kolokwium w pewnej grupie studentów. Korzystając z odpowiedniego testu, na poz
   \item quasi-niezależności. 
 \end{enumerate}
 Zwrócić uwagę na problem z zastosowaniem do analizowanych danych testu Bowkera
+
+\subsubsection{Testowanie symetrii za pomocą testu ilorazu wiarygodności}
+<<echo= F, message=F,result='hide'>>=
+count <- c(5,2,1,0,0,0,6,3,2,2,0,0,1,4,5,5,2,2,0,10,15,18,5,2,1,2,5,3,2,2,0,1,3,4,3,2)
+kol1<- gl(6,6,labels=c("2","3","+3","4","+4","5"))
+kol2 <- gl(6,1,labels=c("2","3","+3","4","+4","5"))
+dane33 <- data.frame(kol1,kol2,count)
+#dane33
+library(gnm)
+symmetry <- glm(count ~ Symm(kol1, kol2), data=dane33, family = poisson)
+#summary(symmetry)
+x = symmetry$deviance
+#x
+r = 15
+p = 1-pchisq(x,r)
+@
+<<>>=
+symmetry <- glm(count ~ Symm(kol1, kol2), data=dane33, 
+                family = poisson) 
+x = symmetry$deviance #wartość statystyki G^2
+r=15 #Liczba stopni swobody
+1-pchisq(x,r) #p-wartość
+@
+Do przetestowania symetrii dla danych w Tabeli 1. wykorzystaliśmy test ilorazu wiarygodności (IW), aby to zrobić musieliśmy przekształcić dane do postaci ramki danych. Następnie za pomocą funkcji $\textbf{glm}$ z biblioteki $\textbf{gnm}$ przeprowadziliśmy test symetrii. P-wartość owego testu wyznaczyliśmy za pomocą wzoru : $\textbf{1-pchisq(x,r)}$, gdzie $\textbf{pchisq}$ jest dystrybuantą rozkładu $\chi^{2}$, $\textbf{x}$ to wartość statystyki $G^{2}$ z testu, a $\textbf{r}$ to ilość stopni swobody. \newline Na poziomie istotności 0.05 nie mamy podstaw do odrzucenia hipotezy o symetrii. Wartość poziomu krytycznego wynosi 0.1004656. 
+
+\subsubsection{Testowanie quasi-symetrii}
+Hipotezę zerową, że dane podlegają modelowi quasi-symetrii również zweryfikujemy korzystając z funkcji $\textbf{glm}$.
+<<>>=
+quasi.symm <- glm(count ~ kol1+kol2 + Symm(kol1,kol2),
+                  data=dane33, family =poisson)
+x = quasi.symm$deviance #wartość statystyki G^2
+r=10 #Liczba stopni swobody
+1-pchisq(x,r) #p-wartość
+@
+Korzystając z testu ilorazu wiarygodności (IW), na poziomie istotności 0.05, nie ma podstaw do odrzucenia hipotezy o quasi-symetrii. Wartość poziomu krytycznego w teście wynosi  0.9589187. 
+
+\subsubsection{Testowanie quasi-niezależności}
+Hipotezę zerową, że dane podlegają modelowi quasi niezależności również zweryfikujemy korzystając z funkcji $\textbf{glm}$.
+
+<<>>=
+quasi.indep <- glm(count ~ kol1 + kol2 + Diag(kol1, kol2),
+                   data=dane33, family = poisson)
+x=quasi.indep$deviance #wartość statystyki G^2
+r = 19 #Liczba stopni swobody
+1-pchisq(x,r) #p-wartość
+@
+Korzystając, z testu ilorazu wiarogodności (IW), na poziomie istotności 0.05, hipotezę o quasi-niezależności należy odrzucić.
+Wartość poziomu krytycznego w tym teście wynosi 0.00962481.
+
+
+
 \subsection*{Zadanie 2}
 W tabeli 1 zawarte są wyniki (w skali 2, 3, +3, 4, +4, 5) z pierwszego i drugiego
 kolokwium w pewnej grupie studentów. Przyjmując, że poziom trudności zadań na
@@ -88,6 +139,7 @@ do obu kolokwiów.\newline
 <<tab3,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
 knitr::include_graphics("nowyfolder/3.png")
 @
+\newpage
 \section*{Lista 12,13 i 14}
 Wszystkie poniższe zadania należy wykonać w oparciu o dane w pliku Ankieta.csv,
 które zawieraj ,
@@ -97,18 +149,18 @@ dobrze, 0, że źle), czy regularnie biega (1 – tak, 0 – nie) oraz czy posia
 \subsection*{Zadanie 1}
 W przypadku powyższych danych, podać interpretację następujących modeli logliniowych:
 \begin{itemize}
-  \item[$\blacksquare$] [1 3], \newline
-  opis
-  \item[$\blacksquare$] [13],\newline
-  opis
-  \item[$\blacksquare$] [1 2 3],\newline
-  opis
-  \item[$\blacksquare$] [12 3],\newline
-  opis
-  \item[$\blacksquare$] [12 13],\newline
-  opis
-  \item[$\blacksquare$] [1 23].\newline
-  opis
+  \item[$\blacksquare$] \textbf{[1 3]}, \newline
+  $ l_{ij} = \lambda + \lambda_{i}^{(1)}+ \lambda_{j}^{(3)}, \forall i \in \{1,...,R\}$ i $j \in \{1,...,C\} $, \newline Zmienne $W_{1}$ i $W_{3}$ mają dowolne rozkłady oraz zmienne te są niezależne. 
+  \item[$\blacksquare$] \textbf{[13]},\newline
+  $ l_{ij} = \lambda + \lambda_{i}^{(1)}+ \lambda_{j}^{(3)} + \lambda_{ij}^{(13)}, \forall i \in \{1,...,R\}$ i $j \in \{1,...,C\} $, \newline Zmienne $W_{1}$ i $W_{3}$ mają dowolne rozkłady oraz zmienne te nie są niezależne. 
+  \item[$\blacksquare$] \textbf{[1 2 3]},\newline
+  $ l_{ijk} = \lambda + \lambda_{i}^{(1)}+ \lambda_{j}^{(2)}  + \lambda_{k}^{(3)}, \forall i \in \{1,...,R\}$ i $j \in \{1,...,C\} $ i $k \in \{1,...,L\} $, \newline Zmienne $W_{1}$ i $W_{2}$ i $W_{3}$ są wzajemnie niezależne. 
+  \item[$\blacksquare$] \textbf{[12 3]},\newline
+  $ l_{ijk} = \lambda + \lambda_{i}^{(1)}+ \lambda_{j}^{(2)} +\lambda_{k}^{(3)}+ \lambda_{ij}^{(12)},\newline \forall i \in \{1,...,R\}$ i $j \in \{1,...,C\} $ i $k \in \{1,...,L\} $, \newline Zmienna $W_{3}$ jest niezależna od zmiennej $W_{1}$ i $W_{2}$, ale zmienne $W_{1}$ i $W_{2}$ nie są niezależne.  
+  \item[$\blacksquare$] \textbf{[12 13]},\newline
+$ l_{ijk} = \lambda + \lambda_{i}^{(1)}+ \lambda_{j}^{(2)}  + \lambda_{k}^{(3)}+ \lambda_{ij}^{(12)}+ \lambda_{ik}^{(13)},\newline \forall i \in \{1,...,R\}$ i $j \in \{1,...,C\} $ i $k \in \{1,...,L\} $, \newline Przy ustalonej wartości zmiennej $W_{1}$, zmienne $W_{2}$ i $W_{3}$ są niezależne. Mówimy wówczas, że zmienne $W_{2}$ i $W_{3}$ są warunkowo niezależne.
+  \item[$\blacksquare$] \textbf{[1 23]}.\newline
+  $ l_{ijk} = \lambda + \lambda_{i}^{(1)}+ \lambda_{j}^{(2)} +\lambda_{k}^{(3)}+ \lambda_{jk}^{(23)},\newline \forall i \in \{1,...,R\}$ i $j \in \{1,...,C\} $ i $k \in \{1,...,L\} $, \newline Zmienna $W_{1}$ jest niezależna od zmiennej $W_{2}$ i $W_{3}$, ale zmienne $W_{2}$ i $W_{3}$ nie są niezależne. 
 \end{itemize}
 \subsection*{Zadanie 2}
 Przyjmując model log-liniowy [12 3], na podstawie danych Ankieta.csv, oszacować
