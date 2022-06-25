@@ -32,6 +32,9 @@ library(stats)
 library(base)
 library(matlib)
 library(exact2x2)
+library(gnm)
+library(MASS)
+
 @
 \section*{Lista 10}
 \subsection*{Zadanie 1}
@@ -184,8 +187,8 @@ f_to_sup <- function(p) {
     ps_1[mc] <- p_value1 < 0.05
     ps_2[mc] <- p_value2 < 0.05
   }
-  return(c(sum(ps_1, na.rm = TRUE)/mcs,
-           sum(ps_2, na.rm = TRUE)/mcs))
+  return(c( sum(ps_1, na.rm = TRUE)/mcs,
+            sum(ps_2, na.rm = TRUE)/mcs))
 }
 
 f_to_sup_error_rm <- function(x){
@@ -209,11 +212,6 @@ melt_Df <- melt(df, id=1, measure=c("Z","Z0"))
 @
 
 <<fig.width = 12, fig.height = 8, echo = F, fig.cap ='\\label{fig:1} Porównanie mocy testów' ,fig.pos = 'H'>>=
-# ggplot(df1, aes(x, y, label = name ,colour = col) ) +
-# 	geom_point() + geom_text(vjust = -1) +
-# 	scale_color_manual(values=c("#0000ff","#ff0000"))+
-#   	geom_hline(yintercept=0) + geom_vline(xintercept = 0)+
-#     xlab("Dim 1") + ylab("Dim 2")
 ggplot(melt_Df,aes(p2, value, colour = variable)) + 
 geom_point() + geom_line() 
 @
@@ -234,8 +232,7 @@ count <- c(5,2,1,0,0,0,6,3,2,2,0,0,1,4,5,5,2,2,0,10,15,18,5,2,1,2,5,3,2,2,0,1,3,
 kol1<- gl(6,6,labels=c("2","3","+3","4","+4","5"))
 kol2 <- gl(6,1,labels=c("2","3","+3","4","+4","5"))
 dane33 <- data.frame(kol1,kol2,count)
-#dane33
-library(gnm)
+#dane3
 symmetry <- glm(count ~ Symm(kol1, kol2), data=dane33, family = poisson)
 #summary(symmetry)
 x = symmetry$deviance
@@ -286,6 +283,12 @@ do obu kolokwiów.\newline
 <<tab3,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
 knitr::include_graphics("nowyfolder/3.png")
 @
+
+<<>>=
+comparison <- anova(symmetry, quasi.symm)
+p <- 1-pchisq(comparison$Deviance[2], comparison$Df[2])
+@
+
 \newpage
 \section*{Lista 12,13 i 14}
 Wszystkie poniższe zadania należy wykonać w oparciu o dane w pliku Ankieta.csv,
@@ -318,6 +321,87 @@ prawdopodobieństwo:
 \end{enumerate}
 Jakie byłyby oszacowania powyższych prawdopodobieństw przy założeniu modelu [12 23]?
 
+<<>>=
+dane <- read.csv("Ankieta.csv",sep = ";")
+sen <- dane[,1]
+bieganie <- dane[,2]
+pies <- dane[,3]
+ankieta <- table(sen, bieganie, pies)
+ankieta.df <- as.data.frame(as.table(ankieta))
+@
+\subsection*{Model [12 3]}
+<<>>=
+mod1 <- glm(Freq ~ sen + bieganie + pies + sen*bieganie, 
+            data = ankieta.df, family = poisson)
+diff <- cbind(mod1$data, fitted(mod1))
+diff
+@
+
+\subsubsection*{Pytanie 1.}
+
+<<>>=
+La_mod1_fitt<-sum(diff[diff["sen"] == 1&diff["bieganie"] ==1,]["fitted(mod1)"])
+Ma_mod1_fitt<-sum(diff[diff["bieganie"] == 1,]["fitted(mod1)"])
+pa_mod1_fitt<-La_mod1_fitt/Ma_mod1_fitt
+pa_mod1_fitt
+
+La_mod1_date <- sum(diff[diff["sen"] == 1&diff["bieganie"] == 1,]["Freq"])
+Ma_mod1_date <- sum(diff[diff["bieganie"] == 1,]["Freq"])
+pa_mod1_date <- La_mod1_date/Ma_mod1_date
+pa_mod1_date
+@
+
+\subsubsection*{Pytanie 2.}
+
+<<>>=
+Lb_mod1_fitt<-sum(diff[diff["bieganie"] ==1&diff["pies"] == 1 ,]["fitted(mod1)"])
+Mb_mod1_fitt<-sum(diff[diff["pies"] ==1,]["fitted(mod1)"])
+pb_mod1_fitt<-Lb_mod1_fitt/Mb_mod1_fitt
+pb_mod1_fitt
+
+Lb_mod1_date <- sum(diff[diff["bieganie"] ==1&diff["pies"] == 1 ,]["Freq"])
+Mb_mod1_date <- sum(diff[diff["pies"] ==1,]["Freq"])
+pb_mod1_date <- Lb_mod1_date/Mb_mod1_date
+pb_mod1_date
+@
+
+\subsection*{Model [12 23]}
+<<>>=
+mod2 <- glm(Freq ~ sen + bieganie + pies + sen*bieganie + bieganie*pies, 
+            data = ankieta.df, family = poisson)
+diff <- cbind(mod2$data, fitted(mod2))
+diff
+@
+
+\subsubsection*{Pytanie 1.}
+
+<<>>=
+La_mod2_fitt<-sum(diff[diff["sen"] == 1&diff["bieganie"] ==1,]["fitted(mod2)"])
+Ma_mod2_fitt<-sum(diff[diff["bieganie"] == 1,]["fitted(mod2)"])
+pa_mod2_fitt<-La_mod2_fitt/Ma_mod2_fitt
+pa_mod2_fitt
+
+La_mod2_date <- sum(diff[diff["sen"] == 1&diff["bieganie"] == 1,]["Freq"])
+Ma_mod2_date <- sum(diff[diff["bieganie"] == 1,]["Freq"])
+pa_mod2_date <- La_mod2_date/Ma_mod2_date
+pa_mod2_date
+@
+
+\subsubsection*{Pytanie 2.}
+
+<<>>=
+Lb_mod2_fitt<-sum(diff[diff["bieganie"] ==1&diff["pies"] == 1 ,]["fitted(mod2)"])
+Mb_mod2_fitt<-sum(diff[diff["pies"] ==1,]["fitted(mod2)"])
+pb_mod2_fitt<-Lb_mod2_fitt/Mb_mod2_fitt
+pb_mod2_fitt
+
+Lb_mod2_date <- sum(diff[diff["bieganie"] ==1&diff["pies"] == 1 ,]["Freq"])
+Mb_mod2_date <- sum(diff[diff["pies"] ==1,]["Freq"])
+pb_mod2_date <- Lb_mod2_date/Mb_mod2_date
+pb_mod2_date
+@
+
+
 \subsection*{Zadanie 3}
 Na podstawie danych Reakcja3.csv zweryfikować następujące hipotezy:
 
@@ -327,6 +411,57 @@ Na podstawie danych Reakcja3.csv zweryfikować następujące hipotezy:
   \item zmienna losowa Sen jest niezależna od zmiennej Pies, przy ustalonej zmiennej
 Bieganie.
 \end{enumerate}
+
+\subsection*{Pytanie 1.}
+
+<<>>=
+mod1 <- glm(Freq ~ sen + bieganie + pies, 
+            data = ankieta.df, family = poisson)
+mod2 <- glm(Freq ~ (sen + bieganie + pies)^2, 
+            data = ankieta.df, family = poisson)
+mod3 <- glm(Freq ~ (sen + bieganie + pies)^3, 
+            data = ankieta.df, family = poisson)
+@
+<<>>=
+test1 <- anova(mod1,mod2)
+1-pchisq(test1$Deviance[2], df = test1$Df[2])
+test2 <- anova(mod1,mod3)
+1-pchisq(test2$Deviance[2], df = test2$Df[2])
+@
+
+\subsection*{Pytanie 2.}
+<<>>=
+mod1 <- glm(Freq ~ sen + bieganie + pies + sen*bieganie, 
+            data = ankieta.df, family = poisson)
+mod2 <- glm(Freq ~ (sen + bieganie + pies)^2, 
+            data = ankieta.df, family = poisson)
+mod3 <- glm(Freq ~ (sen + bieganie + pies)^3, 
+            data = ankieta.df, family = poisson)
+@
+<<>=
+test1 <- anova(mod1,mod2)
+1-pchisq(test1$Deviance[2], df = test1$Df[2])
+test2 <- anova(mod1,mod3)
+1-pchisq(test2$Deviance[2], df = test2$Df[2])
+@
+
+\subsection*{Pytanie 3.}
+
+<<>>=
+mod1 <- glm(Freq ~ sen + bieganie + pies + sen*bieganie + pies*bieganie, 
+            data = ankieta.df, family = poisson)
+mod2 <- glm(Freq ~ (sen + bieganie + pies)^2, 
+            data = ankieta.df, family = poisson)#model niepełny
+mod3 <- glm(Freq ~ (sen + bieganie + pies)^3, 
+            data = ankieta.df, family = poisson)#model pełny
+@
+<<>>=
+mod2 <- glm(Freq ~ (sen + bieganie + pies)^2, 
+            data = ankieta.df, family = poisson)#model niepełny
+mod3 <- glm(Freq ~ (sen + bieganie + pies)^3, 
+            data = ankieta.df, family = poisson)#model pełny
+@
+
 \subsection*{Zadanie 4}
 Na podstawie danych Ankieta.csv dokonać wyboru modelu w oparciu o:
 \begin{enumerate}

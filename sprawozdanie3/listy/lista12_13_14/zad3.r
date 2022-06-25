@@ -36,7 +36,7 @@ test1 <- anova(mod1,mod2)
 test2 <- anova(mod1,mod3)
 1-pchisq(test2$Deviance[2], df = test2$Df[2])
 
-##############b
+##############c
 mod1 <- glm(Freq ~ sen + bieganie + pies + sen*bieganie + pies*bieganie, 
             data = ankieta.df, family = poisson)
 mod2 <- glm(Freq ~ (sen + bieganie + pies)^2, 
@@ -47,5 +47,10 @@ mod3 <- glm(Freq ~ (sen + bieganie + pies)^3,
 test1 <- anova(mod1,mod2)
 1-pchisq(test1$Deviance[2], df = test1$Df[2])
 test2 <- anova(mod1,mod3)
-1-pchisq(test2$Deviance[2], df = test2$Df[2])
+1-pchisq(test2$Deviance[2], df = test2$Df[2])mod1 <- glm(Freq ~ sen + bieganie + pies + sen*bieganie + pies*bieganie, 
+                                                         data = ankieta.df, family = poisson)
+mod2 <- glm(Freq ~ (sen + bieganie + pies)^2, 
+            data = ankieta.df, family = poisson)#model niepełny
+mod3 <- glm(Freq ~ (sen + bieganie + pies)^3, 
+            data = ankieta.df, family = poisson)#model pełny
 
