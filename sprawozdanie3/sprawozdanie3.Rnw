@@ -31,6 +31,7 @@ library(DescTools)
 library(stats)
 library(base)
 library(matlib)
+library(exact2x2)
 @
 \section*{Lista 10}
 \subsection*{Zadanie 1}
@@ -38,16 +39,38 @@ W tabeli 1 zawarte są wyniki (w skali pozytywny, negatywny) z pierwszego i drug
 kolokwium w pewnej grupie studentów. Przyjmując, że poziom trudności zadań na
 pierwszym i drugim kolokwium był taki sam, na podstawie tych danych, zweryfikować hipotezę, na poziomie istotności 0.05, że studenci byli tak samo przygotowani
 do obu kolokwiów.\newline
-<<results = F, echo = F>>=
-data <- matrix(c(
-  32,44,76,22,38,60,54,82,136), 3, 3, byrow = T)
+
+% <<results = F, echo = F>>=
+% data <- matrix(c(
+%   32,44,76,22,38,60,54,82,136), 3, 3, byrow = T)
+% dimnames(data) <- list(
+%   `Wynik z kolokwium 2` =
+%     c("Negatywny", "Pozytywny","Suma"),
+%   `Wynik z kolokwium 1` = c("Negatywny","Pozytywny","suma"))
+% @
+% <<tab1,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
+% knitr::include_graphics("nowyfolder/1.png")
+% @
+
+<<>>=
+data <- matrix(c(32,44,
+                 22,38), 2, 2, byrow = T)
+data
 dimnames(data) <- list(
-  `Wynik z kolokwium 2` =
-    c("Negatywny", "Pozytywny","Suma"),
-  `Wynik z kolokwium 1` = c("Negatywny","Pozytywny","suma"))
-@
-<<tab1,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
-knitr::include_graphics("nowyfolder/1.png")
+  wyniki_z_1 = c("F", "T"),
+  wyniki_z_2 = c("F", "T")
+)
+data
+mcnemar.test(data,correct = FALSE)
+
+zad1 <- function(data) {
+  y12 <- data[1,2]
+  y21 <- data[2,1]
+  z0  <- ( y12 - y21 ) / ( sqrt( y12 + y21 ) )  
+  p <- 1 - pchisq(z0^2, df = 1)
+  return(p)
+}
+zad1(data)
 @
 
 \subsection*{Zadanie 2}
@@ -65,11 +88,135 @@ wartość poziomu krytycznego (p wartość) w tym warunkowym teście dokładnym.
 <<tab2,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
 knitr::include_graphics("nowyfolder/2.png")
 @
+\subsection*{a)}
+<<>>=
+  data2 <- matrix(c(1,5,
+                  2,4), 2, 2, byrow = T)
+  dimnames(data2) <- list(
+  wyniki_z_1 = c("F", "T"),
+  wyniki_z_2 = c("F", "T"))
+  zad2 <- function(data, correct = TRUE) {
+    y12 <- data[1,2]
+    y21 <- data[2,1]
+    if (correct) {
+      z0 <- (abs( y12 - y21 ) - 1)/sqrt(y12 + y21)
+    } else {
+      z0  <- ( y12 - y21 ) / ( sqrt( y12 + y21 ) )  
+    }
+    p <- 1 - pchisq(z0^2, df = 1)
+    return(p)
+  }
+mcnemar.test(data2,correct = TRUE)
+zad2(data2)
+@
+
+\subsection*{b)}
+<<>>=
+zad2b <- function(data) {
+  y12 <- data[1,2]
+  y21 <- data[2,1]
+  if (y12 < (y12+y21)/2) {
+    p <- 2*sum(sapply(0:y12, function(k) choose(y12+y21,k) * (1/2)^k * (1/2)^(y12+y21-k)))
+  } else if (y12 > (y12+y21)/2) {
+    p <- 2*sum(sapply(y12:(y12+y21), function(k) choose(y12+y21,k) * (1/2)^k * (1/2)^(y12+y21-k)))
+  } else {
+    p <- 1
+  }
+  return(p)
+}
+
+zad2b(data2)
+mcnemar.exact(data2)$p.value
+@
+
 \subsection*{Zadanie 3}
 Przeprowadzić symulacje, w celu porównania mocy testu Z (opisanego w sekcji
 2.1.1) i testu $Z_{0}$ (opisanego w sekcji 2.1.2). Wyniki przedstawić w tabeli lub/i na
 wykresach i napisać odpowiednie wnioski.
+<<>>=
+n <- 10
+mcs <- 1000
+alpha <- 0.05
+ps_1 <- numeric(mcs)
+ps_2 <- numeric(mcs)
+p2 <- seq(0.01,0.99,0.02)
+p2_0 <- 0.5
+@
 
+
+<<warning=F, message=F>>=
+f_to_sup <- function(p) {
+  p2 <- p
+  for (mc in 1:mcs) {
+    X <- rbinom(n,1, p = 0.5)
+    Y <- rbinom(n, 1, p = p2)
+    data <- matrix(0, nrow = 2, ncol = 2)
+    for (i in 1:n) {
+      x<-X[i]
+      y<-Y[i]
+      if (x==0 & y==0) {
+        data[1,1] <- data[1,1] + 1
+      } else if (x==0 & y==1){
+        data[1,2] <- data[1,2] + 1
+      }
+      else if (x==1 & y==0){
+        data[2,1] <- data[2,1] + 1
+      } else{
+        data[2,2] <- data[2,2] + 1
+      }
+    }
+    y12 <- data[1,2]
+    y21 <- data[2,1]
+    p_data <- data/n
+    p11 <- p_data[1,1]
+    p12 <- p_data[1,2]
+    p21 <- p_data[2,1]
+    p22 <- p_data[2,2]
+    
+    p_.1 <- (data[1,1]+data[2,1])/n
+    p_1. <- (data[1,1]+data[1,2])/n
+    D <- p_1. - p_.1
+    sig <- sqrt( ( p_1.*(1-p_1.) + p_.1*(1-p_.1) - 2*(p11*p22-p12*p21) )/n  )
+    z <- D/sig
+    p_value1 <- 2*(1 - pnorm(abs(z)))
+    z0  <- ( y12 - y21 ) / ( sqrt( y12 + y21 ) )  
+    p_value2 <- 2*(1 - pnorm(abs(z0)))
+    ps_1[mc] <- p_value1 < 0.05
+    ps_2[mc] <- p_value2 < 0.05
+  }
+  return(c(sum(ps_1, na.rm = TRUE)/mcs,
+           sum(ps_2, na.rm = TRUE)/mcs))
+}
+
+f_to_sup_error_rm <- function(x){
+  tryCatch(
+    expr = {
+      return(f_to_sup(x))
+    },
+    error = function(e){
+    },
+    warning = function(w){
+      f_to_sup(x)
+    },
+    finally = {
+    }
+  )    
+}
+
+sym <- sapply(p2, f_to_sup_error_rm)
+df <- data.frame(p2 = p2, Z0 = sym[1,], Z = sym[2,] )
+melt_Df <- melt(df, id=1, measure=c("Z","Z0"))
+@
+
+<<fig.width = 12, fig.height = 8, echo = F, fig.cap ='\\label{fig:1} Porównanie mocy testów' ,fig.pos = 'H'>>=
+# ggplot(df1, aes(x, y, label = name ,colour = col) ) +
+# 	geom_point() + geom_text(vjust = -1) +
+# 	scale_color_manual(values=c("#0000ff","#ff0000"))+
+#   	geom_hline(yintercept=0) + geom_vline(xintercept = 0)+
+#     xlab("Dim 1") + ylab("Dim 2")
+ggplot(melt_Df,aes(p2, value, colour = variable)) + 
+geom_point() + geom_line() 
+@
 \section*{Lista 11}
 \subsection*{Zadanie 1}
 W tabeli 1 zawarte są wyniki (w skali 2, 3, +3, 4, +4, 5) z pierwszego i drugiego
