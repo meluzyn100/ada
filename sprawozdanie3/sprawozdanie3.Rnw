@@ -232,11 +232,11 @@ geom_point() + geom_line()
 nie wiem co tu
 \section*{Lista 11}
 \subsection*{Zadanie 1}
-W tabeli 1 zawarte są wyniki (w skali 2, 3, +3, 4, +4, 5) z pierwszego i drugiego
-kolokwium w pewnej grupie studentów. Korzystając z odpowiedniego testu, na poziomie istotności $\alpha$ = 0.05, zweryfikować hipotezę, że dane w tabeli 1 podlegają modelow:
+W tabeli 3 (znajduje się poniżej) zawarte są wyniki (w skali 2, 3, +3, 4, +4, 5) z pierwszego i drugiego
+kolokwium w pewnej grupie studentów. Korzystając z odpowiedniego testu, na poziomie istotności $\alpha$ = 0.05, zweryfikować hipotezę, że dane w tabeli 3 podlegają modelowi:
 \begin{enumerate}
   \item symetrii, 
-  \item quasi-symetriim 
+  \item quasi-symetrii 
   \item quasi-niezależności. 
 \end{enumerate}
 Zwrócić uwagę na problem z zastosowaniem do analizowanych danych testu Bowkera
@@ -304,8 +304,9 @@ comparison <- anova(symmetry, quasi.symm)
 p <- 1-pchisq(comparison$Deviance[2], comparison$Df[2])
 p
 @
+Do weryfikacji hipotezy o tym, że studenci byli tak samo przygotowani do obu kolokwiów wykorzystamy funkcję $\textbf{anova}$, a dokładnie test $\textbf{IW}$, który jest zaimplementowany w tą funkcje. \newline
+Korzystając z tego testu, na poziomie istotności 0.05, należy odrzucić hipotezę o symetrii, czyli że studenci byli tak samo przygotowani na oba kolokwia, pod warunkiem, że zachodzi quasi-symetria. Wartość poziomu krytycznego w tym teście wynosi .002316914. 
 
-\newpage
 \section*{Lista 12,13 i 14}
 Wszystkie poniższe zadania należy wykonać w oparciu o dane w pliku Ankieta.csv,
 które zawieraj ,
