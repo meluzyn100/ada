@@ -51,11 +51,11 @@ do obu kolokwiów.\newline
 %     c("Negatywny", "Pozytywny","Suma"),
 %   `Wynik z kolokwium 1` = c("Negatywny","Pozytywny","suma"))
 % @
-% <<tab1,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
-% knitr::include_graphics("nowyfolder/1.png")
-% @
+<<tab1,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
+knitr::include_graphics("nowyfolder/1.png")
+@
 
-<<>>=
+<<results = F, echo = F>>=
 data <- matrix(c(32,44,
                  22,38), 2, 2, byrow = T)
 data
@@ -64,6 +64,8 @@ dimnames(data) <- list(
   wyniki_z_2 = c("F", "T")
 )
 data
+@
+<<>>=
 mcnemar.test(data,correct = FALSE)
 
 zad1 <- function(data) {
@@ -75,7 +77,8 @@ zad1 <- function(data) {
 }
 zad1(data)
 @
-
+\newpage
+Dla danych w Tabeli 1. przeprowadziliśmy test McNemary'ego i test $Z_{0}$ i na poziomie istotności 0.05 odrzucamy hipotezę, że studenci byli tak samo przygotowani do obu kolokwiów. Z obu testów otrzymaliśmy takie same p-wartości równe 0.006768741.
 \subsection*{Zadanie 2}
 W tabeli 2 zawarte są dane dotyczące reakcji po godzinie od przyjęcia dwóch różnych
 leków przeciwbólowych (powiedzmy A i B) stosowanych w migrenie, zaaplikowanych
@@ -87,17 +90,19 @@ zweryfikować hipotezę, że leki te są jednakowo skuteczne korzystając z test
 \end{enumerate}
 
 W drugim przypadku, najpierw napisać deklarację funkcji, której wartością będzie
-wartość poziomu krytycznego (p wartość) w tym warunkowym teście dokładnym.\newline
+wartość poziomu krytycznego (p wartość) w tym warunkowym teście dokładnym.\newline\newline
 <<tab2,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
 knitr::include_graphics("nowyfolder/2.png")
 @
-\subsection*{a)}
-<<>>=
+\subsection*{1)}
+<<results = F, echo = F>>=
   data2 <- matrix(c(1,5,
                   2,4), 2, 2, byrow = T)
   dimnames(data2) <- list(
   wyniki_z_1 = c("F", "T"),
   wyniki_z_2 = c("F", "T"))
+@
+<<>>=
   zad2 <- function(data, correct = TRUE) {
     y12 <- data[1,2]
     y21 <- data[2,1]
@@ -112,16 +117,18 @@ knitr::include_graphics("nowyfolder/2.png")
 mcnemar.test(data2,correct = TRUE)
 zad2(data2)
 @
-
-\subsection*{b)}
+Na poziomie istotności 0.05, nie mamy podstaw do odrzucenia hipotezy o tym, że leki są jednakowo skuteczne. Wartość poziomu krytycznego zarówno w teście McNemary z poprawką na ciągłość i teście $Z_{0}$ wynosi 0.4496918.
+\subsection*{2)}
 <<>>=
 zad2b <- function(data) {
   y12 <- data[1,2]
   y21 <- data[2,1]
   if (y12 < (y12+y21)/2) {
-    p <- 2*sum(sapply(0:y12, function(k) choose(y12+y21,k) * (1/2)^k * (1/2)^(y12+y21-k)))
+    p <- 2*sum(sapply(0:y12, 
+      function(k) choose(y12+y21,k) * (1/2)^k * (1/2)^(y12+y21-k)))
   } else if (y12 > (y12+y21)/2) {
-    p <- 2*sum(sapply(y12:(y12+y21), function(k) choose(y12+y21,k) * (1/2)^k * (1/2)^(y12+y21-k)))
+    p <- 2*sum(sapply(y12:(y12+y21), 
+      function(k) choose(y12+y21,k) * (1/2)^k * (1/2)^(y12+y21-k)))
   } else {
     p <- 1
   }
@@ -131,7 +138,7 @@ zad2b <- function(data) {
 zad2b(data2)
 mcnemar.exact(data2)$p.value
 @
-
+W 2. podpunkcie przeprowadziliśmy warunkowy test dokładny, wynik porówaliśmy z wbudowanym testem. McNemary z biblioteki $\textbf{exact2x2}$. Jak możemy zauważyć, p-wartości są sobie równe w tych dwóch metodach i wynoszą 0.453125, co dla poziomu istotności 0.05 nie daje nam podstaw do odrzucenia hipotezy o tym, że leki są jednakowo skuteczne.\newpage
 \subsection*{Zadanie 3}
 Przeprowadzić symulacje, w celu porównania mocy testu Z (opisanego w sekcji
 2.1.1) i testu $Z_{0}$ (opisanego w sekcji 2.1.2). Wyniki przedstawić w tabeli lub/i na
@@ -190,7 +197,6 @@ f_to_sup <- function(p) {
   return(c( sum(ps_1, na.rm = TRUE)/mcs,
             sum(ps_2, na.rm = TRUE)/mcs))
 }
-
 f_to_sup_error_rm <- function(x){
   tryCatch(
     expr = {
@@ -205,16 +211,25 @@ f_to_sup_error_rm <- function(x){
     }
   )    
 }
-
 sym <- sapply(p2, f_to_sup_error_rm)
 df <- data.frame(p2 = p2, Z0 = sym[1,], Z = sym[2,] )
 melt_Df <- melt(df, id=1, measure=c("Z","Z0"))
 @
 
 <<fig.width = 12, fig.height = 8, echo = F, fig.cap ='\\label{fig:1} Porównanie mocy testów' ,fig.pos = 'H'>>=
+theme_update(# axis labels
+             axis.title = element_text(size = 27),
+             # tick labels
+             axis.text = element_text(size = 20),
+             # title 
+             title = element_text(size = 22),
+             legend.text = element_text(size=20))
 ggplot(melt_Df,aes(p2, value, colour = variable)) + 
 geom_point() + geom_line() 
 @
+\newpage
+\subsection*{Wnioski do Zadania 3}
+nie wiem co tu
 \section*{Lista 11}
 \subsection*{Zadanie 1}
 W tabeli 1 zawarte są wyniki (w skali 2, 3, +3, 4, +4, 5) z pierwszego i drugiego
@@ -276,10 +291,10 @@ Wartość poziomu krytycznego w tym teście wynosi 0.00962481.
 
 
 \subsection*{Zadanie 2}
-W tabeli 1 zawarte są wyniki (w skali 2, 3, +3, 4, +4, 5) z pierwszego i drugiego
+W tabeli 3 zawarte są wyniki (w skali 2, 3, +3, 4, +4, 5) z pierwszego i drugiego
 kolokwium w pewnej grupie studentów. Przyjmując, że poziom trudności zadań na
 pierwszym i drugim kolokwium był taki sam, na podstawie tych danych, zweryfikować hipotezę, na poziomie istotności 0.05, że studenci byli tak samo przygotowani
-do obu kolokwiów.\newline
+do obu kolokwiów.\newline\newline
 <<tab3,echo=FALSE,message=FALSE,result='hide',warning=FALSE,fig.height=7,fig.pos="h">>=
 knitr::include_graphics("nowyfolder/3.png")
 @
@@ -287,6 +302,7 @@ knitr::include_graphics("nowyfolder/3.png")
 <<>>=
 comparison <- anova(symmetry, quasi.symm)
 p <- 1-pchisq(comparison$Deviance[2], comparison$Df[2])
+p
 @
 
 \newpage
