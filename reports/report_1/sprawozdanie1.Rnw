@@ -16,79 +16,84 @@
 \date{}
 
 \begin{document}
-	\maketitle 
+  \maketitle 
 	
-	<<warning=F, message=F,echo = F>>=
-  	library(binom)
-    require(ggplot2)
-    library(reshape2)
-    library(xtable)
-	
-	  library(vcdExtra)
-    library(tidyverse)
-  	library(matrixStats)
+<<warning=F, message=F,echo = F>>=
+  
+	library(binom)
+  require(ggplot2)
+  library(reshape2)
+  library(xtable)
 
-  	# pdf.options(encoding = 'ISOLatin2') # znaki polskie w wykresach
-	@
+  library(vcdExtra)
+  library(tidyverse)
+	library(matrixStats)
+  library(dplyr)
+	# pdf.options(encoding = 'ISOLatin2') # znaki polskie w wykresach
+@
 	
 	\section*{Lista 1}
   \subsection*{Zad 1}
   Sporządzić tablice liczności dla zmiennych \textit{Temperature} oraz \textit{Preference} biorąc pod uwagę wszystkie dane, jak również w podgrupach ze względu na zmienną \textit{Water Softness}:
   \subsubsection*{Detergent}
 <<size = "small">>=
-Detergent.df <- data.frame(Detergent)
-Detergent.df %>% group_by(Temperature) %>% summarise(n = sum(Freq))
-Detergent.df %>% filter(Water_softness == "Soft") %>%
-  group_by(Temperature) %>% summarise(n = sum(Freq))
-Detergent.df %>% filter(Water_softness == "Medium") %>%
-  group_by(Temperature) %>% summarise(n = sum(Freq))
-Detergent.df %>% filter(Water_softness == "Hard") %>%
-  group_by(Temperature) %>% summarise(n = sum(Freq))
+  Detergent.df <- data.frame(Detergent)
+  Detergent.df |> group_by(Temperature) |>
+    summarise(n = sum(Freq))
+  Detergent.df |> filter(Water_softness == "Soft") |>
+    group_by(Temperature) |> summarise(n = sum(Freq))
+  Detergent.df |> filter(Water_softness == "Medium") |>
+    group_by(Temperature) |> summarise(n = sum(Freq))
+  Detergent.df |> filter(Water_softness == "Hard") |>
+    group_by(Temperature) |> summarise(n = sum(Freq))
 @
 
   \subsubsection*{Preference}
-
-  <<size = "small">>=
-  # Detergent.df %>% group_by(Preference) %>% summarise(n = sum(Freq))
-  Detergent.df %>% filter(Water_softness == "Soft") %>%
-    group_by(Preference) %>% summarise(n = sum(Freq))
-  Detergent.df %>% filter(Water_softness == "Medium") %>%
-    group_by(Preference) %>% summarise(n = sum(Freq))
-  Detergent.df %>% filter(Water_softness == "Hard") %>%
-    group_by(Preference) %>% summarise(n = sum(Freq))
-  @
+<<size = "small">>=
+  Detergent.df |> filter(Water_softness == "Soft") |>
+    group_by(Preference) |> summarise(n = sum(Freq))
+  Detergent.df |> filter(Water_softness == "Medium") |>
+    group_by(Preference) |> summarise(n = sum(Freq))
+  Detergent.df |> filter(Water_softness == "Hard") |>
+    group_by(Preference) |> summarise(n = sum(Freq))
+@
 
   \subsection*{Zad 2}
   Sporządzić tabelę wielodzielczą uwzględniającą zmienną \textit{Temperature} i \textit{Water Softness}:
-  <<>>=
-  ftable(Detergent, col.vars = "Temperature", row.vars = "Water_softness")
-  structable(Temperature ~ Water_softness, Detergent) %>% addmargins()
-  @
+<<>>=
+  ftable(
+    Detergent, 
+    col.vars="Temperature", 
+    row.vars="Water_softness"
+  )
+  structable(Temperature ~ Water_softness, Detergent) |>
+    addmargins()
+@
 
 \subsection*{Zad 3}
 Sporządzić wykres kołowy i słupkowy dla zmiennej \textit{Water Softness}:
 <<fig_1, fig.width = 6, fig.height = 2, fig.cap ='\\label{fig:1}Wykres słupkowy dla zmiennej \\text{\\textit{Water Softness}}.' ,fig.pos = 'H'>>=
-par(mar = c(2, 2, 0.5, 1))
-A <- apply(Detergent, "Water_softness", sum)
-barplot(A,ylim=c(0,350))
+  par(mar = c(2, 2, 0.5, 1))
+  A <- apply(Detergent, "Water_softness", sum)
+  barplot(A,ylim=c(0,350))
 @
 <<fig_2, fig.width = 7, fig.height = 4.5, fig.cap ='\\label{fig:2}Wykresy kołowy dla zmiennej \\text{\\textit{Water Softness}}.' ,fig.pos = 'H'>>=
-par(mar = c(0,0,0,0))
-pie(A)
+  par(mar = c(0,0,0,0))
+  pie(A)
 @
   \subsection*{Zad 4}
   Sporządzić wykresy mozaikowe odpowiadające rozpatrywanym danym.
 <<fig_3, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:3}Wykres mozaikowy dla \\text{\\textit{Preference}} i \\text{\\textit{Water softness}}' ,fig.pos = 'H'>>=
-par(mar = c(2, 2, 2, 2))
-mosaicplot(~Water_softness+Preference, data = Detergent)
+  par(mar = c(2, 2, 2, 2))
+  mosaicplot(~Water_softness+Preference, data = Detergent)
 @
 <<fig_4, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:4}Wykres mozaikowy dla \\text{\\textit{Preference}} i \\text{\\textit{M User}}.' ,fig.pos = 'H'>>=
-par(mar = c(2, 2, 2, 2))
-mosaicplot(~M_User+Preference, data = Detergent)
+  par(mar = c(2, 2, 2, 2))
+  mosaicplot(~M_User+Preference, data = Detergent)
 @
 <<fig_5, fig.width = 6, fig.height = 3, fig.cap ='\\label{fig:5}Wykres mozaikowy dla \\text{\\textit{Preference}} i \\text{\\textit{Temperature}}.' ,fig.pos = 'H'>>=
-par(mar = c(2, 2, 2, 2))
-mosaicplot(~Temperature+Preference, data = Detergent)
+  par(mar = c(2, 2, 2, 2))
+  mosaicplot(~Temperature+Preference, data = Detergent)
 @
 Wykresy mozaikowe są bardzo proste w analizie. Wykres tworzy nam prostokąty, dzięki czemu łatwo zauważyć które kombinacje zmiennych są najliczniejsze. Wysokość takiego prostokąta odpowiada liczności zmiennej na osi OX, a szerokość odpowiada liczności zmiennej na osi OY.
 \section*{Lista 2}
@@ -97,33 +102,33 @@ Zapoznać się z funkcją \textit{sample} (w pakiecie \textit{stats}). Napisać 
 bazy danych (pewnej hipotetycznej), ze zwracaniem oraz bez zwracania.
 \newline\newline
 Będziemy korzystać z funkcji $sample$. Wylosujemy elementy z bazy danych o nazwie $mtcars$. Jest to zbiór informacji na temat specyfikacji różnych samochodów, poniżej widzimy pięć pierwszych wierszy:
-<<>>=
-head(mtcars,5)
+<<size = "footnotesize">>=
+  head(mtcars,5)
 @
 
 \subsubsection*{Losowanie ze zwracaniem:} 
-<<>>=
-ind <- sample(x=nrow(mtcars),size=nrow(mtcars)/10,replace=TRUE)
+<<size = "small">>=
+  ind <- sample(x=nrow(mtcars),size=nrow(mtcars)/10,replace=TRUE)
 @
 Wylosowane indeksy:
 <<>>=
-ind
+  ind
 @
 Wylosowane elementy z bazy danych:
-<<size = "small">>=
-mtcars[ind,]
+<<size = "footnotesize">>=
+  mtcars[ind,]
 @
 \textbf{Losowanie bez zwracania:} 
-<<>>=
-ind <- sample(x=nrow(mtcars),size=nrow(mtcars)/10,replace=FALSE)
+<<size = "small">>=
+  ind <- sample(x=nrow(mtcars),size=nrow(mtcars)/10,replace=FALSE)
 @
 Wylosowane indeksy:
 <<>>=
-ind
+  ind
 @
 Wylosowane elementy z bazy danych:
 <<size = "small">>=
-mtcars[ind,]
+  mtcars[ind,]
 @
 
 \newpage
@@ -141,19 +146,19 @@ Zaproponować algorytm generowania liczb z rozkładu dwumianowego i udowodnić,
 
 \textbf{Algorytm opisany za pomocą funkcji w R:}
 <<>>=
-bin <- function(n,p,N){
-  X <- rep(0,N)
-  for (i in 1:N) {
-    r = sum(runif(n) < p)
-    X[i] = r
-  }
-  return(X)
-} 
+  bin <- function(n,p,N){
+    X <- rep(0,N)
+    for (i in 1:N) {
+      r = sum(runif(n) < p)
+      X[i] = r
+    }
+    return(X)
+  } 
 @
 gdzie: n - rozmiar próby, p - prawdopodobieństwo sukcesu, N - ilość wywołań\newline
 \textbf{Przykładowe użycie:}
 <<>>=
-bin(10,0.4,5)
+  bin(10,0.4,5)
 @
 
 
@@ -165,9 +170,9 @@ Dla zmiennej losowej $X \sim \mathcal{B}(n, p)$ wiemy, że:
 \end{itemize} 
 Sprawdźmy zatem działanie naszej funkcji dla $n = 100$ i $p = 0.4$:
 <<cache = T>>=
-test <- bin(100,0.4,10000)
-mean(test)
-var(test)
+  test <- bin(100,0.4,10000)
+  mean(test)
+  var(test)
 @
 Wartości teoretyczne średniej i wariancji dla takich parametrów powinny wynosić kolejno 40 i 24. Nasze wyniki są bardzo bliskie co wskazuje na poprawność metody.
 \newpage
@@ -186,23 +191,23 @@ Chcemy generować zmienna losowa z rozkładu wielomianowego o parametrach $n$ i 
 %\newline
 \textbf{Algorytm opisany za pomocą funkcji w R:}
 <<>>=
-multinom.rv <-function(n, p, N){
-  k <- length(p)
-  X <- matrix(0, nrow = k, ncol = N)
-  for (j in 1:N) {
-    ind <- sample(1:k, n, replace = TRUE, prob = p)
-    for (i in 1:n) {
-      X[ind[i],j] = 1 + X[ind[i],j]
+  multinom.rv <-function(n, p, N){
+    k <- length(p)
+    X <- matrix(0, nrow = k, ncol = N)
+    for (j in 1:N) {
+      ind <- sample(1:k, n, replace = TRUE, prob = p)
+      for (i in 1:n) {
+        X[ind[i],j] = 1 + X[ind[i],j]
+      }
     }
+    return(X)
   }
-  return(X)
-}
 @
 
 
 \textbf{Przykładowe użycie:}
 <<>>=
-multinom.rv(10,c(0.2,0.3,0.5),5)
+  multinom.rv(10,c(0.2,0.3,0.5),5)
 @
 
 
@@ -216,12 +221,12 @@ Dla zmiennej losowej $X \sim \mathcal{W}(n,\{p_1, p_2, \dots,p_k \})$ wiemy, że
 \end{itemize} 
 Sprawdźmy zatem działanie naszej funkcji dla $n = 100$ i $p =\{ 0.2, 0.3, 0.5 \}$ :
 <<>>=
-test <- multinom.rv(100,c(0.2,0.3,0.5),10000)
-rowMeans(test)
+  test <- multinom.rv(100,c(0.2,0.3,0.5),10000)
+  rowMeans(test)
 @
 Widzimy zatem że symulowane wartości są bardzo bliskie wartości teoretycznych: $20,30,50$.
 <<>>=
-rowVars(test)
+  rowVars(test)
 @
 Widzimy zatem że symulowane wartości są bardzo bliskie wartości teoretycznych: $16,21,25$.\\
 W obu powyższych przypadkach nasze wyniki są bardzo bliskie co wskazuje na poprawność metody.
@@ -231,12 +236,12 @@ W obu powyższych przypadkach nasze wyniki są bardzo bliskie co wskazuje na pop
 Celem badania będzie zebranie informacji na temat zorganizowanego wcześniej Webinaru wydziałowego. Będziemy chcieli dowiedzieć się jak wydarzenie zostało odebrane przez uczestników. Naszą grupą docelową stanowią oczywiście studenci, którzy brali udział w naszym Webinarze. Warunkiem przystąpienia do wydarzenia było wypełnienie formularza zgłoszeniowego, w którym studenci musieli podać adresy e-mail. Dzięki temu posiadamy adres e-mail każdego uczestnika, więc łatwo możemy wysłać im link do ankiety. Poniżej znajduję się fragment przykładowego kwestionariusza: \newline\newline
 \textbf{Część ankiety z pytaniami metryczkowymi:} \newline
 <<echo=F, message= F>>=
-knitr::include_graphics("ankieta1.png")
+  knitr::include_graphics("figure/ankieta1.png")
 @
 \newline
 \textbf{Przykładowe pytania:}\newline
 <<echo=F, message= F>>=
-knitr::include_graphics("ankieta2.png")
+  knitr::include_graphics("figure/ankieta2.png")
 @
 \newline
 Taką ankietę możemy stworzyć za pomocą darmowych narzędzi dostępnych w internecie, na przykład Formularze Google.
@@ -251,109 +256,109 @@ W symulacji wykorzystamy przedziały ufności Cloppera-Pearsona, Walda i Asympto
 Symulacje przeprowadzimy na podstawie realizacji zmiennej losowej: $X \sim \mathcal{B}(n, p)$. Wyznaczymy prawdopodobieństwa pokrycia oraz długości przedziałów ufności, a wykorzystamy do tego symulacje Monte Carlo.  \newline\newline
 Poniżej znajduje się kod z symulacją:
 <<eval = FALSE>>=
-symulation <-function(n = 10, dp= 0.2, MCs = 1000){
-  ps <- seq(0.01, 0.99, dp)
-  N <- length(ps)
-  data <- matrix(0,N,6)
-  
-  for (k in 1:N) {
-    p <- ps[k]
-    wilson_ok <- 0
-    axact_ok  <- 0
-    asymp_ok  <- 0
-    wilson_l <- rep(0,MCs)
-    axact_l  <- rep(0,MCs)
-    asymp_l  <- rep(0,MCs)
+  symulation <-function(n = 10, dp= 0.2, MCs = 1000){
+    ps <- seq(0.01, 0.99, dp)
+    N <- length(ps)
+    data <- matrix(0,N,6)
     
-    for (i in 1:MCs){
-      x <- rbinom(1, n, p)
-      wilson <- binom.wilson(x, n)
-      exact  <- binom.exact(x, n)
-      asymp  <- binom.asymp(x, n)
-      wilson_l[i] <- wilson$upper - wilson$lower
-      axact_l[i] <- exact$upper - exact$lower
-      asymp_l[i] <- asymp$upper - asymp$lower
+    for (k in 1:N) {
+      p <- ps[k]
+      wilson_ok <- 0
+      axact_ok  <- 0
+      asymp_ok  <- 0
+      wilson_l <- rep(0,MCs)
+      axact_l  <- rep(0,MCs)
+      asymp_l  <- rep(0,MCs)
       
-      if (wilson["lower"]<p && p < wilson["upper"]) {
-        wilson_ok <- 1 + wilson_ok
+      for (i in 1:MCs){
+        x <- rbinom(1, n, p)
+        wilson <- binom.wilson(x, n)
+        exact  <- binom.exact(x, n)
+        asymp  <- binom.asymp(x, n)
+        wilson_l[i] <- wilson$upper - wilson$lower
+        axact_l[i] <- exact$upper - exact$lower
+        asymp_l[i] <- asymp$upper - asymp$lower
+        
+        if (wilson["lower"]<p && p < wilson["upper"]) {
+          wilson_ok <- 1 + wilson_ok
+        }
+        if (exact["lower"]<p && p < exact["upper"]) {
+          axact_ok <- 1 + axact_ok
+        }
+        if (asymp["lower"]<p && p < asymp["upper"]) {
+          asymp_ok <- 1 + asymp_ok
+        }
       }
-      if (exact["lower"]<p && p < exact["upper"]) {
-        axact_ok <- 1 + axact_ok
-      }
-      if (asymp["lower"]<p && p < asymp["upper"]) {
-        asymp_ok <- 1 + asymp_ok
-      }
+      
+      data[k,] <- c(wilson_ok/MCs, axact_ok/MCs, asymp_ok/MCs, 
+                mean(wilson_l), mean(axact_l), mean(asymp_l))
     }
-    
-    data[k,]<- c( wilson_ok/MCs, axact_ok/MCs, asymp_ok/MCs,
-                  mean(wilson_l), mean(axact_l), mean(asymp_l))
+    return(data)
   }
-  return(data)
-}
 @
 Symulacje przeprowadzamy dla $n=10$ z krokiem równym $dp = 0.01$. Wyniki zapisujemy w pliku csv, dzięki czemu nie musimy za każdym razem czekać na wyniki.
 <<eval = FALSE>>=
-data <- symulation(n = 10, dp = 0.01)
-write.csv(df_l, "data_n_10.csv")
+  data <- symulation(n = 10, dp = 0.01)
+  write.csv(df_l, "data/data_n_10.csv")
 @
 
 Stwórzmy teraz ramki danych prawdopodobieństw pokrycia:
 <<>>=
-data <- read.csv("data_n_10.csv")
-ps <- seq(0.01, 0.99, 0.01)
-df1 <- data.frame(wilsonp = data[,1], axact = data[,2],
-                    asymp = data[,3], p = ps)
-head(df1)
+  data <- read.csv("data/data_n_10.csv")
+  ps <- seq(0.01, 0.99, 0.01)
+  df1 <- data.frame(wilsonp = data[,1], axact = data[,2],
+                      asymp = data[,3], p = ps)
+  head(df1)
 @
 Stwórzmy teraz ramki danych średniej długości przedziałów:
 <<>>=
-df2 <- data.frame(wilsonp = data[,4], axact = data[,5], 
-                    asymp = data[,6], p = ps)
-head(df2)
+  df2 <- data.frame(wilsonp = data[,4], axact = data[,5], 
+                      asymp = data[,6], p = ps)
+  head(df2)
 @
 Sprawdzamy również wykresy:
 <<fig_6, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:6}Wykres prawdopodobieństwa pokrycia dla poszczególnych metod i n równego 10.' ,fig.pos = 'H'>>=
-df_p <- melt(df1,id.vars="p")
-ggplot(df_p,aes(p, value,col=variable))+
-  geom_point()+ geom_line()
+  df_p <- melt(df1,id.vars="p")
+  ggplot(df_p,aes(p, value,col=variable))+
+    geom_point()+ geom_line()
 @
 <<fig_7,  fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:7}Wykres średniej długości przedziałów dla poszczególnych metod i n równego 10.' ,fig.pos = 'H'>>=
-df_l <- melt(df2,id.vars="p")
-ggplot(df_l,aes(p, value,col=variable))+
-  geom_point()+ geom_line()
+  df_l <- melt(df2,id.vars="p")
+  ggplot(df_l,aes(p, value,col=variable))+
+    geom_point()+ geom_line()
 @
 Zobaczmy również jak wygladają powyższe wykresy, ale tym razem dla n równego 100:
 <<echo = FALSE>>=
-data <- read.csv("data_n_100.csv")
-ps <- seq(0.01, 0.99, 0.01)
-df1 <- data.frame(wilsonp = data[,1], axact = data[,2],asymp = data[,3],p =ps)
-df2 <- data.frame(wilsonp = data[,4], axact = data[,5],asymp = data[,6], p =ps)
-df_p2 <- melt(df1,id.vars="p")
-df_l2 <- melt(df2,id.vars="p")
+  data <- read.csv("data/data_n_100.csv")
+  ps <- seq(0.01, 0.99, 0.01)
+  df1 <- data.frame(wilsonp = data[,1], axact = data[,2],asymp = data[,3],p =ps)
+  df2 <- data.frame(wilsonp = data[,4], axact = data[,5],asymp = data[,6], p =ps)
+  df_p2 <- melt(df1,id.vars="p")
+  df_l2 <- melt(df2,id.vars="p")
 @
 <<fig_8, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:8}Wykres prawdopodobieństwa pokrycia dla poszczególnych metod i n równego 100.' ,fig.pos = 'H', echo = FALSE>>=
-ggplot(df_p2,aes(p, value,col=variable))+
-  geom_point()+ geom_line()
+  ggplot(df_p2,aes(p, value,col=variable))+
+    geom_point()+ geom_line()
 @
 <<fig_9, fig.width = 10, fig.height = 6, fig.cap ='\\label{fig:9}Wykres średniej długości przedziałów dla poszczególnych metod i n równego 100.' ,fig.pos = 'H', echo = FALSE>>=
-ggplot(df_l2,aes(p, value,col=variable))+
-  geom_point()+ geom_line()
+  ggplot(df_l2,aes(p, value,col=variable))+
+    geom_point()+ geom_line()
 @
 \subsection*{Porównanie Rysunku \ref{fig:6} z Rysunkiem \ref{fig:8}:} 
 % ######################################## może do usuniecia
 <<fig_10, fig.show="hold", out.width="50%", fig.cap ='\\label{fig:10}Wykresy prawdopodobieństwa pokrycia dla poszczególnych metod i n równego odpowiednio 10 i 100.',fig.pos = 'H',echo = FALSE>>=
-ggplot(df_p,aes(p, value,col=variable))+
-  geom_point()+ geom_line()
-ggplot(df_p2,aes(p, value,col=variable))+
-  geom_point()+ geom_line()
+  ggplot(df_p,aes(p, value,col=variable))+
+    geom_point()+ geom_line()
+  ggplot(df_p2,aes(p, value,col=variable))+
+    geom_point()+ geom_line()
 @
 \newpage
 \subsection*{Porównanie Rysunku \ref{fig:7} z Rysunkiem \ref{fig:9}:}
 <<fig_11, fig.show="hold", out.width="50%", fig.cap ='\\label{fig:11}Wykresy średniej długości przedziałów dla poszczególnych metod i n równego 10 i 100.',fig.pos = 'H',echo = FALSE>>=
-ggplot(df_l,aes(p, value,col=variable))+
-  geom_point()+ geom_line()
-ggplot(df_l2,aes(p, value,col=variable))+
-  geom_point()+ geom_line()
+  ggplot(df_l,aes(p, value,col=variable))+
+    geom_point()+ geom_line()
+  ggplot(df_l2,aes(p, value,col=variable))+
+    geom_point()+ geom_line()
 @
 % #######################################
 \textbf{Wnioski:}\newline
@@ -366,51 +371,51 @@ Załóżmy, że 200 losowo wybranych klientów (w różnym wieku) kilku (losowo 
 Do wyboru najlepszych przedziałów ufności stosujemy funkcję $binom.confint$. Funkcja ta zwraca tabelkę z porównaniem 11 metod. Przedziały będziemy porównywać na podstawie ich długości, im węższy tym metoda jest lepsza. Długość takiego przedziału będzie opisana w tabelce w kolumnie $ls$.\newline
 \subsubsection*{a) Prawdopodobieństwo stosowania leku ibuprofen (bez względu na grupę wiekową)}
 <<size = "small">>=
-conf <- binom.confint(50,200)
-ls <- conf$"upper"- conf$"lower"
-cbind(conf,ls)
+  conf <- binom.confint(50,200)
+  ls <- conf$"upper"- conf$"lower"
+  cbind(conf,ls)
 @
 Dla tych danych najlepsza okazała się $metoda Bayes'a$.
 <<size = "small">>=
-cbind(conf,ls)[ls == min(ls),]
+  cbind(conf,ls)[ls == min(ls),]
 @
 
 \newpage
 \subsubsection*{b) Prawdopodobieństwo stosowania leku ibuprofen przez klienta w wieku do 35
 lat}
-<<size = "small">>=
-conf <- binom.confint(0,90)
-ls <- conf$"upper"- conf$"lower"
-cbind(conf,ls)
+<<size = "footnotesize">>=
+  conf <- binom.confint(0,90)
+  ls <- conf$"upper"- conf$"lower"
+  cbind(conf, ls)
 @
 
 Najlepszy w tym przypadku okazał się test asymptotyczny.
 <<size = "small">>=
-cbind(conf,ls)[ls == min(ls),]
+  cbind(conf,ls)[ls == min(ls),]
 @
 
 
 \subsubsection*{c) Prawdopodobieństwo stosowania leku apap (bez względu na grupę wiekową)}
 <<size = "small">>=
-conf <- binom.confint(44,200)
-ls <- conf$"upper"- conf$"lower"
-cbind(conf,ls)
+  conf <- binom.confint(44,200)
+  ls <- conf$"upper"- conf$"lower"
+  cbind(conf,ls)
 @
 Po raz drugi test $Bayes'a$ okazuję się najlepszy.
 <<size = "small">>=
-cbind(conf,ls)[ls == min(ls),]
+  cbind(conf,ls)[ls == min(ls),]
 @
 
 
 \subsubsection*{d) Prawdopodobieństwo stosowania leku apap przez klienta w wieku do 35 lat}
 <<size = "small">>=
-conf <- binom.confint(22,90)
-ls <- conf$"upper"- conf$"lower"
-cbind(conf,ls)
+  conf <- binom.confint(22,90)
+  ls <- conf$"upper"- conf$"lower"
+  cbind(conf,ls)
 @
 W podpunkcie $d) $ najlepszym testem jest po raz trzeci test $Bayes'a$.
 <<size = "small">>=
-cbind(conf,ls)[ls == min(ls),]
+  cbind(conf,ls)[ls == min(ls),]
 @
 \textbf{Wnioski:} \newline
 Zauważamy, że im mamy większą liczbę sukcesów tym metody zwracają bardziej zbliżone wyniki. Największą rozbieżność mamy przy testowaniu dla liczby sukcesów równej 0, wtedy niektóre przedziały mają nawet długość 0, a inne około 0.02. Test $Bayes'a$ okazał się najlepszy w 3 podpunktach, więc możemy uznać, że jest to najlepsza metoda, którą możemy wykorzystać konstruując przedziały ufności dla tych danych.

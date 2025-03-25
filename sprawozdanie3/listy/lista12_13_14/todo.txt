@@ -1,1 +1,0 @@
-funkcja anova (wynik funkcji glm, wywolanie funkcji glm z chipotezy alternatywnej)

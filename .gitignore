@@ -1,10 +1,24 @@
-token.txt
-testy/*
+# LaTeX temporary files
 *.aux
-*.fdb_latexmk
 *.log
-*.gz
-*.tex
+*.out
+*.toc
 *.fdb_latexmk
 *.fls
-*.gz
+*.synctex.gz
+cache/
+
+# R temporary files
+*.Rhistory
+*.RData
+*.rds
+
+# Png and other generated files
+*.png
+*.pdf
+*.tex
+
+# System files
+.DS_Store
+Thumbs.db
+
